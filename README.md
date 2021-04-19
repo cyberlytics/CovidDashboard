@@ -1,2 +1,5 @@
-# covid-dashboard
+# Covid Dashboard
 
+## Build-Umgebung
+
+## Run-Time
