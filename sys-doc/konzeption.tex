@@ -7,12 +7,18 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{Konzeptpapier - Team Weiß}
+\title{Konzeptpapier -- Covid-Dashboard\\
+{\footnotesize Team Weiß}}
 \author{
 \IEEEauthorblockN{Bauer Tobias}
 \textit{t.bauer@oth-aw.de}
@@ -39,6 +45,89 @@
 \begin{IEEEkeywords}
 \end{IEEEkeywords}
 
-\section{User Stories}
+\section{Einleitung}
+Seit Beginn der Corona-Pandemie gilt es, der Bevölkerung die Informationen und aktuellen Kennzahlen geeignet darzustellen. Mit sich fast täglich ändernden politischen Regelungen und Restriktionen ist es für Privatpersonen wichtig, diese Informationen und Werte regelmäßig abzurufen.
+
+Die Motivation hinter diesem Covid-Dashboard ist es, dem Benutzer eine persönlich anpassbare Ansicht zu ermöglichen, die seinen Informationsbedürfnissen entspricht. Hier liegt ein besonderes Augenmerk auf der räumlichen Relevanz, da sich die meisten Benutzer nur für die Kennzahlen einiger ausgewählter Landkreise (v.a. ihren Wohn- sowie Arbeitsort) interessieren.
+
+\section{Verwandte Arbeiten}
+Die offizielle Quelle für aktuelle Kennzahlen in Deutschland ist das Robert-Koch-Institut (RKI). Das RKI stellt außerdem ein Dashboard bereit\footnote{\url{https://experience.arcgis.com/experience/478220a4c454480e823b17327b2bf1d4}}, in dem die Daten visuell aufbereitet sind. Das RKI-Dashboard ist die maßgebliche Inspiration für dieses Projekt, zeigt aber auch Schwächen in der Personalisierbarkeit und Benutzerfreundlichkeit auf. Diese erschweren es Benutzern, ihre gewünschten Informationen effizient abzulesen.
+
+Ein weiteres Dashboard zur Visualisierung der Corona-Kennzahlen weltweit, ist das der Berliner Morgenpost\footnote{\url{https://interaktiv.morgenpost.de/corona-virus-karte-infektionen-deutschland-weltweit/}}. Dieses Dashboard bietet einen weltweiten Überblick über das Infektionsgeschehen, jedoch ist die feinste Granularität auf Ebene der Bundesländer. Zu Beginn des ersten Lockdowns waren diese Informationen relevant, da Regierungsentscheidungen auf Landes- oder Bundesebene getroffen wurden. Zum aktuellen Stand (28.04.2021) hängen die Restriktionen der Bürger jedoch nur von den Inzidenzwerten \textit{des jeweiligen Landkreises} ab. Somit ist eine feinere Distrahierung der Informationen nötig.
+
+\section{Anforderungen - User Stories}
+\subsection{Zeitlicher Verlauf der Inzidenzwerte}
+\textit{Ich als} Benutzer des Covid-Dashboards
+\textit{möchte} den zeitlichen Verlauf der Inzidenzwerte farblich erkennen,
+\textit{weil} eine graphische Repräsentation intuitiver ist.
+\newline
+\textbf{Akzeptanzkriterien}
+\begin{itemize}
+    \item Darstellung zeigt Inzidenzwerte in einem oder mehreren räumlichen Bereichen (Landkreise)
+    \item Darstellung ist zeitlich variabel
+    \item Graphische Repräsentation in Form einer Landkarte
+\end{itemize}
+
+\subsection{Zeitlicher Verlauf der Impfungen}
+\textit{Ich als} Benutzer des Covid-Dashboards
+\textit{möchte} den zeitlichen Verlauf der Impfungen pro Vakzin farblich dargestellt bekommen,
+\textit{weil} eine graphische Repräsentation intuitiver ist.
+\textbf{Akzeptanzkriterien}
+\begin{itemize}
+    \item Darstellung zeigt Anteil der geimpften Personen aufgeschlüsselt nach Vakzin-Typ in einem mehreren räumlichen Bereichen
+    \item Darstellung ist zeitlich variabel
+    \item Graphische Repräsentation in Form einer Landkarte
+\end{itemize}
+
+\subsection{Vergleich ausgewählter Landkreise}
+\textit{Ich als} Benutzer des Covid-Dashboards
+\textit{möchte} eine Statistik über mehrere kleinere Landkreise sehen,
+\textit{weil} damit ein Vergleich meiner relevanten Landkreise möglich ist.
+\newline
+\textbf{Akzeptanzkriterien}
+\begin{itemize}
+    \item Darstellung der Kennzahlen (Inzidenzen, Impfungen, Sterberate, Genesungen) für jeden Landkreis
+    \item Darstellung der Kennzahlen einer oder mehrerer Bereiche, um Vergleich zu ermöglichen
+\end{itemize}
+
+\subsection{Anpassbarkeit der relevanten Landkreise}
+\textit{Ich als} Benutzer des Covid-Dashboards
+\textit{möchte} die für mich relevanten Landkreise auswählen und ggf. speichern,
+\textit{weil} damit ein Überblick über meine Landkreise möglich ist.
+\newline
+\textbf{Akzeptanzkriterien}
+\begin{itemize}
+    \item Auswahl aus einer Liste aller Landkreise, die jeweils als Favorit festgelegt werden können
+    \item Auswahl der Kennzahlen, die angezeigt werden sollen
+\end{itemize}
+
+\newpage
+\subsection{Aktualität der Daten}
+\textit{Ich als} Benutzer und Entwickler des Covid-Dashboards
+\textit{möchte} tagesaktuelle Informationen angezeigt bekommen,
+\textit{weil} veraltete Informationen unsinnig sind.
+\newline
+\textbf{Akzeptanzkriterien}
+\begin{itemize}
+    \item Es werden stets die aktuellen Kennzahlen ausgeliefert
+    \item Die Kennzahlen werden mindestens einmal pro Tag von einer offiziellen API abgerufen
+\end{itemize}
+
+\subsection{Performanceanforderungen}
+\textit{Ich als} Benutzer des Covid-Dashboards
+\textit{möchte} kurze Ladezeiten,
+\textit{weil} der Spaßfaktor indirekt proportional mit den Ladezeiten wächst.
+\newline
+\textbf{Akzeptanzkriterien}
+\begin{itemize}
+    \item Die Kennzahlen werden auf dem Server gecacht
+    \item Der Client-seitige Code ist performant
+\end{itemize}
+
+\section{Methoden}
+angular
+nodejs
+aufgaben front/backend
+
 
 \end{document}
