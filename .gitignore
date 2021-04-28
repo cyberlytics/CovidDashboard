@@ -2,3 +2,8 @@
 *.log
 .DS_Store
 .idea/
+/sys-doc/conference_101719.synctex.gz
+/sys-doc/konzeption.fdb_latexmk
+/sys-doc/konzeption.fls
+/sys-doc/konzeption.out
+/sys-doc/konzeption.synctex.gz
