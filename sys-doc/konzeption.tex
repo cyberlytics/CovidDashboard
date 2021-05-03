@@ -17,8 +17,8 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{Konzeptpapier -- Covid-Dashboard\\
-{\footnotesize Team Weiß}}
+\title{Covid-Dashboard -- Konzeptpapier\\
+{\footnotesize Web-Anwendungsentwicklung Sommersemester 2021}}
 \author{
 \IEEEauthorblockN{Bauer Tobias}
 \textit{t.bauer@oth-aw.de}
@@ -39,11 +39,11 @@
 \maketitle
 
 \begin{abstract}
-    
+    In diesem Konzeptpapier wird das Projekt "`Covid-Dashboard"' von Team Weiß erläutert. Die Anwendung wird unter Verwendung der Web-Frameworks Angular, Node.js und Express.js entwickelt.
 \end{abstract}
 
-\begin{IEEEkeywords}
-\end{IEEEkeywords}
+%\begin{IEEEkeywords}
+%\end{IEEEkeywords}
 
 \section{Einleitung}
 Seit Beginn der Corona-Pandemie gilt es, der Bevölkerung die Informationen und aktuellen Kennzahlen geeignet darzustellen. Mit sich fast täglich ändernden politischen Regelungen und Restriktionen ist es für Privatpersonen wichtig, diese Informationen und Werte regelmäßig abzurufen.
@@ -101,12 +101,11 @@ Ein weiteres Dashboard zur Visualisierung der Corona-Kennzahlen weltweit, ist da
     \item Auswahl der Kennzahlen, die angezeigt werden sollen
 \end{itemize}
 
-\newpage
 \subsection{Aktualität der Daten}
 \textit{Ich als} Benutzer und Entwickler des Covid-Dashboards
 \textit{möchte} tagesaktuelle Informationen angezeigt bekommen,
 \textit{weil} veraltete Informationen unsinnig sind.
-\newline
+\newpage
 \textbf{Akzeptanzkriterien}
 \begin{itemize}
     \item Es werden stets die aktuellen Kennzahlen ausgeliefert
@@ -125,9 +124,11 @@ Ein weiteres Dashboard zur Visualisierung der Corona-Kennzahlen weltweit, ist da
 \end{itemize}
 
 \section{Methoden}
-angular
-nodejs
-aufgaben front/backend
+Als Frontend-Framework kommt für das Covid-Dashboard \textit{Angular} zum Einsatz. Hiermit werden eine gute Performance und einfache REST-Anfragen ermöglicht. Außerdem ist in der Gruppe bereits Vorwissen zu Angular vorhanden.
+
+Im Backend wird auf \textit{Node.js} zusammen mit \textit{Express.js} gesetzt, da auch hier die Performance im Fokus steht. Zudem kann mit \textit{TypeScript} die gleiche Programmiersprache für Front- und Backend verwendet werden.
+
+Der Server bezieht seine Daten von der API des Robert-Koch-Instituts sowie weiteren Datenquellen. Diese Daten werden gecacht und im Speicher gehalten. Die Single-Page-Applikation bezieht die Daten per REST-Anfragen vom Server und stellt diese dar.
 
 
 \end{document}
