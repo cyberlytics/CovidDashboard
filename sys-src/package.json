@@ -4,10 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "client-install": "npm install --prefix client",
+    "client-install": "npm install && npm install --prefix covid-dashboard",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "client": "npm start --prefix covid-dashboard",
+    "client": "npm start --prefix covid-dashboard -o",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "",
