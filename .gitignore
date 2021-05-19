@@ -1,7 +1,7 @@
 *.aux
 *.log
 .DS_Store
-../.idea/
+/.idea
 /sys-doc/conference_101719.synctex.gz
 /sys-doc/konzeption.fdb_latexmk
 /sys-doc/konzeption.fls
