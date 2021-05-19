@@ -7,7 +7,7 @@
     "client-install": "npm install && npm install --prefix covid-dashboard",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "client": "npm start --prefix covid-dashboard -o",
+    "client": "npm start --prefix covid-dashboard",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "",
