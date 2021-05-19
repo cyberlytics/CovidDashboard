@@ -16,11 +16,27 @@ _Eine ausführliche textuelle Ausformulierung ist unter dem Ordner [sys-doc](htt
 - npm: v**6.14.12** (Bei obiger Node.js®-Installation bereits enthalten)
 - Angular CLI: v**11.2.9** ([Angular - Setting up the local environment and workspace](https://angular.io/guide/setup-local#install-the-angular-cli))
 
-### **Angular-Projekt ausführen**
-> Mit Hilfe des Befehls `ng serve -o` kann das Projekt gebaut und automatisch lokal ausgeführt werden.
+### **Erstinstallation**
+> 1. In den Ordner `sys-src` navigieren.
+> 2. Den Befehl `npm run client-install` ausführen, um alle benötigten Module herunterzuladen.
+
+### **Gesamtprojekt starten**
+> 1. In den Ordner `sys-src` navigieren.
+> 2. Mit Hilfe des Befehls `npm run dev` wird sowohl **Node.js** als auch **Angular** gebaut und gestartet.
+
+### **Node.js separat ausführen**
+> 1. In den Ordner `sys-src` navigieren.
+> 2. (**Für Entwicklungsumgebung**) Mit Hilfe des Befehls `npm run server` wird der Node.js Server im Hintergrund mit Hilfe von `nodemon` gestartet und automatisch aktuell gehalten.
+> 3. (**Für Produktivumgebung**) Mit Hilfe des Befehls `npm run start` wird der Node.js Server im Hintergrund gestartet.
+
+### **Angular-Projekt separat ausführen**
+> 1. In den Ordner `sys-src/covid-dashboard` navigieren.
+> 2. Mit Hilfe des Befehls `npm run start` kann das Projekt gebaut und automatisch lokal ausgeführt werden.
 
 ### **Angular-Projekt testen**
-> Mit Hilfe des Befehls `ng test` kann das Projekt getestet werden.
+> 1. In den Ordner `sys-src/covid-dashboard` navigieren.
+> 2. Mit Hilfe des Befehls `npm run test` kann das Projekt getestet werden.
 
 ### **Angular-Projekt bauen**
-> Mit Hilfe des Befehls `ng build --prod` kann das Projekt für die Produktivumgebung gebaut werden.
+> 1. In den Ordner `sys-src/covid-dashboard` navigieren.
+> 2. Mit Hilfe des Befehls `npm run build` kann das Projekt gebaut werden.
