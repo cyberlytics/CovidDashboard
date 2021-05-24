@@ -5,19 +5,25 @@
   "main": "server.js",
   "scripts": {
     "client-install": "npm install && npm install --prefix covid-dashboard",
-    "start": "node server.js",
-    "server": "nodemon server.js",
+    "start": "node server.ts",
+    "server": "nodemon server.ts",
     "client": "npm start --prefix covid-dashboard",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node-fetch": "^2.5.10",
+    "@types/papaparse": "^5.2.5",
     "concurrently": "^6.1.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.2.4"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "papaparse": "^5.3.0"
   }
 }
