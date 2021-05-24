@@ -1,5 +1,6 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+import express from "express";
+import bodyParser from "body-parser";
+import { dataPerCounty } from "./backend/rkiFetcher";
 
 const app = express();
 
@@ -26,6 +27,14 @@ app.use(bodyParser.json(), function (req, res, next) {
 
     // Pass to next layer of middleware
     next();
+});
+
+app.get('/:landkreis(\\d+)', (req, res, next) => {
+    dataPerCounty().then(d => {
+        res.send(d[req.params.landkreis]);
+        next();
+    })
+        .catch(err => console.log('error:', err));
 });
 
 const port = process.env.PORT || 5000;
