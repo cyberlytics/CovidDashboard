@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { dataPerCounty } from "./backend/rkiFetcher";
+import { dataPerCounty, getNames } from "./backend/rkiFetcher";
+import { stringify } from "./backend/util";
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(bodyParser.json(), function (req, res, next) {
 
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
-    res.setHeader("Access-Control-Allow-Credentials", true);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
 
     // Pass to next layer of middleware
     next();
@@ -31,11 +32,22 @@ app.use(bodyParser.json(), function (req, res, next) {
 
 app.get('/:landkreis(\\d+)', (req, res, next) => {
     dataPerCounty().then(d => {
-        res.send(d[req.params.landkreis]);
+        const id = parseInt((req.params as any).landkreis);
+        if(id === 0) {
+            getNames().then(n => {
+                res.send(stringify(n));
+            })
+            .catch(err => console.log('error:', err));
+        }
+        else {
+            res.send(d.get(id));
+        }
         next();
     })
         .catch(err => console.log('error:', err));
 });
+
+
 
 const port = process.env.PORT || 5000;
 

@@ -1,13 +1,18 @@
 import Papa from "papaparse";
 import getFromCache from "./filestore";
 import fetch from "node-fetch";
+import { parse, stringify } from "./util";
 
 const RKIDataPath = 'https://opendata.arcgis.com/api/v3/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/downloads/data?format=csv&spatialRefId=4326';
 
 export type RKIData = {
-    StateId: number;
-    CountyId: number;
-    TotalCases: number;
+    StateId: number,
+    CountyId: number,
+    TotalCases: number,
+    Recovered: number,
+    Deaths: number,
+    ActiveCases: number,
+    Incidence7: number,
 };
 
 export type RKIRawData = {
@@ -19,10 +24,14 @@ export type RKIRawData = {
     NewDeaths: number;
     NewRecovered: number;
     Date: Date;
+    County: string;
+    State: string;
 };
 
-export const CountyNames = new Map<number, string>();
-export const StateNames = new Map<number, string>();
+export type Names = {
+    Counties: Map<number, string>;
+    States: Map<number, string>;
+};
 
 function convertAgegroup(rkiAgeGroup: string): RKIRawData["Agegroup"] {
     switch (rkiAgeGroup) {
@@ -44,6 +53,29 @@ function convertSex(rkiSex: string): RKIRawData["Sex"] {
     return 'u';
 }
 
+const headerTranslation = (function () {
+    const map = new Map<string, string>();
+    map.set('ObjectId', 'ObjectId');
+    map.set('IdBundesland', 'StateId');
+    map.set('Bundesland', 'State');
+    map.set('IdLandkreis', 'CountyId');
+    map.set('Landkreis', 'County');
+    map.set('Altersgruppe', 'Agegroup');
+    map.set('Geschlecht', 'Sex');
+    map.set('AnzahlFall', 'Cases');
+    map.set('AnzahlTodesfall', 'Deaths');
+    map.set('AnzahlGenesen', 'Recovered');
+    map.set('Meldedatum', 'ReportDate');
+    map.set('NeuerFall', 'NewCaseType');
+    map.set('NeuerTodesfall', 'NewDeathType');
+    map.set('NeuGenesen', 'NewRecoveredType');
+    map.set('Refdatum', 'RefDate');
+    map.set('IstErkrankungsbeginn', 'IsDiseaseBegin');
+    map.set('Datenstand', 'LastUpdate');
+    map.set('Altersgruppe2', 'NotUsed');
+    return map;
+})(); // IIFE
+
 
 function fullData(): Promise<RKIRawData[]> {
     return new Promise((resolve, reject) => {
@@ -61,27 +93,8 @@ function fullData(): Promise<RKIRawData[]> {
             return new Promise<any>((resolve, reject) => {
                 const parseResult = Papa.parse(t, {
                     header: true,
-                    transformHeader: function (s, i) {
-                        return {
-                            'ObjectId': 'ObjectId',
-                            'IdBundesland': 'StateId',
-                            'Bundesland': 'State',
-                            'IdLandkreis': 'CountyId',
-                            'Landkreis': 'County',
-                            'Altersgruppe': 'Agegroup',
-                            'Geschlecht': 'Sex',
-                            'AnzahlFall': 'Cases',
-                            'AnzahlTodesfall': 'Deaths',
-                            'AnzahlGenesen': 'Recovered',
-                            'Meldedatum': 'ReportDate',
-                            'NeuerFall': 'NewCaseType',
-                            'NeuerTodesfall': 'NewDeathType',
-                            'NeuGenesen': 'NewRecoveredType',
-                            'Refdatum': 'RefDate',
-                            'IstErkrankungsbeginn': 'IsDiseaseBegin',
-                            'Datenstand': 'LastUpdate',
-                            'Altersgruppe2': 'NotUsed'
-                        }[s];
+                    transformHeader: function (s: string) {
+                        return headerTranslation.get(s)!;
                     },
                     dynamicTyping: true,
                     skipEmptyLines: 'greedy',
@@ -107,19 +120,13 @@ function fullData(): Promise<RKIRawData[]> {
                         CountyId: e.CountyId,
                         Agegroup: convertAgegroup(e.Agegroup),
                         Sex: convertSex(e.Sex),
-                        Date: e.Date,
+                        Date: e.IsDiseaseBegin === 1 ? e.RefDate : e.Date,
                         NewCases: newCases,
                         NewDeaths: newDeaths,
                         NewRecovered: newRecovered,
+                        County: e.County,
+                        State: e.State,
                     });
-
-                    // Fill county and state arrays
-                    if (!CountyNames[e.CountyId]) {
-                        CountyNames[e.CountyId] = e.County;
-                    }
-                    if (!StateNames[e.StateId]) {
-                        StateNames[e.StateId] = e.State;
-                    }
                 });
 
                 resolve(result);
@@ -132,28 +139,71 @@ function fullData(): Promise<RKIRawData[]> {
 
 export function dataPerCounty(): Promise<Map<number, RKIData>> {
     return new Promise((resolve, reject) => {
-        getFromCache('perCounty.json', () => {
+        getFromCache<Map<number, RKIData>>('perCounty.json', () => {
             return new Promise((resolve, reject) => {
                 fullData()
                     .then(d => {
                         const result = new Map<number, RKIData>();
                         d.forEach(e => {
-                            if (!result[e.CountyId]) {
-                                result[e.CountyId] = {
+                            if (!result.has(e.CountyId)) {
+                                result.set(e.CountyId, {
                                     CountyId: e.CountyId,
                                     StateId: e.StateId,
                                     TotalCases: 0,
-                                };
+                                    Recovered: 0,
+                                    Deaths: 0,
+                                    ActiveCases: 0,
+                                    Incidence7: 0,
+                                });
                             }
-                            result[e.CountyId].TotalCases += e.NewCases + e.NewDeaths + e.NewRecovered;
+                            result.get(e.CountyId)!.TotalCases += e.NewCases + e.NewDeaths + e.NewRecovered;
+                            result.get(e.CountyId)!.Deaths += e.NewDeaths;
+                            result.get(e.CountyId)!.Recovered += e.NewRecovered;
                         });
-                        resolve(JSON.stringify(result));
+                        result.forEach(r => {
+                            r.ActiveCases = r.TotalCases - r.Deaths - r.Recovered;
+
+                        });
+
+                        resolve(stringify(result));
                     })
                     .catch(reject);
             });
         }, (t) => {
             return new Promise((resolve, reject) => {
-                resolve(JSON.parse(t));
+                resolve(parse(t));
+            });
+        })
+            .then(resolve)
+            .catch(reject);
+    });
+}
+
+export function getNames(): Promise<Names> {
+    return new Promise((resolve, reject) => {
+        getFromCache<Names>('names.json', () => {
+            return new Promise((resolve, reject) => {
+                fullData()
+                    .then(d => {
+                        const counties = new Map<number, string>();
+                        const states = new Map<number, string>();
+
+                        d.forEach(v => {
+                            if (!counties.has(v.CountyId)) {
+                                counties.set(v.CountyId, v.County);
+                            }
+                            if (!states.has(v.StateId)) {
+                                states.set(v.StateId, v.State);
+                            }
+                        })
+
+                        resolve(stringify({ counties, states }));
+                    })
+                    .catch(reject);
+            });
+        }, (t) => {
+            return new Promise((resolve, reject) => {
+                resolve(parse(t));
             });
         })
             .then(resolve)
