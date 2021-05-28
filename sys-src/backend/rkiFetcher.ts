@@ -1,9 +1,10 @@
 import Papa from "papaparse";
 import getFromCache from "./filestore";
 import fetch from "node-fetch";
-import { parse, stringify } from "./util";
+import { addDays, lastDays, parse, parseRKIDate, stringify } from "./util";
 
 const RKIDataPath = 'https://opendata.arcgis.com/api/v3/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/downloads/data?format=csv&spatialRefId=4326';
+const RKIPopulationDataPath = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=EWZ,last_update,cases7_per_100k,AdmUnitId,cases7_lk,death7_lk&returnGeometry=false&outSR=4326&f=json';
 
 export type RKIData = {
     StateId: number,
@@ -13,7 +14,17 @@ export type RKIData = {
     Deaths: number,
     ActiveCases: number,
     Incidence7: number,
+    Population: number,
 };
+
+type RKIPopulationData = {
+    CountyId: number,
+    Population: number,
+    Cases7: number,
+    Incidence7: number,
+    LastUpdate: number,
+    Deaths7: number,
+}
 
 export type RKIRawData = {
     StateId: number;
@@ -120,7 +131,8 @@ function fullData(): Promise<RKIRawData[]> {
                         CountyId: e.CountyId,
                         Agegroup: convertAgegroup(e.Agegroup),
                         Sex: convertSex(e.Sex),
-                        Date: e.IsDiseaseBegin === 1 ? e.RefDate : e.Date,
+                        Date: //parseRKIDate(e.IsDiseaseBegin === 1 ? e.RefDate : e.ReportDate),
+                                parseRKIDate(e.ReportDate),
                         NewCases: newCases,
                         NewDeaths: newDeaths,
                         NewRecovered: newRecovered,
@@ -137,36 +149,88 @@ function fullData(): Promise<RKIRawData[]> {
 }
 
 
-export function dataPerCounty(): Promise<Map<number, RKIData>> {
+export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
     return new Promise((resolve, reject) => {
-        getFromCache<Map<number, RKIData>>('perCounty.json', () => {
+        getFromCache<Map<number, Map<number, RKIData>>>('perCounty.json', () => {
             return new Promise((resolve, reject) => {
-                fullData()
-                    .then(d => {
-                        const result = new Map<number, RKIData>();
-                        d.forEach(e => {
-                            if (!result.has(e.CountyId)) {
-                                result.set(e.CountyId, {
-                                    CountyId: e.CountyId,
-                                    StateId: e.StateId,
-                                    TotalCases: 0,
-                                    Recovered: 0,
-                                    Deaths: 0,
-                                    ActiveCases: 0,
-                                    Incidence7: 0,
+                getFromCache<Map<number, RKIPopulationData>>('population.json', () => {
+                    return new Promise((resolve, reject) => {
+                        fetch(RKIPopulationDataPath)
+                            .then(d => {
+                                d.json()
+                                    .then(j => {
+                                        const map = new Map<number, RKIPopulationData>();
+                                        j.features.forEach((x: any) => {
+                                            const e = x.attributes;
+                                            map.set(e.AdmUnitId, {
+                                                CountyId: e.AdmUnitId,
+                                                Cases7: e.cases7_lk,
+                                                Deaths7: e.death7_lk,
+                                                LastUpdate: e.last_update,
+                                                Population: e.EWZ,
+                                                Incidence7: e.cases7_per_100k,
+                                            });
+                                        });
+                                        resolve(stringify(map));
+                                    })
+                                    .catch(reject)
+                            })
+                            .catch(reject);
+                    });
+                }, (t) => {
+                    return new Promise<Map<number, RKIPopulationData>>((resolve, reject) => {
+                        resolve(parse(t));
+                    });
+                }).then((p) => {
+                    fullData()
+                        .then(d => {
+                            const groupPerCounty = new Map<number, RKIRawData[]>();
+                            d.forEach(e => {
+                                if (!groupPerCounty.has(e.CountyId)) {
+                                    groupPerCounty.set(e.CountyId, []);
+                                }
+                                groupPerCounty.get(e.CountyId)!.push(e);
+                            });
+
+                            const result = new Map<number, Map<number, RKIData>>();
+                            groupPerCounty.forEach((v, k) => {
+                                const daysMap = new Map<number, RKIData>();
+                                lastDays(20).forEach(day => {
+                                    const dayValue = day.valueOf();
+                                    v.forEach(e => {
+                                        if (e.Date <= day) {
+                                            if (!daysMap.has(dayValue)) {
+                                                daysMap.set(dayValue, {
+                                                    CountyId: k,
+                                                    StateId: e.StateId,
+                                                    TotalCases: 0,
+                                                    Recovered: 0,
+                                                    Deaths: 0,
+                                                    ActiveCases: 0,
+                                                    Incidence7: -1,
+                                                    Population: 0,
+                                                });
+                                            }
+                                            daysMap.get(dayValue)!.TotalCases += e.NewCases + e.NewDeaths + e.NewRecovered;
+                                            daysMap.get(dayValue)!.Deaths += e.NewDeaths;
+                                            daysMap.get(dayValue)!.Recovered += e.NewRecovered;
+                                        }
+                                    });
                                 });
-                            }
-                            result.get(e.CountyId)!.TotalCases += e.NewCases + e.NewDeaths + e.NewRecovered;
-                            result.get(e.CountyId)!.Deaths += e.NewDeaths;
-                            result.get(e.CountyId)!.Recovered += e.NewRecovered;
-                        });
-                        result.forEach(r => {
-                            r.ActiveCases = r.TotalCases - r.Deaths - r.Recovered;
-
-                        });
-
-                        resolve(stringify(result));
-                    })
+                                daysMap.forEach((r, d) => {
+                                    r.ActiveCases = r.TotalCases - r.Deaths - r.Recovered;
+                                    r.Population = p.get(r.CountyId)?.Population ?? 1;
+                                    const dateMinus7 = addDays(new Date(d), -7).valueOf();
+                                    if (daysMap.has(dateMinus7)) {
+                                        r.Incidence7 = (r.TotalCases - daysMap.get(dateMinus7)!.TotalCases) / r.Population * 100_000;
+                                    }
+                                });
+                                result.set(k, daysMap);
+                            });
+                            resolve(stringify(result));
+                        })
+                        .catch(reject);
+                })
                     .catch(reject);
             });
         }, (t) => {
@@ -197,7 +261,7 @@ export function getNames(): Promise<Names> {
                             }
                         })
 
-                        resolve(stringify({ counties, states }));
+                        resolve(stringify({ Counties: counties, States: states }));
                     })
                     .catch(reject);
             });
