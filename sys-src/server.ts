@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { dataPerCounty, getNames } from "./backend/rkiFetcher";
-import { stringify } from "./backend/util";
+import { mapToObject, stringify } from "./backend/util";
 
 const app = express();
 
@@ -35,14 +35,15 @@ app.get('/:landkreis(\\d+)', (req, res, next) => {
         const id = parseInt((req.params as any).landkreis);
         if(id === 0) {
             getNames().then(n => {
-                res.send(stringify(n));
+                res.send(mapToObject(n.Counties));
+                next();
             })
             .catch(err => console.log('error:', err));
         }
         else {
-            res.send(d.get(id));
+            res.send(mapToObject(d.get(id)));
+            next();
         }
-        next();
     })
         .catch(err => console.log('error:', err));
 });
