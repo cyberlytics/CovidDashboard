@@ -1,14 +1,30 @@
 import Papa from "papaparse";
 import getFromCache from "./filestore";
 import fetch from "node-fetch";
+import { addDays, lastDays, parse, parseRKIDate, stringify } from "./util";
 
 const RKIDataPath = 'https://opendata.arcgis.com/api/v3/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/downloads/data?format=csv&spatialRefId=4326';
+const RKIPopulationDataPath = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=EWZ,last_update,cases7_per_100k,AdmUnitId,cases7_lk,death7_lk&returnGeometry=false&outSR=4326&f=json';
 
 export type RKIData = {
-    StateId: number;
-    CountyId: number;
-    TotalCases: number;
+    StateId: number,
+    CountyId: number,
+    TotalCases: number,
+    Recovered: number,
+    Deaths: number,
+    ActiveCases: number,
+    Incidence7: number,
+    Population: number,
 };
+
+type RKIPopulationData = {
+    CountyId: number,
+    Population: number,
+    Cases7: number,
+    Incidence7: number,
+    LastUpdate: number,
+    Deaths7: number,
+}
 
 export type RKIRawData = {
     StateId: number;
@@ -19,10 +35,14 @@ export type RKIRawData = {
     NewDeaths: number;
     NewRecovered: number;
     Date: Date;
+    County: string;
+    State: string;
 };
 
-export const CountyNames = new Map<number, string>();
-export const StateNames = new Map<number, string>();
+export type Names = {
+    Counties: Map<number, string>;
+    States: Map<number, string>;
+};
 
 function convertAgegroup(rkiAgeGroup: string): RKIRawData["Agegroup"] {
     switch (rkiAgeGroup) {
@@ -44,6 +64,29 @@ function convertSex(rkiSex: string): RKIRawData["Sex"] {
     return 'u';
 }
 
+const headerTranslation = (function () {
+    const map = new Map<string, string>();
+    map.set('ObjectId', 'ObjectId');
+    map.set('IdBundesland', 'StateId');
+    map.set('Bundesland', 'State');
+    map.set('IdLandkreis', 'CountyId');
+    map.set('Landkreis', 'County');
+    map.set('Altersgruppe', 'Agegroup');
+    map.set('Geschlecht', 'Sex');
+    map.set('AnzahlFall', 'Cases');
+    map.set('AnzahlTodesfall', 'Deaths');
+    map.set('AnzahlGenesen', 'Recovered');
+    map.set('Meldedatum', 'ReportDate');
+    map.set('NeuerFall', 'NewCaseType');
+    map.set('NeuerTodesfall', 'NewDeathType');
+    map.set('NeuGenesen', 'NewRecoveredType');
+    map.set('Refdatum', 'RefDate');
+    map.set('IstErkrankungsbeginn', 'IsDiseaseBegin');
+    map.set('Datenstand', 'LastUpdate');
+    map.set('Altersgruppe2', 'NotUsed');
+    return map;
+})(); // IIFE
+
 
 function fullData(): Promise<RKIRawData[]> {
     return new Promise((resolve, reject) => {
@@ -59,39 +102,28 @@ function fullData(): Promise<RKIRawData[]> {
             });
         }, (t) => {
             return new Promise<any>((resolve, reject) => {
-                const parseResult = Papa.parse(t, {
+                const result = new Array<RKIRawData>();
+                Papa.parse(t, {
                     header: true,
-                    transformHeader: function (s, i) {
-                        return {
-                            'ObjectId': 'ObjectId',
-                            'IdBundesland': 'StateId',
-                            'Bundesland': 'State',
-                            'IdLandkreis': 'CountyId',
-                            'Landkreis': 'County',
-                            'Altersgruppe': 'Agegroup',
-                            'Geschlecht': 'Sex',
-                            'AnzahlFall': 'Cases',
-                            'AnzahlTodesfall': 'Deaths',
-                            'AnzahlGenesen': 'Recovered',
-                            'Meldedatum': 'ReportDate',
-                            'NeuerFall': 'NewCaseType',
-                            'NeuerTodesfall': 'NewDeathType',
-                            'NeuGenesen': 'NewRecoveredType',
-                            'Refdatum': 'RefDate',
-                            'IstErkrankungsbeginn': 'IsDiseaseBegin',
-                            'Datenstand': 'LastUpdate',
-                            'Altersgruppe2': 'NotUsed'
-                        }[s];
+                    transformHeader: function (s: string) {
+                        return headerTranslation.get(s)!;
                     },
                     dynamicTyping: true,
                     skipEmptyLines: 'greedy',
+                    step: function (results, parser) {
+                        if (typeof results.data === 'object') {
+                            transformToRKIRawData(results.data);
+                        }
+                        else {
+                            (results.data as []).forEach(transformToRKIRawData);
+                        }
+                        if(results.errors && results.errors.length > 0) {
+                            reject(results.errors);
+                        }
+                    },
                 });
-                if (parseResult.errors && parseResult.errors.length > 0) {
-                    reject(parseResult.errors);
-                }
 
-                const result = new Array<RKIRawData>();
-                parseResult.data.forEach((e: any) => {
+                function transformToRKIRawData(e: any) {
                     let newCases = 0;
                     let newDeaths = 0;
                     let newRecovered = 0;
@@ -107,21 +139,15 @@ function fullData(): Promise<RKIRawData[]> {
                         CountyId: e.CountyId,
                         Agegroup: convertAgegroup(e.Agegroup),
                         Sex: convertSex(e.Sex),
-                        Date: e.Date,
+                        Date: //parseRKIDate(e.IsDiseaseBegin === 1 ? e.RefDate : e.ReportDate),
+                            parseRKIDate(e.ReportDate),
                         NewCases: newCases,
                         NewDeaths: newDeaths,
                         NewRecovered: newRecovered,
+                        County: e.County,
+                        State: e.State,
                     });
-
-                    // Fill county and state arrays
-                    if (!CountyNames[e.CountyId]) {
-                        CountyNames[e.CountyId] = e.County;
-                    }
-                    if (!StateNames[e.StateId]) {
-                        StateNames[e.StateId] = e.State;
-                    }
-                });
-
+                }
                 resolve(result);
             });
         }).then(resolve)
@@ -130,30 +156,125 @@ function fullData(): Promise<RKIRawData[]> {
 }
 
 
-export function dataPerCounty(): Promise<Map<number, RKIData>> {
+export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
     return new Promise((resolve, reject) => {
-        getFromCache('perCounty.json', () => {
+        getFromCache<Map<number, Map<number, RKIData>>>('perCounty.json', () => {
+            return new Promise((resolve, reject) => {
+                getFromCache<Map<number, RKIPopulationData>>('population.json', () => {
+                    return new Promise((resolve, reject) => {
+                        fetch(RKIPopulationDataPath)
+                            .then(d => {
+                                d.json()
+                                    .then(j => {
+                                        const map = new Map<number, RKIPopulationData>();
+                                        j.features.forEach((x: any) => {
+                                            const e = x.attributes;
+                                            map.set(e.AdmUnitId, {
+                                                CountyId: e.AdmUnitId,
+                                                Cases7: e.cases7_lk,
+                                                Deaths7: e.death7_lk,
+                                                LastUpdate: e.last_update,
+                                                Population: e.EWZ,
+                                                Incidence7: e.cases7_per_100k,
+                                            });
+                                        });
+                                        resolve(stringify(map));
+                                    })
+                                    .catch(reject)
+                            })
+                            .catch(reject);
+                    });
+                }, (t) => {
+                    return new Promise<Map<number, RKIPopulationData>>((resolve, reject) => {
+                        resolve(parse(t));
+                    });
+                }).then((p) => {
+                    fullData()
+                        .then(d => {
+                            const groupPerCounty = new Map<number, RKIRawData[]>();
+                            d.forEach(e => {
+                                if (!groupPerCounty.has(e.CountyId)) {
+                                    groupPerCounty.set(e.CountyId, []);
+                                }
+                                groupPerCounty.get(e.CountyId)!.push(e);
+                            });
+
+                            const result = new Map<number, Map<number, RKIData>>();
+                            groupPerCounty.forEach((v, k) => {
+                                const daysMap = new Map<number, RKIData>();
+                                lastDays(20).forEach(day => {
+                                    const dayValue = day.valueOf();
+                                    v.forEach(e => {
+                                        if (e.Date <= day) {
+                                            if (!daysMap.has(dayValue)) {
+                                                daysMap.set(dayValue, {
+                                                    CountyId: k,
+                                                    StateId: e.StateId,
+                                                    TotalCases: 0,
+                                                    Recovered: 0,
+                                                    Deaths: 0,
+                                                    ActiveCases: 0,
+                                                    Incidence7: -1,
+                                                    Population: 0,
+                                                });
+                                            }
+                                            daysMap.get(dayValue)!.TotalCases += e.NewCases + e.NewDeaths + e.NewRecovered;
+                                            daysMap.get(dayValue)!.Deaths += e.NewDeaths;
+                                            daysMap.get(dayValue)!.Recovered += e.NewRecovered;
+                                        }
+                                    });
+                                });
+                                daysMap.forEach((r, d) => {
+                                    r.ActiveCases = r.TotalCases - r.Deaths - r.Recovered;
+                                    r.Population = p.get(r.CountyId)?.Population ?? 1;
+                                    const dateMinus7 = addDays(new Date(d), -7).valueOf();
+                                    if (daysMap.has(dateMinus7)) {
+                                        r.Incidence7 = (r.TotalCases - daysMap.get(dateMinus7)!.TotalCases) / r.Population * 100_000;
+                                    }
+                                });
+                                result.set(k, daysMap);
+                            });
+                            resolve(stringify(result));
+                        })
+                        .catch(reject);
+                })
+                    .catch(reject);
+            });
+        }, (t) => {
+            return new Promise((resolve, reject) => {
+                resolve(parse(t));
+            });
+        })
+            .then(resolve)
+            .catch(reject);
+    });
+}
+
+export function getNames(): Promise<Names> {
+    return new Promise((resolve, reject) => {
+        getFromCache<Names>('names.json', () => {
             return new Promise((resolve, reject) => {
                 fullData()
                     .then(d => {
-                        const result = new Map<number, RKIData>();
-                        d.forEach(e => {
-                            if (!result[e.CountyId]) {
-                                result[e.CountyId] = {
-                                    CountyId: e.CountyId,
-                                    StateId: e.StateId,
-                                    TotalCases: 0,
-                                };
+                        const counties = new Map<number, string>();
+                        const states = new Map<number, string>();
+
+                        d.forEach(v => {
+                            if (!counties.has(v.CountyId)) {
+                                counties.set(v.CountyId, v.County);
                             }
-                            result[e.CountyId].TotalCases += e.NewCases + e.NewDeaths + e.NewRecovered;
-                        });
-                        resolve(JSON.stringify(result));
+                            if (!states.has(v.StateId)) {
+                                states.set(v.StateId, v.State);
+                            }
+                        })
+
+                        resolve(stringify({ Counties: counties, States: states }));
                     })
                     .catch(reject);
             });
         }, (t) => {
             return new Promise((resolve, reject) => {
-                resolve(JSON.parse(t));
+                resolve(parse(t));
             });
         })
             .then(resolve)
