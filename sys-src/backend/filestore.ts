@@ -1,12 +1,12 @@
 import fs from "fs";
 
 const filesFolder = './data';
-const cache = [];
+const cache = new Map<string, any>();
 
 export default function getFromCache<T>(path: string, fetchDataCallback: () => Promise<string>, transformData: (text: string) => Promise<T>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
-        if (cache && cache[path]) {
-            resolve(cache[path]);
+        if (cache && cache.has(path)) {
+            resolve(cache.get(path));
         }
         else {
             const filePath = `${filesFolder}/${path}`;
@@ -24,7 +24,7 @@ export default function getFromCache<T>(path: string, fetchDataCallback: () => P
                             });
                             transformData(data)
                                 .then(transformed => {
-                                    cache[path] = transformed;
+                                    cache.set(path, transformed);
                                     resolve(transformed);
                                 })
                                 .catch(reject);
@@ -34,7 +34,7 @@ export default function getFromCache<T>(path: string, fetchDataCallback: () => P
                 else {
                     transformData(data.toString())
                         .then(transformed => {
-                            cache[path] = transformed;
+                            cache.set(path, transformed);
                             resolve(transformed);
                         })
                         .catch(reject);
