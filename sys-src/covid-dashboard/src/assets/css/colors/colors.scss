@@ -1,0 +1,30 @@
+$color-primary: #d8d4cf;
+
+$color-accent-red: #ff1f4d;
+$color-accent-yellow: #ffc71d;
+$color-accent-green: #62d87b;
+$color-accent-blue: #529bf2;
+$color-accent-gray: #9e9688;
+
+$color-background: #12131f;
+$color-secondary-background: #181926;
+
+.accent-red {
+  color: $color-accent-red;
+}
+
+.accent-yellow {
+  color: $color-accent-yellow;
+}
+
+.accent-green {
+  color: $color-accent-green;
+}
+
+.accent-blue {
+  color: $color-accent-blue;
+}
+
+.accent-gray {
+  color: $color-accent-gray;
+}

@@ -1,0 +1,27 @@
+@import "../../../assets/css/colors/colors.scss";
+
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  padding: 20px 40px;
+  background-color: $color-secondary-background;
+
+  &__icon {
+    font-size: 28rem;
+    margin-right: 8px;
+  }
+
+  &__logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    p {
+      font-size: 14rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
+}
