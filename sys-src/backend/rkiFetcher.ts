@@ -102,20 +102,28 @@ function fullData(): Promise<RKIRawData[]> {
             });
         }, (t) => {
             return new Promise<any>((resolve, reject) => {
-                const parseResult = Papa.parse(t, {
+                const result = new Array<RKIRawData>();
+                Papa.parse(t, {
                     header: true,
                     transformHeader: function (s: string) {
                         return headerTranslation.get(s)!;
                     },
                     dynamicTyping: true,
                     skipEmptyLines: 'greedy',
+                    step: function (results, parser) {
+                        if (typeof results.data === 'object') {
+                            transformToRKIRawData(results.data);
+                        }
+                        else {
+                            (results.data as []).forEach(transformToRKIRawData);
+                        }
+                        if(results.errors && results.errors.length > 0) {
+                            reject(results.errors);
+                        }
+                    },
                 });
-                if (parseResult.errors && parseResult.errors.length > 0) {
-                    reject(parseResult.errors);
-                }
 
-                const result = new Array<RKIRawData>();
-                parseResult.data.forEach((e: any) => {
+                function transformToRKIRawData(e: any) {
                     let newCases = 0;
                     let newDeaths = 0;
                     let newRecovered = 0;
@@ -132,15 +140,14 @@ function fullData(): Promise<RKIRawData[]> {
                         Agegroup: convertAgegroup(e.Agegroup),
                         Sex: convertSex(e.Sex),
                         Date: //parseRKIDate(e.IsDiseaseBegin === 1 ? e.RefDate : e.ReportDate),
-                                parseRKIDate(e.ReportDate),
+                            parseRKIDate(e.ReportDate),
                         NewCases: newCases,
                         NewDeaths: newDeaths,
                         NewRecovered: newRecovered,
                         County: e.County,
                         State: e.State,
                     });
-                });
-
+                }
                 resolve(result);
             });
         }).then(resolve)
