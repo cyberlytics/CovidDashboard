@@ -1,0 +1,15 @@
+.home {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  padding: 40px;
+
+  &__left {
+    width: 48.5%;
+  }
+
+  &__right {
+    width: 48.5%;
+  }
+}

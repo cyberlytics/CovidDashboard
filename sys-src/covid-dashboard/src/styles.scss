@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+@import "assets/css/colors/colors.scss";
+
+@import "assets/css/resets/normalize.scss";
+@import "assets/css/resets/reset.local.scss";
+@import "assets/css/resets/typography.scss";
+
+body {
+  background-color: $color-background;
+}
