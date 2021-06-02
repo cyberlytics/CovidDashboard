@@ -11,6 +11,8 @@ import { InfoBadgesComponent } from './components/info-badges/info-badges.compon
 import localeDe from '@angular/common/locales/de';
 import { registerLocaleData } from '@angular/common';
 import { InfoTableComponent } from './components/info-table/info-table.component';
+import { HttpClientModule } from '@angular/common/http';
+
 
 registerLocaleData(localeDe);
 
@@ -23,7 +25,7 @@ registerLocaleData(localeDe);
     InfoBadgesComponent,
     InfoTableComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule,],
   providers: [{ provide: LOCALE_ID, useValue: 'de' }],
   bootstrap: [AppComponent],
 })

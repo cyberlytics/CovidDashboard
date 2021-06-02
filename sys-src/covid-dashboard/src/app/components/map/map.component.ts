@@ -1,7 +1,10 @@
 import { AfterViewInit, Component } from '@angular/core';
 import * as L from 'leaflet';
+import { County } from 'src/app/services/county';
+import { NetworkService } from 'src/app/services/network/network.service';
 import { MapService } from '../../services/map/map.service';
 // import * as La from 'leaflet-ajax';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-map',
@@ -10,8 +13,19 @@ import { MapService } from '../../services/map/map.service';
 })
 export class MapComponent implements AfterViewInit {
   private map: any;
+  private response: GeoData = {} as GeoData;
 
-  constructor() {} // private mapService: MapService
+  constructor(
+    private network: NetworkService
+  ) {
+    // this.network.getCounty(1001).subscribe((res: any) => {
+    //   console.log(res);
+    // })
+
+    this.network.getVaccine(0).subscribe((res) => {
+      console.log(res)
+    })
+  }
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -29,7 +43,7 @@ export class MapComponent implements AfterViewInit {
     });
 
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', './assets/json/map_layer_sehr_hoch.json');
+    xhr.open('GET', './assets/json/RKI_Corona_Landkreise.json');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
     xhr.onload = () => {
@@ -41,6 +55,8 @@ export class MapComponent implements AfterViewInit {
         opacity: 0.5,
         fillOpacity: 0.1,
       };
+
+      this.response = xhr.response;
 
       L.geoJSON(xhr.response, {
         style: myStyle,
@@ -67,4 +83,35 @@ export class MapComponent implements AfterViewInit {
     //   }
     // }).addTo(this.map);
   }
+}
+
+type GeoData = {
+  type: string;
+  features: GeoElement[];
+}
+
+type GeoElement = {
+  type: string
+  id: number,
+  properties: properties
+  geometry: {
+    type: string,
+    coordinates: any;
+  }
+}
+
+type properties = {
+  ID_0: number,
+  ISO: string,
+  NAME_0: string,
+  ID_1: number,
+  NAME_1: string,
+  ID_2: number,
+  NAME_2: string,
+  ID_3: number,
+  NAME_3: string,
+  NL_NAME_3: string,
+  VARNAME_3: null,
+  TYPE_3: string,
+  ENGTYPE_3: string
 }
