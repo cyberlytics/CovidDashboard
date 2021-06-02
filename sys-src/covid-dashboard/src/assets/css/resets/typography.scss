@@ -1,0 +1,32 @@
+@font-face {
+  font-family: "Archia";
+  src: url("../../fonts/archia-500-medium-webfont.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Archia";
+  src: url("../../fonts/archia-600-semibold-webfont.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Archia";
+  src: url("../../fonts/archia-700-bold-webfont.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+}
+
+html {
+  font-size: 1px;
+}
+
+body {
+  font-family: "Archia", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+  font-size: 16rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: $color-primary;
+}

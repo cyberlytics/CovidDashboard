@@ -1,0 +1,49 @@
+@import "../../../assets/css/colors/colors.scss";
+
+.info-table {
+  margin-top: 50px;
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+
+    .row {
+      display: contents;
+
+      .heading {
+        text-align: center !important;
+        font-weight: 700;
+        background-color: $color-secondary-background;
+      }
+
+      .cell {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        border-radius: 5px;
+
+        padding: 5px;
+        margin-bottom: 5px;
+
+        font-size: 13rem;
+        text-align: right;
+        word-break: break-word;
+
+        &:not(:last-child) {
+          margin-right: 5px;
+        }
+
+        &__difference-to-previous-day {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+
+          i {
+            margin-right: 2.5px;
+          }
+        }
+      }
+    }
+  }
+}
