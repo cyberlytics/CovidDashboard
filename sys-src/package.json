@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "client-install": "npm install && npm install --prefix covid-dashboard",
+    "client-install": "npm install && cd covid-dashboard && npm install",
     "start": "ts-node server.ts",
     "server": "nodemon server.ts",
     "client": "npm start --prefix covid-dashboard",
