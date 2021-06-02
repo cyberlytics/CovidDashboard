@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { dataPerCounty, getNames } from "./backend/rkiFetcher";
+import { dataPerCounty, getNames, vaccinationPerState } from "./backend/rkiFetcher";
 import { mapToObject, stringify } from "./backend/util";
 
 const app = express();
@@ -30,9 +30,9 @@ app.use(bodyParser.json(), function (req, res, next) {
     next();
 });
 
-app.get('/:landkreis(\\d+)', (req, res, next) => {
+app.get('/county/:county(\\d+)', (req, res, next) => {
     dataPerCounty().then(d => {
-        const id = parseInt((req.params as any).landkreis);
+        const id = parseInt((req.params as any).county);
         if(id === 0) {
             getNames().then(n => {
                 res.send(mapToObject(n.Counties));
@@ -46,6 +46,14 @@ app.get('/:landkreis(\\d+)', (req, res, next) => {
         }
     })
         .catch(err => console.log('error:', err));
+});
+
+app.get('/vaccine/:state(\\d+)', (req, res, next) => {
+    vaccinationPerState().then(v => {
+        const id = parseInt((req.params as any).state);
+        res.send(mapToObject(v.get(id)));
+        next();
+    }).catch(err => console.log('error:', err));
 });
 
 
