@@ -5,6 +5,7 @@ import { addDays, lastDays, parse, parseRKIDate, stringify } from "./util";
 
 const RKIDataPath = 'https://opendata.arcgis.com/api/v3/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/downloads/data?format=csv&spatialRefId=4326';
 const RKIPopulationDataPath = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=EWZ,last_update,cases7_per_100k,AdmUnitId,cases7_lk,death7_lk&returnGeometry=false&outSR=4326&f=json';
+const RKIVaccinationDataPath = 'https://services.arcgis.com/OLiydejKCZTGhvWg/arcgis/rest/services/Impffortschritt_DE/FeatureServer/0/query?f=json&where=1%3D1&orderByFields=Datum%20asc&outFields=*&resultType=standard';
 
 export type RKIData = {
     StateId: number,
@@ -42,6 +43,26 @@ export type RKIRawData = {
 export type Names = {
     Counties: Map<number, string>;
     States: Map<number, string>;
+};
+
+export type RKIVaccinationData = {
+    StateId: number;
+    Date: Date;
+    SumVaccinations: number;
+    SumFirstVaccinations: number;
+    SumSecondVaccinations: number;
+    ProportionFirstVaccinations: number;
+    ProportionSecondVaccinations: number;
+    SumFirstBioNTech: number;
+    SumSecondBioNTech: number;
+    SumFirstAstraZeneca: number;
+    SumSecondAstraZeneca: number;
+    SumFirstModerna: number;
+    SumSecondModerna: number;
+    SumBioNTech: number;
+    SumAstraZeneca: number;
+    SumModerna: number;
+    SumJohnsonAndJohnson: number;
 };
 
 function convertAgegroup(rkiAgeGroup: string): RKIRawData["Agegroup"] {
@@ -117,7 +138,7 @@ function fullData(): Promise<RKIRawData[]> {
                         else {
                             (results.data as []).forEach(transformToRKIRawData);
                         }
-                        if(results.errors && results.errors.length > 0) {
+                        if (results.errors && results.errors.length > 0) {
                             reject(results.errors);
                         }
                     },
@@ -155,7 +176,7 @@ function fullData(): Promise<RKIRawData[]> {
     });
 }
 
-
+const HISTORY_DAYS = 30;
 export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
     return new Promise((resolve, reject) => {
         getFromCache<Map<number, Map<number, RKIData>>>('perCounty.json', () => {
@@ -202,7 +223,7 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                             const result = new Map<number, Map<number, RKIData>>();
                             groupPerCounty.forEach((v, k) => {
                                 const daysMap = new Map<number, RKIData>();
-                                lastDays(20).forEach(day => {
+                                lastDays(HISTORY_DAYS).forEach(day => {
                                     const dayValue = day.valueOf();
                                     v.forEach(e => {
                                         if (e.Date <= day) {
@@ -278,6 +299,101 @@ export function getNames(): Promise<Names> {
             });
         })
             .then(resolve)
+            .catch(reject);
+    });
+}
+
+export function vaccinationPerState(): Promise<Map<number, Map<number, RKIVaccinationData>>> {
+    return new Promise((resolve, reject) => {
+        getFromCache<Map<number, Map<number, RKIVaccinationData>>>('vaccination.json', () => {
+            return new Promise<string>((resolve, reject) => {
+                fetch(RKIVaccinationDataPath)
+                    .then(d => {
+                        d.json()
+                            .then(j => resolve(stringify(transformVaccinationData(j))))
+                            .catch(reject);
+                    })
+                    .catch(reject);
+
+                function transformVaccinationData(obj: any): Map<number, Map<number, RKIVaccinationData>> {
+                    const map = new Map<number, Map<number, RKIVaccinationData>>();
+                    obj.features.forEach(({ attributes }: any) => {
+                        const stateIdentifier = attributes.RS;
+                        if(stateIdentifier === 'DE') return;    // Ignore "Impfzentren Bund*"
+                        const stateId = stateIdentifier === 'GE' ? 0 : parseInt(stateIdentifier);
+                        if(!map.has(stateId))
+                            map.set(stateId, new Map<number, RKIVaccinationData>());
+
+                        if(!map.get(stateId)!.has(attributes.Datum))
+                            map.get(stateId)!.set(attributes.Datum, {
+                                Date: new Date(attributes.Datum),
+                                ProportionFirstVaccinations: 0,
+                                ProportionSecondVaccinations: 0,
+                                StateId: stateId,
+                                SumFirstAstraZeneca: 0,
+                                SumFirstBioNTech: 0,
+                                SumFirstModerna: 0,
+                                SumFirstVaccinations: 0,
+                                SumSecondAstraZeneca: 0,
+                                SumSecondBioNTech: 0,
+                                SumSecondModerna: 0,
+                                SumSecondVaccinations: 0,
+                                SumVaccinations: 0,
+                                SumAstraZeneca: 0,
+                                SumBioNTech: 0,
+                                SumJohnsonAndJohnson: 0,
+                                SumModerna: 0,
+                            });
+
+                        add(map, stateId, attributes.Datum, 'ProportionFirstVaccinations', attributes.AlleImpfstellenImpfquoteEineImp);
+                        add(map, stateId, attributes.Datum, 'ProportionSecondVaccinations', attributes.AlleImpfstellenImpfquoteDurchge);
+
+                        add(map, stateId, attributes.Datum, 'SumVaccinations', attributes.AlleImpfstellenSummeImpfungen);
+                        add(map, stateId, attributes.Datum, 'SumFirstVaccinations', attributes.AlleImpfstellenSummeErstimpfung);
+                        add(map, stateId, attributes.Datum, 'SumSecondVaccinations', attributes.AlleImpfstellenSummeDurchgeimpf);
+
+                        add(map, stateId, attributes.Datum, 'SumFirstAstraZeneca', attributes.ImpfzentrenEtcEineImpfungAstraZ, attributes.NiedergelasseneEineImpfungAstra);
+                        add(map, stateId, attributes.Datum, 'SumSecondAstraZeneca', attributes.ImpfzentrenEtcDurchgeimpftAstra, attributes.NiedergelassenDurchgeimpftAstra);
+                        addInMap(map, stateId, attributes.Datum, 'SumAstraZeneca', 'SumFirstAstraZeneca', 'SumSecondAstraZeneca');
+
+                        add(map, stateId, attributes.Datum, 'SumFirstBioNTech', attributes.ImpfzentrenEtcEineImpfungBioNTe, attributes.NiedergelasseneEineImpfungBioNT);
+                        add(map, stateId, attributes.Datum, 'SumSecondBioNTech', attributes.ImpfzentrenEtcDurchgeimpftBioNT, attributes.NiedergelassenDurchgeimpftBioNT);
+                        addInMap(map, stateId, attributes.Datum, 'SumBioNTech', 'SumFirstBioNTech', 'SumSecondBioNTech');
+
+                        add(map, stateId, attributes.Datum, 'SumFirstModerna', attributes.ImpfzentrenEtcEineImpfungModern, attributes.NiedergelasseneEineImpfungModer);
+                        add(map, stateId, attributes.Datum, 'SumSecondModerna', attributes.ImpfzentrenEtcDurchgeimpftModer, attributes.NiedergelassenDurchgeimpftModer);
+                        addInMap(map, stateId, attributes.Datum, 'SumModerna', 'SumFirstModerna', 'SumSecondModerna');
+
+                        add(map, stateId, attributes.Datum, 'SumJohnsonAndJohnson', attributes.ImpfzentrenEtcDurchgeimpftJans, attributes.NiedergelassenDurchgeimpftJans);
+
+
+                        function add(map: Map<number, Map<number, RKIVaccinationData>>, stateId: number, date: number, property: keyof RKIVaccinationData, ...values: any[]) {
+                            if(typeof(values) !== 'undefined' && values !== null) {
+                                values.forEach(value => {
+                                    if(typeof(value) !== 'undefined' && value !== null && !isNaN(value)) {
+                                        map.get(stateId)!.get(date)![property] += value;
+                                    }
+                                });
+                            }
+                        }
+
+                        function addInMap(map: Map<number, Map<number, RKIVaccinationData>>, stateId: number, date: number, property: keyof RKIVaccinationData, ...values: (keyof RKIVaccinationData)[]) {
+                            values.forEach(value => {
+                                (map.get(stateId)!.get(date)![property] as number) += map.get(stateId)!.get(date)![value] as number;
+                            });
+                        }
+                    });
+                    /*map.forEach((m, stateId) => {
+                        map.set(stateId, new Map([...m.entries()].sort((a, b) => a[0] - b[0])));
+                    });*/
+                    return map;
+                }
+            });
+        }, (t) => {
+            return new Promise((resolve, reject) => {
+                resolve(parse(t));
+            });
+        }).then(resolve)
             .catch(reject);
     });
 }
