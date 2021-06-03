@@ -22,9 +22,9 @@ export class MapComponent implements AfterViewInit {
     //   console.log(res);
     // })
 
-    this.network.getVaccine(0).subscribe((res) => {
-      console.log(res)
-    })
+    // this.network.getVaccine(0).subscribe((res) => {
+    //   console.log(res)
+    // })
   }
 
   ngAfterViewInit(): void {
