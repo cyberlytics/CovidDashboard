@@ -12,8 +12,9 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements AfterViewInit {
-  private map: any;
+  private map = {} as L.Map;
   private response: GeoData = {} as GeoData;
+  private layer = {} as L.Layer;
 
   constructor(
     private network: NetworkService
@@ -39,7 +40,14 @@ export class MapComponent implements AfterViewInit {
       maxZoom: 10,
       attributionControl: false,
       zoomControl: false,
-      dragging: false,
+      dragging: true,
+    });
+
+    // set bounds for the map so only germany is displayed and draggable
+    let bounds = L.latLngBounds([[55.1, 5.4541194], [46.25, 15.4541194]]);
+    this.map.setMaxBounds(bounds);
+    this.map.on('drag', () => {
+      this.map.panInsideBounds(bounds, { animate: false });
     });
 
     let xhr = new XMLHttpRequest();
@@ -57,31 +65,50 @@ export class MapComponent implements AfterViewInit {
       };
 
       this.response = xhr.response;
-
-      L.geoJSON(xhr.response, {
-        style: myStyle,
-        onEachFeature: (feature, layer) => {
-          layer.on('click', function (e) {
-            // e = event
-            console.log(e);
-            console.log(e.target.feature.properties);
-          });
-        },
-      }).addTo(this.map);
+      this.loadMapWithData(xhr.response, myStyle);
     };
     xhr.send();
+  }
 
-    // L.geoJSON()
+  private loadMapWithData(data: any, myStyle: any) {
+    this.layer = L.geoJSON(data, {
+      style: myStyle,
+      onEachFeature: (feature, layer) => {
+        layer.on('click', function (e) {
+          // e = event
+          console.log(e);
+          console.log(e.target.feature.properties);
+        });
+      },
+    })
+    this.layer.addTo(this.map);
+  }
 
-    // L.geoJSON(this.mapService.geoDaten,{
-    //   onEachFeature: (feature, layer) => {
-    //     layer.on('click', function (e) {
-    //       // e = event
-    //       console.log(e);
-    //       console.log(e.target.feature.properties);
-    //       })
-    //   }
-    // }).addTo(this.map);
+  public showVaccineData() {
+    console.log('showVaccineData');
+    this.map.removeLayer(this.layer);
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', './assets/json/bundeslaender_simplify200.geo.json');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.responseType = 'json';
+    xhr.onload = () => {
+      if (xhr.status !== 200) return;
+
+      let myStyle = {
+        color: '#ff1f4d',
+        weight: 2,
+        opacity: 0.5,
+        fillOpacity: 0.1,
+      };
+
+      this.response = xhr.response;
+      this.loadMapWithData(xhr.response, myStyle);
+    };
+    xhr.send();
+  }
+
+  public showInfectionData() {
+    console.log('showInfectionData');
   }
 }
 
