@@ -13,7 +13,8 @@ import { map } from 'rxjs/operators';
 })
 export class MapComponent implements AfterViewInit {
   private map = {} as L.Map;
-  private response: GeoData = {} as GeoData;
+  private countyJson = {} as GeoData;
+  private vaccineJson = {} as GeoData;
   private layer = {} as L.Layer;
 
   constructor(
@@ -44,78 +45,91 @@ export class MapComponent implements AfterViewInit {
     });
 
     // set bounds for the map so only germany is displayed and draggable
-    let bounds = L.latLngBounds([[55.1, 5.4541194], [46.25, 15.4541194]]);
+    const bounds = L.latLngBounds([[55.1, 5.4541194], [46.25, 15.4541194]]);
     this.map.setMaxBounds(bounds);
     this.map.on('drag', () => {
       this.map.panInsideBounds(bounds, { animate: false });
     });
 
-    let xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open('GET', './assets/json/RKI_Corona_Landkreise.json');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
     xhr.onload = () => {
-      if (xhr.status !== 200) return;
+      if (xhr.status !== 200) { return; }
 
-      let myStyle = {
+      const myStyle = {
         color: '#ff1f4d',
         weight: 2,
         opacity: 0.5,
         fillOpacity: 0.1,
       };
 
-      this.response = xhr.response;
+      this.countyJson = xhr.response;
       this.loadMapWithData(xhr.response, myStyle);
     };
     xhr.send();
   }
 
-  private loadMapWithData(data: any, myStyle: any) {
+  private loadMapWithData(data: any, myStyle: any): void {
     this.layer = L.geoJSON(data, {
       style: myStyle,
       onEachFeature: (feature, layer) => {
-        layer.on('click', function (e) {
+        layer.on('click', (e) => {
           // e = event
           console.log(e);
           console.log(e.target.feature.properties);
         });
       },
-    })
+    });
     this.layer.addTo(this.map);
   }
 
-  public showVaccineData() {
-    console.log('showVaccineData');
-    this.map.removeLayer(this.layer);
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', './assets/json/bundeslaender_simplify200.geo.json');
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.responseType = 'json';
-    xhr.onload = () => {
-      if (xhr.status !== 200) return;
-
-      let myStyle = {
-        color: '#ff1f4d',
-        weight: 2,
-        opacity: 0.5,
-        fillOpacity: 0.1,
-      };
-
-      this.response = xhr.response;
-      this.loadMapWithData(xhr.response, myStyle);
+  public showVaccineData(): void {
+    const myStyle = {
+      color: '#ff1f4d',
+      weight: 2,
+      opacity: 0.5,
+      fillOpacity: 0.1,
     };
-    xhr.send();
+    console.log('showVaccineData', this.vaccineJson);
+    this.map.removeLayer(this.layer);
+    if (this.vaccineJson.type) {
+      this.loadMapWithData(this.vaccineJson, myStyle);
+    } else {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', './assets/json/bundeslaender_simplify200.geo.json');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
+      xhr.onload = () => {
+        if (xhr.status !== 200) { return; }
+        this.vaccineJson = xhr.response;
+        this.loadMapWithData(xhr.response, myStyle);
+      };
+      xhr.send();
+    }
   }
 
-  public showInfectionData() {
+  public showInfectionData(): void {
     console.log('showInfectionData');
+    this.map.removeLayer(this.layer);
+    const myStyle = {
+      color: '#ff1f4d',
+      weight: 2,
+      opacity: 0.5,
+      fillOpacity: 0.1,
+    };
+    setTimeout(() => {
+      this.loadMapWithData(this.countyJson, myStyle);
+
+    }, 0);
   }
 }
 
 type GeoData = {
   type: string;
   features: GeoElement[];
-}
+};
 
 type GeoElement = {
   type: string
@@ -125,7 +139,7 @@ type GeoElement = {
     type: string,
     coordinates: any;
   }
-}
+};
 
 type properties = {
   ID_0: number,
@@ -141,4 +155,4 @@ type properties = {
   VARNAME_3: null,
   TYPE_3: string,
   ENGTYPE_3: string
-}
+};
