@@ -40,8 +40,15 @@ app.get('/incidences/:county(\\d+)', (req, res, next) => {
 
 app.get('/incidences', (req, res, next) => {
     dataPerCounty().then(d => {
-        res.send(mapToObject(lastElementPerMap(d)));
-        next();
+        getNames().then(n => {
+            const incidences = lastElementPerMap(d);
+            incidences.forEach(v => {
+                const e = v as RKIData & { State: string; };
+                e.State = n.Counties.get(v.CountyId)!;
+            });
+            res.send(mapToObject(incidences));
+            next();
+        });
     }).catch(err => console.log('error:', err));
 });
 
