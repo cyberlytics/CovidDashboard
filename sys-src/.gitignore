@@ -47,3 +47,5 @@ Thumbs.db
 
 # Backend data cache
 /data
+/data_temp
+/archive
