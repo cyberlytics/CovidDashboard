@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { dataPerCounty, getNames, vaccinationPerState } from "./backend/rkiFetcher";
-import { mapToObject, stringify } from "./backend/util";
+import { dataPerCounty, getNames, RKIData, RKIVaccinationData, vaccinationPerState } from "./backend/rkiFetcher";
+import { lastDays, lastElementPerMap, mapToObject, stringify } from "./backend/util";
 
 const app = express();
 
@@ -30,30 +30,41 @@ app.use(bodyParser.json(), function (req, res, next) {
     next();
 });
 
-app.get('/county/:county(\\d+)', (req, res, next) => {
+app.get('/incidences/:county(\\d+)', (req, res, next) => {
     dataPerCounty().then(d => {
         const id = parseInt((req.params as any).county);
-        if(id === 0) {
-            getNames().then(n => {
-                res.send(mapToObject(n.Counties));
-                next();
-            })
-            .catch(err => console.log('error:', err));
-        }
-        else {
-            res.send(mapToObject(d.get(id)));
-            next();
-        }
-    })
-        .catch(err => console.log('error:', err));
+        res.send(mapToObject(d.get(id)));
+        next();
+    }).catch(err => console.log('error:', err));
 });
 
-app.get('/vaccine/:state(\\d+)', (req, res, next) => {
+app.get('/incidences', (req, res, next) => {
+    dataPerCounty().then(d => {
+        res.send(mapToObject(lastElementPerMap(d)));
+        next();
+    }).catch(err => console.log('error:', err));
+});
+
+app.get('/counties', (req, res, next) => {
+    getNames().then(n => {
+        res.send(mapToObject(n.Counties));
+        next();
+    }).catch(err => console.log('error:', err));
+});
+
+app.get('/vaccines/:state(\\d+)', (req, res, next) => {
     vaccinationPerState().then(v => {
         const id = parseInt((req.params as any).state);
         res.send(mapToObject(v.get(id)));
         next();
     }).catch(err => console.log('error:', err));
+});
+
+app.get('/vaccines', (req, res, next) => {
+    vaccinationPerState().then(v => {
+        res.send(mapToObject(lastElementPerMap(v)));
+        next();
+    }).catch(err => console.log('error:', err));;
 });
 
 
