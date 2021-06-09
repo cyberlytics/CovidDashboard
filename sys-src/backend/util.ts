@@ -71,3 +71,7 @@ export function lastElementPerMap<T>(map: Map<number, Map<number, T>>): Map<numb
   });
   return m;
 }
+
+export function daysSince(date: string): number {
+  return Math.ceil((new Date().valueOf() - new Date(Date.parse(date)).valueOf()) / 1000 / 60 / 60 / 24);
+}

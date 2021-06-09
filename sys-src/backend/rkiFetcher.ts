@@ -1,7 +1,7 @@
 import Papa from "papaparse";
 import getFromCache from "./filestore";
 import fetch from "node-fetch";
-import { addDays, lastDays, parse, parseRKIDate, stringify } from "./util";
+import { addDays, daysSince, lastDays, parse, parseRKIDate, stringify } from "./util";
 
 const RKIDataPath = 'https://opendata.arcgis.com/api/v3/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/downloads/data?format=csv&spatialRefId=4326';
 const RKIPopulationDataPath = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=EWZ,last_update,cases7_per_100k,AdmUnitId,cases7_lk,death7_lk&returnGeometry=false&outSR=4326&f=json';
@@ -177,7 +177,7 @@ function fullData(): Promise<RKIRawData[]> {
     });
 }
 
-const HISTORY_DAYS = 30;
+const HISTORY_DAYS = daysSince('2020-01-01');
 export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
     return new Promise((resolve, reject) => {
         getFromCache<Map<number, Map<number, RKIData>>>('perCounty.json', () => {
