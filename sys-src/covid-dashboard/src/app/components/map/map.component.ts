@@ -27,6 +27,27 @@ export class MapComponent implements AfterViewInit {
     // this.network.getVaccine(0).subscribe((res) => {
     //   console.log(res)
     // })
+
+    // this.network.getAllIncidences().subscribe((res) => {
+    //   console.log(res);
+    //   console.log(res[0][1].ActiveCases)
+    // });
+
+    // this.network.getSingelIncidence(1001).subscribe((res) => {
+    //   console.log(res);
+    // })
+
+    // this.network.getCountyOverView().subscribe((res) => {
+    //   console.log(res);
+    // })
+
+    // this.network.getVaccine(1).subscribe((res) => {
+    //   console.log(res)
+    // })
+
+    this.network.getVaccineAllStates().subscribe((res) => {
+      console.log(res);
+    })
   }
 
   ngAfterViewInit(): void {
