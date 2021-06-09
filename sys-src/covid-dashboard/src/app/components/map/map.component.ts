@@ -98,7 +98,7 @@ export class MapComponent implements AfterViewInit {
       this.loadMapWithData(this.vaccineJson, myStyle);
     } else {
       const xhr = new XMLHttpRequest();
-      xhr.open('GET', './assets/json/bundeslaender_simplify200.geo.json');
+      xhr.open('GET', './assets/json/bundeslaender.geo.json');
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.responseType = 'json';
       xhr.onload = () => {
