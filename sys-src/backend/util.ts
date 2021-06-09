@@ -43,7 +43,10 @@ function getMidnightUTC(date: Date): Date {
 }
 
 export function addDays(date: Date, days: number): Date {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
+  //return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
+  return new Date(
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() + days)
+  );
 }
 
 export function parseRKIDate(date: string): Date {
@@ -55,4 +58,16 @@ export function parseRKIDate(date: string): Date {
     .split("+00")
     .join("Z");
   return new Date(Date.parse(s));
+}
+
+export function lastElementPerMap<T>(map: Map<number, Map<number, T>>): Map<number, T> {
+  const m = new Map<number, T>();
+  map.forEach((v, key) => {
+    let last: T | undefined = undefined;
+    v.forEach(e => last = e);
+    if (typeof (last) !== 'undefined') {
+      m.set(key, last);
+    }
+  });
+  return m;
 }

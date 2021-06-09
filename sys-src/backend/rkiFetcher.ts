@@ -16,6 +16,7 @@ export type RKIData = {
     ActiveCases: number,
     Incidence7: number,
     Population: number,
+    Date: Date,
 };
 
 type RKIPopulationData = {
@@ -226,7 +227,7 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                 lastDays(HISTORY_DAYS).forEach(day => {
                                     const dayValue = day.valueOf();
                                     v.forEach(e => {
-                                        if (e.Date <= day) {
+                                        if (e.Date < day) {
                                             if (!daysMap.has(dayValue)) {
                                                 daysMap.set(dayValue, {
                                                     CountyId: k,
@@ -237,6 +238,7 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                                     ActiveCases: 0,
                                                     Incidence7: -1,
                                                     Population: 0,
+                                                    Date: day,
                                                 });
                                             }
                                             daysMap.get(dayValue)!.TotalCases += e.NewCases + e.NewDeaths + e.NewRecovered;
