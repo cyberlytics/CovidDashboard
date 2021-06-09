@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { County, Vaccine, VaccineData } from '../county';
+import { County, CountyData, Vaccine, VaccineData } from '../county';
 import { map } from 'rxjs/operators';
 import { Counties, Vaccines } from '../counties';
 
@@ -14,13 +14,26 @@ export class NetworkService {
     private http: HttpClient
   ) { }
 
-  public getCounty(id: number) {
-    return this.http.get<County[]>(this.url + '/county/' + id).pipe(map((data) =>
-    data.map(c => Counties.formatDate(c))));
+  public getAllCountyIncidences() {
+    return this.http.get<County[]>(this.url + '/incidences/');
   }
 
-  public getVaccine(id: number) {
-    return this.http.get<Vaccine[]>(this.url + '/vaccine/' + id).pipe(map((data) =>
+  public getSingleCountyIncidences(id: number) {
+    return this.http.get<County[]>(this.url + '/incidences/' + id).pipe(map((data) =>
+      data.map(c => Counties.formatDate(c))));
+  }
+
+  public getCountyOverView() {
+    return this.http.get<County[]>(this.url + '/counties' );
+  }
+
+  public getVaccineSingleState(id: number) {
+    return this.http.get<Vaccine[]>(this.url + '/vaccines/' + id).pipe(map((data) =>
     data.map(v => Vaccines.formatDate(v))));
   }
+
+  public getVaccineAllStates() {
+    return this.http.get<Vaccine[]>(this.url + '/vaccines' );
+  }
+
 }
