@@ -8,7 +8,7 @@ const app = express();
 // Bodyparser Middleware
 app.use(bodyParser.json(), function (req, res, next) {
     // Website you wish to allow to connect
-    res.setHeader("Access-Control-Allow-Origin", "http://194.233.164.10:4200");
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 
     // Request methods you wish to allow
     res.setHeader(
