@@ -5,7 +5,10 @@
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(5, auto);
+    overflow: auto;
+    grid-template-columns: repeat(6, minmax(120px, 1fr));
+    grid-auto-rows: 1fr;
+    grid-gap: 5px;
 
     .row {
       display: contents;
@@ -24,15 +27,10 @@
         border-radius: 5px;
 
         padding: 5px;
-        margin-bottom: 5px;
 
         font-size: 13rem;
         text-align: right;
         word-break: break-word;
-
-        &:not(:last-child) {
-          margin-right: 5px;
-        }
 
         &__difference-to-previous-day {
           display: flex;

@@ -17,9 +17,9 @@ export class MapComponent implements AfterViewInit {
   private vaccineJson = {} as GeoData;
   private layer = {} as L.Layer;
 
-  constructor(
-    private network: NetworkService
-  ) {
+  currentMap: string = 'infection';
+
+  constructor(private network: NetworkService) {
     // this.network.getCounty(1001).subscribe((res: any) => {
     //   console.log(res);
     // })
@@ -47,7 +47,7 @@ export class MapComponent implements AfterViewInit {
 
     this.network.getVaccineAllStates().subscribe((res) => {
       console.log(res);
-    })
+    });
   }
 
   ngAfterViewInit(): void {
@@ -66,7 +66,10 @@ export class MapComponent implements AfterViewInit {
     });
 
     // set bounds for the map so only germany is displayed and draggable
-    const bounds = L.latLngBounds([[55.1, 5.4541194], [46.25, 15.4541194]]);
+    const bounds = L.latLngBounds([
+      [55.1, 5.4541194],
+      [46.25, 15.4541194],
+    ]);
     this.map.setMaxBounds(bounds);
     this.map.on('drag', () => {
       this.map.panInsideBounds(bounds, { animate: false });
@@ -77,7 +80,9 @@ export class MapComponent implements AfterViewInit {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
     xhr.onload = () => {
-      if (xhr.status !== 200) { return; }
+      if (xhr.status !== 200) {
+        return;
+      }
 
       const myStyle = {
         color: '#ff1f4d',
@@ -107,8 +112,9 @@ export class MapComponent implements AfterViewInit {
   }
 
   public showVaccineData(): void {
+    this.currentMap = 'vaccine';
     const myStyle = {
-      color: '#ff1f4d',
+      color: '#529bf2',
       weight: 2,
       opacity: 0.5,
       fillOpacity: 0.1,
@@ -123,7 +129,9 @@ export class MapComponent implements AfterViewInit {
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.responseType = 'json';
       xhr.onload = () => {
-        if (xhr.status !== 200) { return; }
+        if (xhr.status !== 200) {
+          return;
+        }
         this.vaccineJson = xhr.response;
         this.loadMapWithData(xhr.response, myStyle);
       };
@@ -132,6 +140,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   public showInfectionData(): void {
+    this.currentMap = 'infection';
     console.log('showInfectionData');
     this.map.removeLayer(this.layer);
     const myStyle = {
@@ -142,7 +151,6 @@ export class MapComponent implements AfterViewInit {
     };
     setTimeout(() => {
       this.loadMapWithData(this.countyJson, myStyle);
-
     }, 0);
   }
 }
@@ -153,27 +161,27 @@ type GeoData = {
 };
 
 type GeoElement = {
-  type: string
-  id: number,
-  properties: properties
+  type: string;
+  id: number;
+  properties: properties;
   geometry: {
-    type: string,
+    type: string;
     coordinates: any;
-  }
+  };
 };
 
 type properties = {
-  ID_0: number,
-  ISO: string,
-  NAME_0: string,
-  ID_1: number,
-  NAME_1: string,
-  ID_2: number,
-  NAME_2: string,
-  ID_3: number,
-  NAME_3: string,
-  NL_NAME_3: string,
-  VARNAME_3: null,
-  TYPE_3: string,
-  ENGTYPE_3: string
+  ID_0: number;
+  ISO: string;
+  NAME_0: string;
+  ID_1: number;
+  NAME_1: string;
+  ID_2: number;
+  NAME_2: string;
+  ID_3: number;
+  NAME_3: string;
+  NL_NAME_3: string;
+  VARNAME_3: null;
+  TYPE_3: string;
+  ENGTYPE_3: string;
 };
