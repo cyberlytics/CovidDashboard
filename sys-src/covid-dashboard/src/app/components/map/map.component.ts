@@ -12,12 +12,14 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements AfterViewInit {
-  private map: any;
-  private response: GeoData = {} as GeoData;
+  private map = {} as L.Map;
+  private countyJson = {} as GeoData;
+  private vaccineJson = {} as GeoData;
+  private layer = {} as L.Layer;
 
-  constructor(
-    private network: NetworkService
-  ) {
+  currentMap: string = 'infection';
+
+  constructor(private network: NetworkService) {
     // this.network.getCounty(1001).subscribe((res: any) => {
     //   console.log(res);
     // })
@@ -25,6 +27,27 @@ export class MapComponent implements AfterViewInit {
     // this.network.getVaccine(0).subscribe((res) => {
     //   console.log(res)
     // })
+
+    // this.network.getAllIncidences().subscribe((res) => {
+    //   console.log(res);
+    //   console.log(res[0][1].ActiveCases)
+    // });
+
+    // this.network.getSingelIncidence(1001).subscribe((res) => {
+    //   console.log(res);
+    // })
+
+    // this.network.getCountyOverView().subscribe((res) => {
+    //   console.log(res);
+    // })
+
+    // this.network.getVaccine(1).subscribe((res) => {
+    //   console.log(res)
+    // })
+
+    this.network.getVaccineAllStates().subscribe((res) => {
+      console.log(res);
+    });
   }
 
   ngAfterViewInit(): void {
@@ -39,79 +62,126 @@ export class MapComponent implements AfterViewInit {
       maxZoom: 10,
       attributionControl: false,
       zoomControl: false,
-      dragging: false,
+      dragging: true,
     });
 
-    let xhr = new XMLHttpRequest();
+    // set bounds for the map so only germany is displayed and draggable
+    const bounds = L.latLngBounds([
+      [55.1, 5.4541194],
+      [46.25, 15.4541194],
+    ]);
+    this.map.setMaxBounds(bounds);
+    this.map.on('drag', () => {
+      this.map.panInsideBounds(bounds, { animate: false });
+    });
+
+    const xhr = new XMLHttpRequest();
     xhr.open('GET', './assets/json/RKI_Corona_Landkreise.json');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
     xhr.onload = () => {
-      if (xhr.status !== 200) return;
+      if (xhr.status !== 200) {
+        return;
+      }
 
-      let myStyle = {
+      const myStyle = {
         color: '#ff1f4d',
         weight: 2,
         opacity: 0.5,
         fillOpacity: 0.1,
       };
 
-      this.response = xhr.response;
-
-      L.geoJSON(xhr.response, {
-        style: myStyle,
-        onEachFeature: (feature, layer) => {
-          layer.on('click', function (e) {
-            // e = event
-            console.log(e);
-            console.log(e.target.feature.properties);
-          });
-        },
-      }).addTo(this.map);
+      this.countyJson = xhr.response;
+      this.loadMapWithData(xhr.response, myStyle);
     };
     xhr.send();
+  }
 
-    // L.geoJSON()
+  private loadMapWithData(data: any, myStyle: any): void {
+    this.layer = L.geoJSON(data, {
+      style: myStyle,
+      onEachFeature: (feature, layer) => {
+        layer.on('click', (e) => {
+          // e = event
+          console.log(e);
+          console.log(e.target.feature.properties);
+        });
+      },
+    });
+    this.layer.addTo(this.map);
+  }
 
-    // L.geoJSON(this.mapService.geoDaten,{
-    //   onEachFeature: (feature, layer) => {
-    //     layer.on('click', function (e) {
-    //       // e = event
-    //       console.log(e);
-    //       console.log(e.target.feature.properties);
-    //       })
-    //   }
-    // }).addTo(this.map);
+  public showVaccineData(): void {
+    this.currentMap = 'vaccine';
+    const myStyle = {
+      color: '#529bf2',
+      weight: 2,
+      opacity: 0.5,
+      fillOpacity: 0.1,
+    };
+    console.log('showVaccineData', this.vaccineJson);
+    this.map.removeLayer(this.layer);
+    if (this.vaccineJson.type) {
+      this.loadMapWithData(this.vaccineJson, myStyle);
+    } else {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', './assets/json/bundeslaender.geo.json');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
+      xhr.onload = () => {
+        if (xhr.status !== 200) {
+          return;
+        }
+        this.vaccineJson = xhr.response;
+        this.loadMapWithData(xhr.response, myStyle);
+      };
+      xhr.send();
+    }
+  }
+
+  public showInfectionData(): void {
+    this.currentMap = 'infection';
+    console.log('showInfectionData');
+    this.map.removeLayer(this.layer);
+    const myStyle = {
+      color: '#ff1f4d',
+      weight: 2,
+      opacity: 0.5,
+      fillOpacity: 0.1,
+    };
+    setTimeout(() => {
+      this.loadMapWithData(this.countyJson, myStyle);
+    }, 0);
   }
 }
 
 type GeoData = {
   type: string;
   features: GeoElement[];
-}
+};
 
 type GeoElement = {
-  type: string
-  id: number,
-  properties: properties
+  type: string;
+  id: number;
+  properties: properties;
   geometry: {
-    type: string,
+    type: string;
     coordinates: any;
-  }
-}
+  };
+};
 
 type properties = {
-  ID_0: number,
-  ISO: string,
-  NAME_0: string,
-  ID_1: number,
-  NAME_1: string,
-  ID_2: number,
-  NAME_2: string,
-  ID_3: number,
-  NAME_3: string,
-  NL_NAME_3: string,
-  VARNAME_3: null,
-  TYPE_3: string,
-  ENGTYPE_3: string
-}
+  ID_0: number;
+  ISO: string;
+  NAME_0: string;
+  ID_1: number;
+  NAME_1: string;
+  ID_2: number;
+  NAME_2: string;
+  ID_3: number;
+  NAME_3: string;
+  NL_NAME_3: string;
+  VARNAME_3: null;
+  TYPE_3: string;
+  ENGTYPE_3: string;
+};
