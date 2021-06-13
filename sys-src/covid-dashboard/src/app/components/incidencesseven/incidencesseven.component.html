@@ -1,6 +1,8 @@
-<h1 *ngIf="this.type === 'incidence7'">7 TAge Inzdienz</h1>
+<h1 *ngIf="this.type === 'incidence7'">7 Tage Inzdienz</h1>
 <h1 *ngIf="this.type === 'activeCases'">Aktive Fälle</h1>
 <h1 *ngIf="this.type === 'recovered'">Genese Personen</h1>
+<h1 *ngIf="this.type === 'deaths'">Gestorbene</h1>
+<h1 *ngIf="this.type === 'totalCases'">Gestorbene</h1>
 <ngx-charts-bar-vertical
     *ngIf="this.loaded"
     [view]="[800,400]"
