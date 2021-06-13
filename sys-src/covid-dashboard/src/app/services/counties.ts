@@ -7,6 +7,12 @@ export class Counties {
       0: new Date(c[0]).toLocaleDateString('de')
     };
   }
+
+  static returnCorrecData(c: any) {
+    return {
+      1: c[1]
+    };
+  }
 }
 
 
