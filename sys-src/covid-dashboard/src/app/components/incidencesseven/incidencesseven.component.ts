@@ -8,7 +8,8 @@ import { NetworkService } from 'src/app/services/network/network.service';
 })
 export class IncidencessevenComponent implements OnInit {
 
-  @Input()type: 'incidence7' | 'activeCases' | 'recovered' = 'incidence7';
+  @Input() type: 'incidence7' | 'activeCases' | 'recovered' | 'deaths' | 'totalCases' = 'incidence7';
+  @Input() daynumber: number = 7;
 
   public lastseven = [] as ScaleData[];
   public loaded: boolean = false;
@@ -24,7 +25,7 @@ export class IncidencessevenComponent implements OnInit {
   ngOnInit(): void {
     this.network.getSingleCountyIncidences(9361).subscribe((res) => {
       console.log('res singel chart', res);
-      const t = res.splice(res.length-7, res.length);
+      const t = res.splice(res.length - this.daynumber, res.length);
       console.log('t', t);
       for (const element of t) {
         if (this.type === 'incidence7') {
@@ -35,6 +36,12 @@ export class IncidencessevenComponent implements OnInit {
           this.lastseven.push(temp);
         } else if (this.type === 'recovered') {
           const temp: ScaleData = {name: element[0], value: element[1].Recovered};
+          this.lastseven.push(temp);
+        } else if (this.type === 'deaths') {
+          const temp: ScaleData = {name: element[0], value: element[1].Deaths};
+          this.lastseven.push(temp);
+        } else if (this.type === 'totalCases') {
+          const temp: ScaleData = {name: element[0], value: element[1].TotalCases};
           this.lastseven.push(temp);
         }
       }
