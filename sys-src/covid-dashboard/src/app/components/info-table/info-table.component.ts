@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./info-table.component.scss'],
 })
 export class InfoTableComponent implements OnInit {
+  selectedBookmark: boolean = false;
+
   constructor() {}
 
   ngOnInit(): void {}

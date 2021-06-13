@@ -12,6 +12,8 @@ import localeDe from '@angular/common/locales/de';
 import { registerLocaleData } from '@angular/common';
 import { InfoTableComponent } from './components/info-table/info-table.component';
 import { HttpClientModule } from '@angular/common/http';
+import { VaccineProgressBarComponent } from './components/vaccine-progress-bar/vaccine-progress-bar.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 
 registerLocaleData(localeDe);
@@ -24,6 +26,8 @@ registerLocaleData(localeDe);
     HomeComponent,
     InfoBadgesComponent,
     InfoTableComponent,
+    VaccineProgressBarComponent,
+    FooterComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule,],
   providers: [{ provide: LOCALE_ID, useValue: 'de' }],

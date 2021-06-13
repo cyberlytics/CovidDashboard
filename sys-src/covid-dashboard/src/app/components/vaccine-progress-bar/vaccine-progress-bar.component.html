@@ -1,0 +1,20 @@
+<div class="vaccine-progress-bar">
+  <p class="title-badge accent-blue accent-blue-background">Impffortschritt</p>
+
+  <div class="vaccine-progress-bar__info">
+    <p>Zuletzt aktualisiert: {{ lastUpdated | date: "long":"CEST":"de" }}</p>
+  </div>
+
+  <div class="legend" [style.margin-left]="progressFirstVaccinated + '%'">
+    <p class="legend__description">Mindestens einmal geimpft ({{ progressFirstVaccinated }}%)</p>
+    <p>|</p>
+  </div>
+  <div class="progress" style="width: 100%">
+    <div class="progress value" [style.width]="progressFirstVaccinated + '%'"></div>
+    <div class="progress value highlighted" [style.width]="progressFullyVaccinated + '%'"></div>
+  </div>
+  <div class="legend" [style.margin-left]="progressFullyVaccinated + '%'">
+    <p>|</p>
+    <p class="legend__description">Vollständig geimpft ({{ progressFullyVaccinated }}%)</p>
+  </div>
+</div>

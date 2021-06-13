@@ -1,5 +1,9 @@
-#map {
-  width: 100%;
-  height: 100vh;
-  background: transparent;
+@import "../../../assets/css/colors/colors.scss";
+
+.switch-map {
+  #map {
+    width: 100%;
+    height: 100vh;
+    background: transparent;
+  }
 }
