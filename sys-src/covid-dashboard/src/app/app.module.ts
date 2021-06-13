@@ -14,6 +14,9 @@ import { InfoTableComponent } from './components/info-table/info-table.component
 import { HttpClientModule } from '@angular/common/http';
 import { VaccineProgressBarComponent } from './components/vaccine-progress-bar/vaccine-progress-bar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { IncidencessevenComponent } from './components/incidencesseven/incidencesseven.component';
 
 
 registerLocaleData(localeDe);
@@ -28,8 +31,15 @@ registerLocaleData(localeDe);
     InfoTableComponent,
     VaccineProgressBarComponent,
     FooterComponent,
+    IncidencessevenComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule,],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    NgxChartsModule
+  ],
   providers: [{ provide: LOCALE_ID, useValue: 'de' }],
   bootstrap: [AppComponent],
 })

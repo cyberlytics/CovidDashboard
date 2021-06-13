@@ -210,4 +210,4 @@ type propertiesVaccine = {
   name: string,
   type: string,
   propsNetwork?: VaccineData
-}
+};
