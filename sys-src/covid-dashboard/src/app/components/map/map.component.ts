@@ -17,9 +17,9 @@ export class MapComponent implements AfterViewInit {
   private vaccineJson = {} as GeoData;
   private layer = {} as L.Layer;
 
-  constructor(
-    private network: NetworkService
-  ) {
+  currentMap: string = 'infection';
+
+  constructor(private network: NetworkService) {
     // this.network.getCounty(1001).subscribe((res: any) => {
     //   console.log(res);
     // })
@@ -63,7 +63,10 @@ export class MapComponent implements AfterViewInit {
     });
 
     // set bounds for the map so only germany is displayed and draggable
-    const bounds = L.latLngBounds([[55.1, 5.4541194], [46.25, 15.4541194]]);
+    const bounds = L.latLngBounds([
+      [55.1, 5.4541194],
+      [46.25, 15.4541194],
+    ]);
     this.map.setMaxBounds(bounds);
     this.map.on('drag', () => {
       this.map.panInsideBounds(bounds, { animate: false });
@@ -74,7 +77,9 @@ export class MapComponent implements AfterViewInit {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
     xhr.onload = () => {
-      if (xhr.status !== 200) { return; }
+      if (xhr.status !== 200) {
+        return;
+      }
 
       const myStyle = {
         color: '#ff1f4d',
@@ -132,7 +137,9 @@ export class MapComponent implements AfterViewInit {
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.responseType = 'json';
       xhr.onload = () => {
-        if (xhr.status !== 200) { return; }
+        if (xhr.status !== 200) {
+          return;
+        }
         this.vaccineJson = xhr.response;
         console.log(this.vaccineJson);
         for (let i = 0; i < this.vaccineJson.features.length; i++) {
@@ -150,6 +157,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   public showInfectionData(): void {
+    this.currentMap = 'infection';
     console.log('showInfectionData');
     this.map.removeLayer(this.layer);
     const myStyle = {
@@ -160,7 +168,6 @@ export class MapComponent implements AfterViewInit {
     };
     setTimeout(() => {
       this.loadMapWithData(this.countyJson, myStyle);
-
     }, 0);
   }
 }
@@ -175,9 +182,9 @@ type GeoElement = {
   id: number,
   properties: properties | propertiesVaccine
   geometry: {
-    type: string,
+    type: string;
     coordinates: any;
-  }
+  };
 };
 
 type properties = {
