@@ -1,6 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
 import * as L from 'leaflet';
-import { County } from 'src/app/services/county';
+import { County, Vaccine, VaccineData } from 'src/app/services/county';
 import { NetworkService } from 'src/app/services/network/network.service';
 import { MapService } from '../../services/map/map.service';
 // import * as La from 'leaflet-ajax';
@@ -12,8 +12,10 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements AfterViewInit {
-  private map: any;
-  private response: GeoData = {} as GeoData;
+  private map = {} as L.Map;
+  private countyJson = {} as GeoData;
+  private vaccineJson = {} as GeoData;
+  private layer = {} as L.Layer;
 
   constructor(
     private network: NetworkService
@@ -25,6 +27,24 @@ export class MapComponent implements AfterViewInit {
     // this.network.getVaccine(0).subscribe((res) => {
     //   console.log(res)
     // })
+
+    // this.network.getAllIncidences().subscribe((res) => {
+    //   console.log(res);
+    //   console.log(res[0][1].ActiveCases)
+    // });
+
+    // this.network.getSingelIncidence(1001).subscribe((res) => {
+    //   console.log(res);
+    // })
+
+    // this.network.getCountyOverView().subscribe((res) => {
+    //   console.log(res);
+    // })
+
+    // this.network.getVaccine(1).subscribe((res) => {
+    //   console.log(res)
+    // })
+
   }
 
   ngAfterViewInit(): void {
@@ -39,66 +59,126 @@ export class MapComponent implements AfterViewInit {
       maxZoom: 10,
       attributionControl: false,
       zoomControl: false,
-      dragging: false,
+      dragging: true,
     });
 
-    let xhr = new XMLHttpRequest();
+    // set bounds for the map so only germany is displayed and draggable
+    const bounds = L.latLngBounds([[55.1, 5.4541194], [46.25, 15.4541194]]);
+    this.map.setMaxBounds(bounds);
+    this.map.on('drag', () => {
+      this.map.panInsideBounds(bounds, { animate: false });
+    });
+
+    const xhr = new XMLHttpRequest();
     xhr.open('GET', './assets/json/RKI_Corona_Landkreise.json');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
     xhr.onload = () => {
-      if (xhr.status !== 200) return;
+      if (xhr.status !== 200) { return; }
 
-      let myStyle = {
+      const myStyle = {
         color: '#ff1f4d',
         weight: 2,
         opacity: 0.5,
         fillOpacity: 0.1,
       };
 
-      this.response = xhr.response;
-
-      L.geoJSON(xhr.response, {
-        style: myStyle,
-        onEachFeature: (feature, layer) => {
-          layer.on('click', function (e) {
-            // e = event
-            console.log(e);
-            console.log(e.target.feature.properties);
-          });
-        },
-      }).addTo(this.map);
+      this.countyJson = xhr.response;
+      this.loadMapWithData(xhr.response, myStyle);
     };
     xhr.send();
+  }
 
-    // L.geoJSON()
+  private loadMapWithData(data: any, myStyle: any): void {
+    this.layer = L.geoJSON(data, {
+      style: (feature) => {
+        if (feature?.properties.propsNetwork?.ProportionFirstVaccinations > 40) {
+          return {color: '#87ceeb', fillColor: '#87ceeb', fillOpacity: 0.2};
+        } else if (feature?.properties.propsNetwork?.ProportionFirstVaccinations < 30) {
+          return {color: '#6ca6cd', fillColor: '#6ca6cd', fillOpacity: 0.2};
+        } else if (feature?.properties.propsNetwork?.ProportionFirstVaccinations < 20) {
+          return {color: '#4a708b', fillColor: '#4a708b', fillOpacity: 0.2};
+        }
+        // return {color: 'red', fillColor: 'red'}
+        return {};
+      },
+      onEachFeature: (feature, layer) => {
+        layer.on('click', (e) => {
+          // e = event
+          console.log(e);
+          console.log(e.target.feature.properties);
+        });
+      },
+    });
+    this.layer.addTo(this.map);
+  }
 
-    // L.geoJSON(this.mapService.geoDaten,{
-    //   onEachFeature: (feature, layer) => {
-    //     layer.on('click', function (e) {
-    //       // e = event
-    //       console.log(e);
-    //       console.log(e.target.feature.properties);
-    //       })
-    //   }
-    // }).addTo(this.map);
+  public showVaccineData(): void {
+    this.network.getVaccineAllStates().subscribe((res) => {
+      console.log(res);
+      const myStyle = {
+        color: '#ff1f4d',
+        weight: 2,
+        opacity: 0.5,
+        fillOpacity: 0.1,
+      };
+      console.log('showVaccineData', this.vaccineJson);
+      this.map.removeLayer(this.layer);
+      // if (this.vaccineJson.type) {
+        //   this.loadMapWithData(this.vaccineJson, myStyle);
+        // } else {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', './assets/json/bundeslaender.geo.json');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
+      xhr.onload = () => {
+        if (xhr.status !== 200) { return; }
+        this.vaccineJson = xhr.response;
+        console.log(this.vaccineJson);
+        for (let i = 0; i < this.vaccineJson.features.length; i++) {
+          const element = res.find(a => a[1].StateId === i);
+          if (element) {
+            this.vaccineJson.features[i].properties.propsNetwork = element[1];
+          }
+        }
+
+        this.loadMapWithData(this.vaccineJson, myStyle);
+      };
+      xhr.send();
+    })
+    // }
+  }
+
+  public showInfectionData(): void {
+    console.log('showInfectionData');
+    this.map.removeLayer(this.layer);
+    const myStyle = {
+      color: '#ff1f4d',
+      weight: 2,
+      opacity: 0.5,
+      fillOpacity: 0.1,
+    };
+    setTimeout(() => {
+      this.loadMapWithData(this.countyJson, myStyle);
+
+    }, 0);
   }
 }
 
 type GeoData = {
   type: string;
   features: GeoElement[];
-}
+};
 
 type GeoElement = {
   type: string
   id: number,
-  properties: properties
+  properties: properties | propertiesVaccine
   geometry: {
     type: string,
     coordinates: any;
   }
-}
+};
 
 type properties = {
   ID_0: number,
@@ -114,4 +194,13 @@ type properties = {
   VARNAME_3: null,
   TYPE_3: string,
   ENGTYPE_3: string
-}
+  propsNetwork?: VaccineData
+};
+
+type propertiesVaccine = {
+  StateId: number,
+  id: string,
+  name: string,
+  type: string,
+  propsNetwork?: VaccineData
+};
