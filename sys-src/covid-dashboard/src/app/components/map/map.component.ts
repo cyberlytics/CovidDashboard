@@ -1,6 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
 import * as L from 'leaflet';
-import { County } from 'src/app/services/county';
+import { County, Vaccine, VaccineData } from 'src/app/services/county';
 import { NetworkService } from 'src/app/services/network/network.service';
 import { MapService } from '../../services/map/map.service';
 // import * as La from 'leaflet-ajax';
@@ -45,9 +45,6 @@ export class MapComponent implements AfterViewInit {
     //   console.log(res)
     // })
 
-    this.network.getVaccineAllStates().subscribe((res) => {
-      console.log(res);
-    })
   }
 
   ngAfterViewInit(): void {
@@ -94,7 +91,17 @@ export class MapComponent implements AfterViewInit {
 
   private loadMapWithData(data: any, myStyle: any): void {
     this.layer = L.geoJSON(data, {
-      style: myStyle,
+      style: (feature) => {
+        if (feature?.properties.propsNetwork?.ProportionFirstVaccinations > 40) {
+          return {color: '#87ceeb', fillColor: '#87ceeb', fillOpacity: 0.2};
+        } else if (feature?.properties.propsNetwork?.ProportionFirstVaccinations < 30) {
+          return {color: '#6ca6cd', fillColor: '#6ca6cd', fillOpacity: 0.2};
+        } else if (feature?.properties.propsNetwork?.ProportionFirstVaccinations < 20) {
+          return {color: '#4a708b', fillColor: '#4a708b', fillOpacity: 0.2};
+        }
+        // return {color: 'red', fillColor: 'red'}
+        return {};
+      },
       onEachFeature: (feature, layer) => {
         layer.on('click', (e) => {
           // e = event
@@ -107,17 +114,19 @@ export class MapComponent implements AfterViewInit {
   }
 
   public showVaccineData(): void {
-    const myStyle = {
-      color: '#ff1f4d',
-      weight: 2,
-      opacity: 0.5,
-      fillOpacity: 0.1,
-    };
-    console.log('showVaccineData', this.vaccineJson);
-    this.map.removeLayer(this.layer);
-    if (this.vaccineJson.type) {
-      this.loadMapWithData(this.vaccineJson, myStyle);
-    } else {
+    this.network.getVaccineAllStates().subscribe((res) => {
+      console.log(res);
+      const myStyle = {
+        color: '#ff1f4d',
+        weight: 2,
+        opacity: 0.5,
+        fillOpacity: 0.1,
+      };
+      console.log('showVaccineData', this.vaccineJson);
+      this.map.removeLayer(this.layer);
+      // if (this.vaccineJson.type) {
+        //   this.loadMapWithData(this.vaccineJson, myStyle);
+        // } else {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', './assets/json/bundeslaender.geo.json');
       xhr.setRequestHeader('Content-Type', 'application/json');
@@ -125,10 +134,19 @@ export class MapComponent implements AfterViewInit {
       xhr.onload = () => {
         if (xhr.status !== 200) { return; }
         this.vaccineJson = xhr.response;
-        this.loadMapWithData(xhr.response, myStyle);
+        console.log(this.vaccineJson);
+        for (let i = 0; i < this.vaccineJson.features.length; i++) {
+          const element = res.find(a => a[1].StateId === i);
+          if (element) {
+            this.vaccineJson.features[i].properties.propsNetwork = element[1];
+          }
+        }
+
+        this.loadMapWithData(this.vaccineJson, myStyle);
       };
       xhr.send();
-    }
+    })
+    // }
   }
 
   public showInfectionData(): void {
@@ -155,7 +173,7 @@ type GeoData = {
 type GeoElement = {
   type: string
   id: number,
-  properties: properties
+  properties: properties | propertiesVaccine
   geometry: {
     type: string,
     coordinates: any;
@@ -176,4 +194,13 @@ type properties = {
   VARNAME_3: null,
   TYPE_3: string,
   ENGTYPE_3: string
+  propsNetwork?: VaccineData
+};
+
+type propertiesVaccine = {
+  StateId: number,
+  id: string,
+  name: string,
+  type: string,
+  propsNetwork?: VaccineData
 };
