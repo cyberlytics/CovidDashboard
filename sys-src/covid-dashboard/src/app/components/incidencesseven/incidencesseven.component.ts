@@ -24,9 +24,9 @@ export class IncidencessevenComponent implements OnInit {
 
   ngOnInit(): void {
     this.network.getSingleCountyIncidences(9361).subscribe((res) => {
-      console.log('res singel chart', res);
+      // console.log('res singel chart', res);
       const t = res.splice(res.length - this.daynumber, res.length);
-      console.log('t', t);
+      // console.log('t', t);
       for (const element of t) {
         if (this.type === 'incidence7') {
           const temp: ScaleData = {name: element[0], value: element[1].Incidence7};
@@ -45,7 +45,7 @@ export class IncidencessevenComponent implements OnInit {
           this.lastseven.push(temp);
         }
       }
-      console.log('lastseven', this.lastseven);
+      // console.log('lastseven', this.lastseven);
       this.loaded = true;
     })
   }
