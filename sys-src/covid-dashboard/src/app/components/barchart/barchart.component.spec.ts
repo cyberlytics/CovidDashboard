@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IncidencessevenComponent } from './incidencesseven.component';
+import { BarchartComponent } from './barchart.component';
 
-describe('IncidencessevenComponent', () => {
-  let component: IncidencessevenComponent;
-  let fixture: ComponentFixture<IncidencessevenComponent>;
+describe('BarchartComponent', () => {
+  let component: BarchartComponent;
+  let fixture: ComponentFixture<BarchartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ IncidencessevenComponent ]
+      declarations: [ BarchartComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IncidencessevenComponent);
+    fixture = TestBed.createComponent(BarchartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
