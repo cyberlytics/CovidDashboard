@@ -1,0 +1,16 @@
+<div>
+  <button (click)="this.changeType('incidence7')">7 Tage Inzdienz</button>
+  <button (click)="this.changeType('activeCases')">Aktive Fälle</button>
+  <button (click)="this.changeType('recovered')">Genese Personen</button>
+  <button (click)="this.changeType('deaths')">Gestorbene</button>
+  <button (click)="this.changeType('totalCases')">Gesamte Fälle</button>
+</div>
+
+<div>
+  <button *ngFor="let numb of this.chartDays" (click)="this.daynumber = numb">{{numb}}</button>
+</div>
+
+
+
+<!-- <app-barchart [daynumber]=14 [type]="this.type"></app-barchart> -->
+<app-barchart [daynumber]="this.daynumber"[type]="this.type"></app-barchart>

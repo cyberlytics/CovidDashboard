@@ -16,7 +16,8 @@ import { VaccineProgressBarComponent } from './components/vaccine-progress-bar/v
 import { FooterComponent } from './components/footer/footer.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { IncidencessevenComponent } from './components/incidencesseven/incidencesseven.component';
+import { ChartoverviewComponent } from './components/chartoverview/chartoverview.component';
+import { BarchartComponent } from './components/barchart/barchart.component';
 
 
 registerLocaleData(localeDe);
@@ -31,7 +32,8 @@ registerLocaleData(localeDe);
     InfoTableComponent,
     VaccineProgressBarComponent,
     FooterComponent,
-    IncidencessevenComponent,
+    ChartoverviewComponent,
+    BarchartComponent,
   ],
   imports: [
     BrowserModule,
