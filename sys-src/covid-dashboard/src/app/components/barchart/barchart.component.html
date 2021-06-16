@@ -4,17 +4,17 @@
 <h1 *ngIf="this.type === 'deaths'">Gestorbene</h1>
 <h1 *ngIf="this.type === 'totalCases'">Gesamte Fälle</h1> -->
 <ngx-charts-bar-vertical
-    *ngIf="this.loaded"
-    [view]="[800,400]"
-    [results]="displayedValues"
-    [xAxisLabel]="'Products'"
-    [yAxisLabel]="'Sale'"
-    [legend]="false"
-    [showXAxisLabel]="false"
-    [showYAxisLabel]="false"
-    [xAxis]="true"
-    [yAxis]="true"
-    [gradient]="false"
-    [scheme]="colorScheme"
-    >
+  *ngIf="this.loaded"
+  [gradient]="false"
+  [legend]="false"
+  [results]="displayedValues"
+  [scheme]="colorScheme"
+  [showXAxisLabel]="false"
+  [showYAxisLabel]="false"
+  [view]="[800,400]"
+  [xAxisLabel]="'Products'"
+  [xAxis]="true"
+  [yAxisLabel]="'Sale'"
+  [yAxis]="true"
+>
 </ngx-charts-bar-vertical>

@@ -14,8 +14,7 @@ export type CountyData = {
   State: string;
   StateId: number;
   TotalCases: number;
-}
-
+};
 
 export interface Vaccine {
   0: number;
@@ -23,26 +22,26 @@ export interface Vaccine {
 }
 
 export type VaccineData = {
-  Date: string
-  ProportionFirstVaccinations: number
-  ProportionSecondVaccinations: number
-  StateId: number
-  SumAstraZeneca: number
-  SumBioNTech: number
-  SumFirstAstraZeneca: number
-  SumFirstBioNTech: number
-  SumFirstModerna: number
-  SumFirstVaccinations: number
-  SumJohnsonAndJohnson: number
-  SumModerna: number
-  SumSecondAstraZeneca: number
-  SumSecondBioNTech: number
-  SumSecondModerna: number
-  SumSecondVaccinations: number
-  SumVaccinations: number
-}
+  Date: string;
+  ProportionFirstVaccinations: number;
+  ProportionSecondVaccinations: number;
+  StateId: number;
+  SumAstraZeneca: number;
+  SumBioNTech: number;
+  SumFirstAstraZeneca: number;
+  SumFirstBioNTech: number;
+  SumFirstModerna: number;
+  SumFirstVaccinations: number;
+  SumJohnsonAndJohnson: number;
+  SumModerna: number;
+  SumSecondAstraZeneca: number;
+  SumSecondBioNTech: number;
+  SumSecondModerna: number;
+  SumSecondVaccinations: number;
+  SumVaccinations: number;
+};
 
-export interface GermanyData{
+export interface GermanyData {
   incidence: CountyData;
   vaccines: VaccineData;
 }

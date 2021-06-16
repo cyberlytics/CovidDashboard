@@ -11,14 +11,11 @@ export class InfoBadgesComponent implements OnInit {
   lastUpdated = new Date();
   public germanyData: GermanyData = {} as GermanyData;
 
-  constructor(
-    private network: NetworkService
-  ) {
+  constructor(private network: NetworkService) {
     this.network.getSummaryGermany().subscribe((res) => {
       console.log('res', res);
       this.germanyData = res;
-    })
-
+    });
   }
 
   ngOnInit(): void {}
