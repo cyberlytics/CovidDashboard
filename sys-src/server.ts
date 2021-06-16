@@ -74,6 +74,18 @@ app.get('/vaccines', (req, res, next) => {
     }).catch(err => console.log('error:', err));;
 });
 
+app.get('/summary', (req, res, next) => {
+    dataPerCounty().then(d => {
+        vaccinationPerState().then(v => {
+            res.send({
+                incidence: d.get(0)!.get(Math.max(...d.get(0)!.keys())),
+                vaccines: v.get(0)!.get(Math.max(...v.get(0)!.keys())),
+            });
+            next();
+        });
+    });
+});
+
 
 
 const port = process.env.PORT || 5000;
