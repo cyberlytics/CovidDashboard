@@ -8,34 +8,15 @@ import {
 } from "./backend/rkiFetcher";
 import { lastElementPerMap, mapToObject } from "./backend/util";
 
+const cors = require("cors");
 const app = express();
 
+app.use(cors());
+
 // Bodyparser Middleware
-app.use(bodyParser.json(), function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+app.use(bodyParser.json());
 
-  // Request methods you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-
-  // Request headers you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
-  );
-
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
-  // Pass to next layer of middleware
-  next();
-});
-
-app.get("/incidences/:county(\\d+)", (req, res, next) => {
+app.get("/api/incidences/:county(\\d+)", (req, res, next) => {
   dataPerCounty()
     .then((d) => {
       const id = parseInt((req.params as any).county);
@@ -45,7 +26,7 @@ app.get("/incidences/:county(\\d+)", (req, res, next) => {
     .catch((err) => console.log("error:", err));
 });
 
-app.get("/incidences", (req, res, next) => {
+app.get("/api/incidences", (req, res, next) => {
   dataPerCounty()
     .then((d) => {
       getNames().then((n) => {
@@ -61,7 +42,7 @@ app.get("/incidences", (req, res, next) => {
     .catch((err) => console.log("error:", err));
 });
 
-app.get("/counties", (req, res, next) => {
+app.get("/api/counties", (req, res, next) => {
   getNames()
     .then((n) => {
       res.send(mapToObject(n.Counties));
@@ -70,7 +51,7 @@ app.get("/counties", (req, res, next) => {
     .catch((err) => console.log("error:", err));
 });
 
-app.get("/vaccines/:state(\\d+)", (req, res, next) => {
+app.get("/api/vaccines/:state(\\d+)", (req, res, next) => {
   vaccinationPerState()
     .then((v) => {
       const id = parseInt((req.params as any).state);
@@ -80,7 +61,7 @@ app.get("/vaccines/:state(\\d+)", (req, res, next) => {
     .catch((err) => console.log("error:", err));
 });
 
-app.get("/vaccines", (req, res, next) => {
+app.get("/api/vaccines", (req, res, next) => {
   vaccinationPerState()
     .then((v) => {
       res.send(mapToObject(lastElementPerMap(v)));
@@ -89,7 +70,7 @@ app.get("/vaccines", (req, res, next) => {
     .catch((err) => console.log("error:", err));
 });
 
-app.get("/summary", (req, res, next) => {
+app.get("/api/summary", (req, res, next) => {
   dataPerCounty().then((d) => {
     vaccinationPerState().then((v) => {
       res.send({
@@ -101,6 +82,6 @@ app.get("/summary", (req, res, next) => {
   });
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
