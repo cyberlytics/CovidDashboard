@@ -5,7 +5,7 @@ import { dateToString } from "./util";
 const filesFolder = "./data";
 const archiveFolder = "./archive";
 const filesTempFolder = "./data_temp";
-const lastUpdateFileName = filesFolder + '/last_update.txt';
+const lastUpdateFileName = filesFolder + "/last_update.txt";
 const cache = new Map<string, any>();
 
 export default function getFromCache<T>(
@@ -27,40 +27,49 @@ export default function getFromCache<T>(
           }
         });
         handleLoading();
-      }
-      else {
+      } else {
         const lastArchiveDate = new Date(Date.parse(data.toString()));
-        if (lastArchiveDate < archiveDate && new Date().getHours() > 4) { // Make sure RKI has enough time to publish new data
+        if (lastArchiveDate < archiveDate && new Date().getHours() > 4) {
+          // Make sure RKI has enough time to publish new data
           cache.clear();
-          fs.rm(filesTempFolder, {
-            force: true,
-            recursive: true,
-          }, (err) => {
-            if (err) {
-              reject(err);
-            }
-            fs.rename(filesFolder, filesTempFolder, (err) => {
-              ensureFolder(filesFolder, reject);
+          fs.rm(
+            filesTempFolder,
+            {
+              force: true,
+              recursive: true,
+            },
+            (err) => {
               if (err) {
                 reject(err);
               }
-              sevenZip.pack(filesTempFolder,
-                `${archiveFolder}/data_${dateToString(archiveDate)}.7z`,
-                err => {
-                  if (err) {
-                    reject(err);
-                  }
-                  fs.writeFile(lastUpdateFileName, dateToString(archiveDate), (err) => {
+              fs.rename(filesFolder, filesTempFolder, (err) => {
+                ensureFolder(filesFolder, reject);
+                if (err) {
+                  reject(err);
+                }
+                sevenZip.pack(
+                  filesTempFolder,
+                  `${archiveFolder}/data_${dateToString(archiveDate)}.7z`,
+                  (err) => {
                     if (err) {
                       reject(err);
                     }
-                  });
-                });
-              handleLoading();
-            });
-          });
-        }
-        else {
+                    fs.writeFile(
+                      lastUpdateFileName,
+                      dateToString(archiveDate),
+                      (err) => {
+                        if (err) {
+                          reject(err);
+                        }
+                      }
+                    );
+                  }
+                );
+                handleLoading();
+              });
+            }
+          );
+        } else {
           handleLoading();
         }
       }
@@ -97,7 +106,6 @@ export default function getFromCache<T>(
         });
       }
     }
-
   });
 }
 

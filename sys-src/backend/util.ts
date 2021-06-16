@@ -60,12 +60,14 @@ export function parseRKIDate(date: string): Date {
   return new Date(Date.parse(s));
 }
 
-export function lastElementPerMap<T>(map: Map<number, Map<number, T>>): Map<number, T> {
+export function lastElementPerMap<T>(
+  map: Map<number, Map<number, T>>
+): Map<number, T> {
   const m = new Map<number, T>();
   map.forEach((v, key) => {
     let last: T | undefined = undefined;
-    v.forEach(e => last = e);
-    if (typeof (last) !== 'undefined') {
+    v.forEach((e) => (last = e));
+    if (typeof last !== "undefined") {
       m.set(key, last);
     }
   });
@@ -73,9 +75,19 @@ export function lastElementPerMap<T>(map: Map<number, Map<number, T>>): Map<numb
 }
 
 export function daysSince(date: string): number {
-  return Math.ceil((new Date().valueOf() - new Date(Date.parse(date)).valueOf()) / 1000 / 60 / 60 / 24);
+  return Math.ceil(
+    (new Date().valueOf() - new Date(Date.parse(date)).valueOf()) /
+      1000 /
+      60 /
+      60 /
+      24
+  );
 }
 
 export function dateToString(date: Date): string {
-  return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+  return `${date.getFullYear().toString().padStart(4, "0")}-${(
+    date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 }
