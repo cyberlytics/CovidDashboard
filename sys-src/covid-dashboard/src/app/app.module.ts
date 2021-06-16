@@ -20,7 +20,6 @@ import { ChartoverviewComponent } from './components/chartoverview/chartoverview
 import { BarchartComponent } from './components/barchart/barchart.component';
 import { AreachartComponent } from './components/areachart/areachart.component';
 
-
 registerLocaleData(localeDe);
 
 @NgModule({
@@ -42,7 +41,7 @@ registerLocaleData(localeDe);
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NgxChartsModule
+    NgxChartsModule,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'de' }],
   bootstrap: [AppComponent],

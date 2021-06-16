@@ -5,15 +5,15 @@
     <p>Zuletzt aktualisiert: {{ lastUpdated | date: "long":"CEST":"de" }}</p>
   </div>
 
-  <div class="legend" [style.margin-left]="progressFirstVaccinated + '%'">
+  <div [style.margin-left]="progressFirstVaccinated + '%'" class="legend">
     <p class="legend__description">Mindestens einmal geimpft ({{ progressFirstVaccinated }}%)</p>
     <p>|</p>
   </div>
   <div class="progress" style="width: 100%">
-    <div class="progress value" [style.width]="progressFirstVaccinated + '%'"></div>
-    <div class="progress value highlighted" [style.width]="progressFullyVaccinated + '%'"></div>
+    <div [style.width]="progressFirstVaccinated + '%'" class="progress value"></div>
+    <div [style.width]="progressFullyVaccinated + '%'" class="progress value highlighted"></div>
   </div>
-  <div class="legend" [style.margin-left]="progressFullyVaccinated + '%'">
+  <div [style.margin-left]="progressFullyVaccinated + '%'" class="legend">
     <p>|</p>
     <p class="legend__description">Vollständig geimpft ({{ progressFullyVaccinated }}%)</p>
   </div>

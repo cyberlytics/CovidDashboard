@@ -2,7 +2,8 @@
   <p class="title-badge accent-yellow accent-yellow-background">Landkreisübersicht</p>
 
   <div class="info-bar">
-    <div class="info-bar__toggle-button" [ngClass]="{'accent-yellow accent-yellow-background': selectedBookmark}" (click)="selectedBookmark = !selectedBookmark">
+    <div (click)="selectedBookmark = !selectedBookmark" [ngClass]="{'accent-yellow accent-yellow-background': selectedBookmark}"
+         class="info-bar__toggle-button">
       <i class="far fa-bookmark"></i>
     </div>
   </div>
@@ -17,7 +18,7 @@
       <div class="cell heading"><p>Verstorben</p></div>
     </div>
 
-    <div class="row" *ngFor="let county of this.allCountys">
+    <div *ngFor="let county of this.allCountys" class="row">
 
       <div class="cell heading">
         <!-- <div class="info-bar__toggle-button" [ngClass]="{'accent-yellow accent-yellow-background': selectedBookmark}" >

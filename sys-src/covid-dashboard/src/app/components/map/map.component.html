@@ -1,12 +1,15 @@
 <div class="switch-map">
-  <p class="title-badge accent-gray accent-gray-background">{{ showInfections ? 'Infektionsgeschehen' : 'Impffortschritt' }}</p>
+  <p
+    class="title-badge accent-gray accent-gray-background">{{ showInfections ? 'Infektionsgeschehen' : 'Impffortschritt' }}</p>
 
   <div class="info-bar">
-    <div class="info-bar__toggle-button" [ngClass]="{'accent-red accent-red-background': true }" (click)="this.showInfectionData()">
+    <div (click)="this.showInfectionData()" [ngClass]="{'accent-red accent-red-background': true }"
+         class="info-bar__toggle-button">
       <i class="fas fa-viruses"></i>
     </div>
 
-    <div class="info-bar__toggle-button" [ngClass]="{'accent-blue accent-blue-background': true }" (click)="this.showVaccineData('first')">
+    <div (click)="this.showVaccineData('first')" [ngClass]="{'accent-blue accent-blue-background': true }"
+         class="info-bar__toggle-button">
       <i class="fas fa-syringe"></i>
     </div>
 

@@ -8,9 +8,8 @@ describe('VaccineProgressBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VaccineProgressBarComponent ]
-    })
-    .compileComponents();
+      declarations: [VaccineProgressBarComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -8,10 +8,12 @@
 </div>
 
 <div>
-  <button *ngFor="let numb of this.timeSpan" (click)="this.daynumber = numb[1]">{{numb[0]}}</button>
+  <button (click)="this.daynumber = numb[1]" *ngFor="let numb of this.timeSpan">{{numb[0]}}</button>
 </div>
 
 
-<app-barchart *ngIf="!this.showRecDeadTotal" [daynumber]="this.daynumber"[type]="this.type" [loaded]="this.loaded"></app-barchart>
+<app-barchart *ngIf="!this.showRecDeadTotal" [daynumber]="this.daynumber" [loaded]="this.loaded"
+              [type]="this.type"></app-barchart>
 
-<app-areachart *ngIf="this.showRecDeadTotal" [data]="this.recDeaTotalCases" [daynumber]="this.daynumber"></app-areachart>
+<app-areachart *ngIf="this.showRecDeadTotal" [data]="this.recDeaTotalCases"
+               [daynumber]="this.daynumber"></app-areachart>

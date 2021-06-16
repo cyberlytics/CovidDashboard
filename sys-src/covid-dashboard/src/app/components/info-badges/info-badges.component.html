@@ -21,7 +21,7 @@
         <p>+ 1.000</p>
       </div>
 
-      <div class="badge__total-number" *ngIf="this.germanyData.incidence">
+      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
         <p>{{this.germanyData.incidence.TotalCases}}</p>
       </div>
     </div>
@@ -41,7 +41,7 @@
         <p>+ 1.000</p>
       </div>
 
-      <div class="badge__total-number" *ngIf="this.germanyData.incidence">
+      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
         <p>{{this.germanyData.incidence.ActiveCases}}</p>
       </div>
     </div>
@@ -61,7 +61,7 @@
         <p>+ 1.000</p>
       </div>
 
-      <div class="badge__total-number" *ngIf="this.germanyData.incidence">
+      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
         <p>{{this.germanyData.incidence.Recovered}}</p>
       </div>
     </div>
@@ -81,7 +81,7 @@
         <p>- 10</p>
       </div>
 
-      <div class="badge__total-number" *ngIf="this.germanyData.incidence">
+      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
         <p>{{this.germanyData.incidence.Incidence7.toFixed(2).replace('.', ',')}}</p>
       </div>
     </div>
@@ -101,7 +101,7 @@
         <p>+ 1.000</p>
       </div>
 
-      <div class="badge__total-number" *ngIf="this.germanyData.incidence">
+      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
         <p>{{this.germanyData.incidence.Deaths}}</p>
       </div>
     </div>

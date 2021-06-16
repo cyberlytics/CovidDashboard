@@ -12,13 +12,11 @@ export class InfoTableComponent implements OnInit {
 
   public allCountys = [] as County[];
 
-  constructor(
-    private network: NetworkService
-  ) {
+  constructor(private network: NetworkService) {
     this.network.getAllCountyIncidences().subscribe((res) => {
       // console.log('res in table', res);
       this.allCountys = res;
-    })
+    });
   }
 
   ngOnInit(): void {}

@@ -1,39 +1,40 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { InfectionsService } from 'src/app/services/infections/infections.service';
 import { NetworkService } from 'src/app/services/network/network.service';
 
 @Component({
   selector: 'app-barchart',
   templateUrl: './barchart.component.html',
-  styleUrls: ['./barchart.component.scss']
+  styleUrls: ['./barchart.component.scss'],
 })
 export class BarchartComponent implements OnInit, OnChanges {
-
   @Input() type: ChartType = ChartType.incidence7;
   @Input() daynumber: number = 7;
 
   public displayedValues = [] as ScaleData[];
   @Input() loaded: boolean = false;
 
-
   colorScheme = {
-    domain: ['#ff1f4d']
+    domain: ['#ff1f4d'],
   };
 
   constructor(
     private network: NetworkService,
     private infections: InfectionsService
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     // console.log(changes);
     this.changedInput(this.type, this.daynumber);
   }
-
-
 
   /**
    * changes the displayed values
@@ -53,11 +54,13 @@ export class BarchartComponent implements OnInit, OnChanges {
       this.displayedValues = this.infections.totalCases.slice();
     }
 
-    if (count <= this.displayedValues.length){
-      this.displayedValues = this.displayedValues.splice(this.displayedValues.length - count, this.displayedValues.length);
+    if (count <= this.displayedValues.length) {
+      this.displayedValues = this.displayedValues.splice(
+        this.displayedValues.length - count,
+        this.displayedValues.length
+      );
     }
   }
-
 }
 
 export type ScaleData = {
@@ -65,10 +68,10 @@ export type ScaleData = {
   value: number;
 };
 
-export enum ChartType{
+export enum ChartType {
   incidence7,
   activeCases,
   recovered,
   deaths,
-  totalCases
+  totalCases,
 }
