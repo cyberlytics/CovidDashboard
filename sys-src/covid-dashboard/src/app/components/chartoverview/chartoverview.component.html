@@ -1,16 +1,17 @@
 <div>
   <button (click)="this.changeType('incidence7')">7 Tage Inzdienz</button>
   <button (click)="this.changeType('activeCases')">Aktive Fälle</button>
-  <button (click)="this.changeType('recovered')">Genese Personen</button>
-  <button (click)="this.changeType('deaths')">Gestorbene</button>
-  <button (click)="this.changeType('totalCases')">Gesamte Fälle</button>
+  <button (click)="this.changeType('recDeadTotal')">Genese, Gestorbene und gesamte Fälle</button>
+  <!-- <button (click)="this.changeType('recovered')">Genese Personen</button> -->
+  <!-- <button (click)="this.changeType('deaths')">Gestorbene</button> -->
+  <!-- <button (click)="this.changeType('totalCases')">Gesamte Fälle</button> -->
 </div>
 
 <div>
-  <button *ngFor="let numb of this.chartDays" (click)="this.daynumber = numb">{{numb}}</button>
+  <button *ngFor="let numb of this.timeSpan" (click)="this.daynumber = numb[1]">{{numb[0]}}</button>
 </div>
 
 
+<app-barchart *ngIf="!this.showRecDeadTotal" [daynumber]="this.daynumber"[type]="this.type" [loaded]="this.loaded"></app-barchart>
 
-<!-- <app-barchart [daynumber]=14 [type]="this.type"></app-barchart> -->
-<app-barchart [daynumber]="this.daynumber"[type]="this.type"></app-barchart>
+<app-areachart *ngIf="this.showRecDeadTotal" [data]="this.recDeaTotalCases" [daynumber]="this.daynumber"></app-areachart>

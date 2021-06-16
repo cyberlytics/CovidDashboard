@@ -18,6 +18,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartoverviewComponent } from './components/chartoverview/chartoverview.component';
 import { BarchartComponent } from './components/barchart/barchart.component';
+import { AreachartComponent } from './components/areachart/areachart.component';
 
 
 registerLocaleData(localeDe);
@@ -34,6 +35,7 @@ registerLocaleData(localeDe);
     FooterComponent,
     ChartoverviewComponent,
     BarchartComponent,
+    AreachartComponent,
   ],
   imports: [
     BrowserModule,
