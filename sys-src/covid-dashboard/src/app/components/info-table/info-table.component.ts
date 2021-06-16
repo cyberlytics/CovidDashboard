@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { County } from 'src/app/services/county';
+import { NetworkService } from 'src/app/services/network/network.service';
 
 @Component({
   selector: 'app-info-table',
@@ -8,7 +10,16 @@ import { Component, OnInit } from '@angular/core';
 export class InfoTableComponent implements OnInit {
   selectedBookmark: boolean = false;
 
-  constructor() {}
+  public allCountys = [] as County[];
+
+  constructor(
+    private network: NetworkService
+  ) {
+    this.network.getAllCountyIncidences().subscribe((res) => {
+      console.log('res in table', res);
+      this.allCountys = res;
+    })
+  }
 
   ngOnInit(): void {}
 }
