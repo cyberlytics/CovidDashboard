@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { GermanyData } from 'src/app/services/county';
+import { NetworkService } from 'src/app/services/network/network.service';
 
 @Component({
   selector: 'app-info-badges',
@@ -7,8 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InfoBadgesComponent implements OnInit {
   lastUpdated = new Date();
+  public germanyData: GermanyData = {} as GermanyData;
 
-  constructor() {}
+  constructor(
+    private network: NetworkService
+  ) {
+    this.network.getSummaryGermany().subscribe((res) => {
+      console.log('res', res);
+      this.germanyData = res;
+    })
+
+  }
 
   ngOnInit(): void {}
 }

@@ -32,7 +32,7 @@ export class InfectionsService {
       this.deaths = [];
       this.totalCases = [];
       this.network.getSingleCountyIncidences(id).subscribe((res) => {
-        console.log('res singel chart', res);
+        // console.log('res singel chart', res);
         for (const element of res) {
           this.incidences.push({name: element[0], value: element[1].Incidence7});
           this.activeCases.push({name: element[0], value: element[1].ActiveCases});
