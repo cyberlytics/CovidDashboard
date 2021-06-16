@@ -16,7 +16,7 @@ export class InfoTableComponent implements OnInit {
     private network: NetworkService
   ) {
     this.network.getAllCountyIncidences().subscribe((res) => {
-      console.log('res in table', res);
+      // console.log('res in table', res);
       this.allCountys = res;
     })
   }

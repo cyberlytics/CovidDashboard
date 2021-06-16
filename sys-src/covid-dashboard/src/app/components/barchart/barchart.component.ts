@@ -29,7 +29,7 @@ export class BarchartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+    // console.log(changes);
     this.changedInput(this.type, this.daynumber);
   }
 

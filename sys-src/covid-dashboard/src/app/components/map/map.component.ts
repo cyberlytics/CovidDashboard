@@ -70,7 +70,7 @@ export class MapComponent implements AfterViewInit {
    */
   private loadInfectionData(): void {
     this.network.getAllCountyIncidences().subscribe((res) => {
-      console.log('res', res);
+      // console.log('res', res);
 
       const xhr = new XMLHttpRequest();
       xhr.open('GET', './assets/json/RKI_Corona_Landkreise.json');
@@ -83,7 +83,7 @@ export class MapComponent implements AfterViewInit {
         this.countyJson = this.mapBackendDataToCountyJSON(res, xhr.response);
 
         this.loadMapWithData(this.countyJson, 'incidences');
-        console.log(this.countyJson);
+        // console.log(this.countyJson);
       };
       xhr.send();
     }, (err) => {

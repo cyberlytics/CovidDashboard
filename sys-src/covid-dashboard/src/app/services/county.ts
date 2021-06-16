@@ -41,3 +41,8 @@ export type VaccineData = {
   SumSecondVaccinations: number
   SumVaccinations: number
 }
+
+export interface GermanyData{
+  incidence: CountyData;
+  vaccines: VaccineData;
+}
