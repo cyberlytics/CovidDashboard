@@ -213,6 +213,9 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                 }).then((p) => {
                     fullData()
                         .then(d => {
+                            // Sort by date to optimize for-loop a couple lines down
+                            d.sort((a, b) => a.Date.valueOf() - b.Date.valueOf());
+
                             const groupPerCounty = new Map<number, RKIRawData[]>();
                             d.forEach(e => {
                                 if (!groupPerCounty.has(e.CountyId)) {
@@ -226,7 +229,8 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                 const daysMap = new Map<number, RKIData>();
                                 lastDays(HISTORY_DAYS).forEach(day => {
                                     const dayValue = day.valueOf();
-                                    v.forEach(e => {
+                                    for (let i = 0; i < v.length; i++) {
+                                        const e = v[i];
                                         if (e.Date < day) {
                                             if (!daysMap.has(dayValue)) {
                                                 daysMap.set(dayValue, {
@@ -245,7 +249,10 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                             daysMap.get(dayValue)!.Deaths += e.NewDeaths;
                                             daysMap.get(dayValue)!.Recovered += e.NewRecovered;
                                         }
-                                    });
+                                        else {
+                                            break;
+                                        }
+                                    }
                                 });
                                 calculate7DaysIncidence(daysMap, p);
                                 result.set(k, daysMap);
