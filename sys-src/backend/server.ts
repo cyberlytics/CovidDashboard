@@ -5,16 +5,22 @@ import {
   getNames,
   RKIData,
   vaccinationPerState,
-} from "./backend/rkiFetcher";
-import { lastElementPerMap, mapToObject } from "./backend/util";
+} from "./typescript/rkiFetcher";
+import { lastElementPerMap, mapToObject } from "./typescript/util";
 
+const compression = require("compression");
 const cors = require("cors");
+
 const app = express();
 
+// CORS
 app.use(cors());
 
-// Bodyparser Middleware
+// Bodyparser
 app.use(bodyParser.json());
+
+// Compress all responses
+app.use(compression());
 
 app.get("/api/incidences/:county(\\d+)", (req, res, next) => {
   dataPerCounty()

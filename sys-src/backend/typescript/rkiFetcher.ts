@@ -587,8 +587,8 @@ export function vaccinationPerState(): Promise<
               }
             });
             /*map.forEach((m, stateId) => {
-                        map.set(stateId, new Map([...m.entries()].sort((a, b) => a[0] - b[0])));
-                    });*/
+                                    map.set(stateId, new Map([...m.entries()].sort((a, b) => a[0] - b[0])));
+                                });*/
             return map;
           }
         });
