@@ -5,7 +5,7 @@ import { addDays, daysSince, lastDays, parse, parseRKIDate, stringify } from "./
 
 const RKIDataPath = 'https://opendata.arcgis.com/api/v3/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/downloads/data?format=csv&spatialRefId=4326';
 const RKIPopulationDataPath = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=EWZ,last_update,cases7_per_100k,AdmUnitId,cases7_lk,death7_lk&returnGeometry=false&outSR=4326&f=json';
-const RKIVaccinationDataPath = 'https://services.arcgis.com/OLiydejKCZTGhvWg/arcgis/rest/services/Impffortschritt_DE/FeatureServer/0/query?f=json&where=1%3D1&orderByFields=Datum%20asc&outFields=*&resultType=standard';
+const RKIVaccinationDataPath = 'https://services.arcgis.com/OLiydejKCZTGhvWg/arcgis/rest/services/Impffortschritt_Deutschland_V4/FeatureServer/0/query?f=json&where=1%3D1&orderByFields=Datum%20asc&outFields=*&resultType=standard';
 
 export type RKIData = {
     StateId: number,
@@ -393,19 +393,19 @@ export function vaccinationPerState(): Promise<Map<number, Map<number, RKIVaccin
                         add(map, stateId, attributes.Datum, 'SumFirstVaccinations', attributes.AlleImpfstellenSummeErstimpfung);
                         add(map, stateId, attributes.Datum, 'SumSecondVaccinations', attributes.AlleImpfstellenSummeDurchgeimpf);
 
-                        add(map, stateId, attributes.Datum, 'SumFirstAstraZeneca', attributes.ImpfzentrenEtcEineImpfungAstraZ, attributes.NiedergelasseneEineImpfungAstra);
-                        add(map, stateId, attributes.Datum, 'SumSecondAstraZeneca', attributes.ImpfzentrenEtcDurchgeimpftAstra, attributes.NiedergelassenDurchgeimpftAstra);
+                        add(map, stateId, attributes.Datum, 'SumFirstAstraZeneca', attributes.EineImpfungAstraZeneca);
+                        add(map, stateId, attributes.Datum, 'SumSecondAstraZeneca', attributes.DurchgeimpftAstraZeneca);
                         addInMap(map, stateId, attributes.Datum, 'SumAstraZeneca', 'SumFirstAstraZeneca', 'SumSecondAstraZeneca');
 
-                        add(map, stateId, attributes.Datum, 'SumFirstBioNTech', attributes.ImpfzentrenEtcEineImpfungBioNTe, attributes.NiedergelasseneEineImpfungBioNT);
-                        add(map, stateId, attributes.Datum, 'SumSecondBioNTech', attributes.ImpfzentrenEtcDurchgeimpftBioNT, attributes.NiedergelassenDurchgeimpftBioNT);
+                        add(map, stateId, attributes.Datum, 'SumFirstBioNTech', attributes.EineImpfungBioNTech);
+                        add(map, stateId, attributes.Datum, 'SumSecondBioNTech', attributes.DurchgeimpftBioNTech);
                         addInMap(map, stateId, attributes.Datum, 'SumBioNTech', 'SumFirstBioNTech', 'SumSecondBioNTech');
 
-                        add(map, stateId, attributes.Datum, 'SumFirstModerna', attributes.ImpfzentrenEtcEineImpfungModern, attributes.NiedergelasseneEineImpfungModer);
-                        add(map, stateId, attributes.Datum, 'SumSecondModerna', attributes.ImpfzentrenEtcDurchgeimpftModer, attributes.NiedergelassenDurchgeimpftModer);
+                        add(map, stateId, attributes.Datum, 'SumFirstModerna', attributes.EineImpfungModerna);
+                        add(map, stateId, attributes.Datum, 'SumSecondModerna', attributes.DurchgeimpftModerna);
                         addInMap(map, stateId, attributes.Datum, 'SumModerna', 'SumFirstModerna', 'SumSecondModerna');
 
-                        add(map, stateId, attributes.Datum, 'SumJohnsonAndJohnson', attributes.ImpfzentrenEtcDurchgeimpftJans, attributes.NiedergelassenDurchgeimpftJans);
+                        add(map, stateId, attributes.Datum, 'SumJohnsonAndJohnson', attributes.DurchgeimpftJanssen);
 
 
                         function add(map: Map<number, Map<number, RKIVaccinationData>>, stateId: number, date: number, property: keyof RKIVaccinationData, ...values: any[]) {
