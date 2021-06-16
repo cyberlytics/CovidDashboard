@@ -17,42 +17,48 @@
       <div class="cell heading"><p>Verstorben</p></div>
     </div>
 
-    <div class="row">
-      <div class="cell heading"><p>Amberg</p></div>
+    <div class="row" *ngFor="let county of this.allCountys">
+
+      <div class="cell heading">
+        <!-- <div class="info-bar__toggle-button" [ngClass]="{'accent-yellow accent-yellow-background': selectedBookmark}" >
+          <i class="far fa-bookmark"></i>
+        </div> -->
+        <p>{{county[1].State}}</p>
+      </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-red">
           <i class="fas fa-arrow-down"></i>
           <p>25</p>
         </div>
-        <p>5.000</p>
+        <p>{{county[1].TotalCases}}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-blue">
           <i class="fas fa-arrow-up"></i>
           <p>20</p>
         </div>
-        <p>3.000</p>
+        <p>{{county[1].ActiveCases}}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-green">
           <i class="fas fa-arrow-up"></i>
           <p>35</p>
         </div>
-        <p>2.500</p>
+        <p>{{county[1].Recovered}}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-purple">
           <i class="fas fa-arrow-down"></i>
           <p>5</p>
         </div>
-        <p>10.5</p>
+        <p>{{county[1].Incidence7.toFixed(2).replace('.', ',')}}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-gray">
           <i class="fas fa-arrow-down"></i>
           <p>5</p>
         </div>
-        <p>1.250</p>
+        <p>{{county[1].Deaths}}</p>
       </div>
     </div>
   </div>

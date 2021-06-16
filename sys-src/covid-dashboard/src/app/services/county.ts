@@ -6,10 +6,12 @@ export interface County {
 export type CountyData = {
   ActiveCases: number;
   CountyId: number;
+  Date: string;
   Deaths: number;
   Incidence7: number;
   Population: number;
   Recovered: number;
+  State: string;
   StateId: number;
   TotalCases: number;
 }
