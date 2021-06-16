@@ -2,13 +2,10 @@
   "name": "covid-dashboard",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
-    "client-install": "npm install && cd covid-dashboard && npm install",
     "start": "ts-node server.ts",
-    "server": "nodemon server.ts",
-    "client": "npm start --prefix covid-dashboard",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "server": "nodemon server.ts"
   },
   "author": "",
   "license": "ISC",
