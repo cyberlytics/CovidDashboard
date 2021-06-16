@@ -5,7 +5,7 @@ import { addDays, daysSince, lastDays, parse, parseRKIDate, stringify } from "./
 
 const RKIDataPath = 'https://opendata.arcgis.com/api/v3/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/downloads/data?format=csv&spatialRefId=4326';
 const RKIPopulationDataPath = 'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=EWZ,last_update,cases7_per_100k,AdmUnitId,cases7_lk,death7_lk&returnGeometry=false&outSR=4326&f=json';
-const RKIVaccinationDataPath = 'https://services.arcgis.com/OLiydejKCZTGhvWg/arcgis/rest/services/Impffortschritt_DE/FeatureServer/0/query?f=json&where=1%3D1&orderByFields=Datum%20asc&outFields=*&resultType=standard';
+const RKIVaccinationDataPath = 'https://services.arcgis.com/OLiydejKCZTGhvWg/arcgis/rest/services/Impffortschritt_Deutschland_V4/FeatureServer/0/query?f=json&where=1%3D1&orderByFields=Datum%20asc&outFields=*&resultType=standard';
 
 export type RKIData = {
     StateId: number,
@@ -213,6 +213,9 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                 }).then((p) => {
                     fullData()
                         .then(d => {
+                            // Sort by date to optimize for-loop a couple lines down
+                            d.sort((a, b) => a.Date.valueOf() - b.Date.valueOf());
+
                             const groupPerCounty = new Map<number, RKIRawData[]>();
                             d.forEach(e => {
                                 if (!groupPerCounty.has(e.CountyId)) {
@@ -226,7 +229,8 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                 const daysMap = new Map<number, RKIData>();
                                 lastDays(HISTORY_DAYS).forEach(day => {
                                     const dayValue = day.valueOf();
-                                    v.forEach(e => {
+                                    for (let i = 0; i < v.length; i++) {
+                                        const e = v[i];
                                         if (e.Date < day) {
                                             if (!daysMap.has(dayValue)) {
                                                 daysMap.set(dayValue, {
@@ -245,23 +249,45 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                             daysMap.get(dayValue)!.Deaths += e.NewDeaths;
                                             daysMap.get(dayValue)!.Recovered += e.NewRecovered;
                                         }
-                                    });
-                                });
-                                daysMap.forEach((r, d) => {
-                                    r.ActiveCases = r.TotalCases - r.Deaths - r.Recovered;
-                                    r.Population = p.get(r.CountyId)?.Population ?? 1;
-                                    const dateMinus7 = addDays(new Date(d), -7).valueOf();
-                                    if (daysMap.has(dateMinus7)) {
-                                        r.Incidence7 = (r.TotalCases - daysMap.get(dateMinus7)!.TotalCases) / r.Population * 100_000;
+                                        else {
+                                            break;
+                                        }
                                     }
                                 });
+                                calculate7DaysIncidence(daysMap, p);
                                 result.set(k, daysMap);
                             });
+
+                            const germanyData = new Map<number, RKIData>();
+                            result.forEach((historyData, countyId) => {
+                                historyData.forEach((rkiData, date) => {
+                                    if (!germanyData.has(date)) {
+                                        germanyData.set(date, {
+                                            ActiveCases: 0,
+                                            CountyId: 0,
+                                            Date: new Date(date),
+                                            Deaths: 0,
+                                            Incidence7: 0,
+                                            Population: 0,
+                                            Recovered: 0,
+                                            StateId: 0,
+                                            TotalCases: 0,
+                                        });
+                                    }
+                                    germanyData.get(date)!.ActiveCases += rkiData.ActiveCases;
+                                    germanyData.get(date)!.Deaths += rkiData.Deaths;
+                                    germanyData.get(date)!.Population += rkiData.Population;
+                                    germanyData.get(date)!.Recovered += rkiData.Recovered;
+                                    germanyData.get(date)!.TotalCases += rkiData.TotalCases;
+                                });
+                            });
+                            const germanyDataSorted = new Map([...germanyData.entries()].sort((a, b) => a[0] - b[0]));
+                            calculate7DaysIncidence(germanyDataSorted, undefined);
+                            result.set(0, germanyDataSorted);
+
                             resolve(stringify(result));
-                        })
-                        .catch(reject);
-                })
-                    .catch(reject);
+                        }).catch(reject);
+                }).catch(reject);
             });
         }, (t) => {
             return new Promise((resolve, reject) => {
@@ -270,6 +296,19 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
         })
             .then(resolve)
             .catch(reject);
+    });
+}
+
+function calculate7DaysIncidence(map: Map<number, RKIData>, p: Map<number, RKIPopulationData> | undefined): void {
+    map.forEach((r, d) => {
+        r.ActiveCases = r.TotalCases - r.Deaths - r.Recovered;
+        if (p !== undefined) {
+            r.Population = p.get(r.CountyId)?.Population ?? 1;
+        }
+        const dateMinus7 = addDays(new Date(d), -7).valueOf();
+        if (map.has(dateMinus7)) {
+            r.Incidence7 = (r.TotalCases - map.get(dateMinus7)!.TotalCases) / r.Population * 100_000;
+        }
     });
 }
 
@@ -321,12 +360,12 @@ export function vaccinationPerState(): Promise<Map<number, Map<number, RKIVaccin
                     const map = new Map<number, Map<number, RKIVaccinationData>>();
                     obj.features.forEach(({ attributes }: any) => {
                         const stateIdentifier = attributes.RS;
-                        if(stateIdentifier === 'DE') return;    // Ignore "Impfzentren Bund*"
+                        if (stateIdentifier === 'DE') return;    // Ignore "Impfzentren Bund*"
                         const stateId = stateIdentifier === 'GE' ? 0 : parseInt(stateIdentifier);
-                        if(!map.has(stateId))
+                        if (!map.has(stateId))
                             map.set(stateId, new Map<number, RKIVaccinationData>());
 
-                        if(!map.get(stateId)!.has(attributes.Datum))
+                        if (!map.get(stateId)!.has(attributes.Datum))
                             map.get(stateId)!.set(attributes.Datum, {
                                 Date: new Date(attributes.Datum),
                                 ProportionFirstVaccinations: 0,
@@ -354,25 +393,25 @@ export function vaccinationPerState(): Promise<Map<number, Map<number, RKIVaccin
                         add(map, stateId, attributes.Datum, 'SumFirstVaccinations', attributes.AlleImpfstellenSummeErstimpfung);
                         add(map, stateId, attributes.Datum, 'SumSecondVaccinations', attributes.AlleImpfstellenSummeDurchgeimpf);
 
-                        add(map, stateId, attributes.Datum, 'SumFirstAstraZeneca', attributes.ImpfzentrenEtcEineImpfungAstraZ, attributes.NiedergelasseneEineImpfungAstra);
-                        add(map, stateId, attributes.Datum, 'SumSecondAstraZeneca', attributes.ImpfzentrenEtcDurchgeimpftAstra, attributes.NiedergelassenDurchgeimpftAstra);
+                        add(map, stateId, attributes.Datum, 'SumFirstAstraZeneca', attributes.EineImpfungAstraZeneca);
+                        add(map, stateId, attributes.Datum, 'SumSecondAstraZeneca', attributes.DurchgeimpftAstraZeneca);
                         addInMap(map, stateId, attributes.Datum, 'SumAstraZeneca', 'SumFirstAstraZeneca', 'SumSecondAstraZeneca');
 
-                        add(map, stateId, attributes.Datum, 'SumFirstBioNTech', attributes.ImpfzentrenEtcEineImpfungBioNTe, attributes.NiedergelasseneEineImpfungBioNT);
-                        add(map, stateId, attributes.Datum, 'SumSecondBioNTech', attributes.ImpfzentrenEtcDurchgeimpftBioNT, attributes.NiedergelassenDurchgeimpftBioNT);
+                        add(map, stateId, attributes.Datum, 'SumFirstBioNTech', attributes.EineImpfungBioNTech);
+                        add(map, stateId, attributes.Datum, 'SumSecondBioNTech', attributes.DurchgeimpftBioNTech);
                         addInMap(map, stateId, attributes.Datum, 'SumBioNTech', 'SumFirstBioNTech', 'SumSecondBioNTech');
 
-                        add(map, stateId, attributes.Datum, 'SumFirstModerna', attributes.ImpfzentrenEtcEineImpfungModern, attributes.NiedergelasseneEineImpfungModer);
-                        add(map, stateId, attributes.Datum, 'SumSecondModerna', attributes.ImpfzentrenEtcDurchgeimpftModer, attributes.NiedergelassenDurchgeimpftModer);
+                        add(map, stateId, attributes.Datum, 'SumFirstModerna', attributes.EineImpfungModerna);
+                        add(map, stateId, attributes.Datum, 'SumSecondModerna', attributes.DurchgeimpftModerna);
                         addInMap(map, stateId, attributes.Datum, 'SumModerna', 'SumFirstModerna', 'SumSecondModerna');
 
-                        add(map, stateId, attributes.Datum, 'SumJohnsonAndJohnson', attributes.ImpfzentrenEtcDurchgeimpftJans, attributes.NiedergelassenDurchgeimpftJans);
+                        add(map, stateId, attributes.Datum, 'SumJohnsonAndJohnson', attributes.DurchgeimpftJanssen);
 
 
                         function add(map: Map<number, Map<number, RKIVaccinationData>>, stateId: number, date: number, property: keyof RKIVaccinationData, ...values: any[]) {
-                            if(typeof(values) !== 'undefined' && values !== null) {
+                            if (typeof (values) !== 'undefined' && values !== null) {
                                 values.forEach(value => {
-                                    if(typeof(value) !== 'undefined' && value !== null && !isNaN(value)) {
+                                    if (typeof (value) !== 'undefined' && value !== null && !isNaN(value)) {
                                         map.get(stateId)!.get(date)![property] += value;
                                     }
                                 });
