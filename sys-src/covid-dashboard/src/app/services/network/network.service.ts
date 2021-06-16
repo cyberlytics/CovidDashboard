@@ -8,7 +8,7 @@ import { Counties, Vaccines } from '../counties';
   providedIn: 'root',
 })
 export class NetworkService {
-  private url: string = 'http://localhost:5000';
+  private url: string = 'https://covidash.de/api';
 
   constructor(private http: HttpClient) {}
 
