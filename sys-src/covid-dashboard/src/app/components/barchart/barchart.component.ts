@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { InfectionsService } from 'src/app/services/infections/infections.service';
 import { NetworkService } from 'src/app/services/network/network.service';
 
 @Component({
@@ -12,25 +13,19 @@ export class BarchartComponent implements OnInit, OnChanges {
   @Input() daynumber: number = 7;
 
   public displayedValues = [] as ScaleData[];
-  public loaded: boolean = false;
+  @Input() loaded: boolean = false;
 
-  // arrays
-  public incidences = [] as ScaleData[];
-  public activeCases = [] as ScaleData[];
-  public recovered = [] as ScaleData[];
-  public deaths = [] as ScaleData[];
-  public totalCases = [] as ScaleData[];
 
   colorScheme = {
     domain: ['#ff1f4d']
   };
 
   constructor(
-    private network: NetworkService
+    private network: NetworkService,
+    private infections: InfectionsService
   ) { }
 
   ngOnInit(): void {
-    this.loadData();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -38,31 +33,7 @@ export class BarchartComponent implements OnInit, OnChanges {
     this.changedInput(this.type, this.daynumber);
   }
 
-  /**
-   * loads the data and sorts it
-   */
-  private loadData(): void {
-    this.incidences = [];
-    this.activeCases = [];
-    this.recovered = [];
-    this.deaths = [];
-    this.totalCases = [];
-    this.network.getSingleCountyIncidences(9361).subscribe((res) => {
-      console.log('res singel chart', res);
-      for (const element of res) {
-        this.incidences.push({name: element[0], value: element[1].Incidence7});
-        this.activeCases.push({name: element[0], value: element[1].ActiveCases});
-        this.recovered.push({name: element[0], value: element[1].Recovered});
-        this.deaths.push({name: element[0], value: element[1].Deaths});
-        this.totalCases.push({name: element[0], value: element[1].TotalCases});
-      }
 
-      this.loaded = true;
-      this.changedInput(ChartType.incidence7, this.daynumber);
-    }, (err) => {
-      console.log('error getSingelCoutnyIncidences', err);
-    });
-  }
 
   /**
    * changes the displayed values
@@ -71,15 +42,15 @@ export class BarchartComponent implements OnInit, OnChanges {
    */
   private changedInput(typ: ChartType, count: number): void {
     if (typ === ChartType.incidence7) {
-      this.displayedValues = this.incidences.slice();
+      this.displayedValues = this.infections.incidences.slice();
     } else if (typ === ChartType.activeCases) {
-      this.displayedValues = this.activeCases.slice();
+      this.displayedValues = this.infections.activeCases.slice();
     } else if (typ === ChartType.recovered) {
-      this.displayedValues = this.recovered.slice();
+      this.displayedValues = this.infections.recovered.slice();
     } else if (typ === ChartType.deaths) {
-      this.displayedValues = this.deaths.slice();
+      this.displayedValues = this.infections.deaths.slice();
     } else if (typ === ChartType.totalCases) {
-      this.displayedValues = this.totalCases.slice();
+      this.displayedValues = this.infections.totalCases.slice();
     }
 
     if (count <= this.displayedValues.length){
@@ -100,4 +71,4 @@ export enum ChartType{
   recovered,
   deaths,
   totalCases
-};
+}
