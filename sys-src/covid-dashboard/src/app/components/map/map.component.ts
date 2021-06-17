@@ -7,6 +7,7 @@ import {
   VaccineData,
 } from 'src/app/services/county';
 import { NetworkService } from 'src/app/services/network/network.service';
+import { Router } from '@angular/router';
 
 // import * as La from 'leaflet-ajax';
 
@@ -17,12 +18,17 @@ import { NetworkService } from 'src/app/services/network/network.service';
 })
 export class MapComponent implements AfterViewInit {
   public showInfections: boolean = true;
+  public showFirstVaccine: boolean = true;
   private map = {} as L.Map;
   private countyJson = {} as GeoData;
   private vaccineJson = {} as GeoDataVaccine;
   private layer = {} as L.Layer;
 
-  constructor(private network: NetworkService) {}
+  constructor(private network: NetworkService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.showInfections = this.router.url.includes('infections');
+  }
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -33,8 +39,6 @@ export class MapComponent implements AfterViewInit {
    */
   public showInfectionData(): void {
     this.showInfections = true;
-    console.log('showInfectionData');
-    this.map.removeLayer(this.layer);
     this.loadInfectionData();
   }
 
@@ -43,36 +47,9 @@ export class MapComponent implements AfterViewInit {
    */
   public showVaccineData(type: 'first' | 'second'): void {
     this.showInfections = false;
-    this.network.getVaccineAllStates().subscribe(
-      (res) => {
-        console.log('showVaccineData', this.vaccineJson);
-        this.map.removeLayer(this.layer);
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', './assets/json/bundeslaender.geo.json');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.responseType = 'json';
-        xhr.onload = () => {
-          if (xhr.status !== 200) {
-            return;
-          }
-          // this.vaccineJson = xhr.response;
-          this.vaccineJson = this.mapBackendDataToVaccineJSON(
-            res,
-            xhr.response
-          );
-          console.log(this.vaccineJson);
-          if (type === 'first') {
-            this.loadMapWithData(this.vaccineJson, 'firstVaccination');
-          } else if (type === 'second') {
-            this.loadMapWithData(this.vaccineJson, 'secondVaccination');
-          }
-        };
-        xhr.send();
-      },
-      (err) => {
-        console.log('error getVacdcineAllStates', err);
-      }
-    );
+    this.loadVaccineData(type);
+
+    this.showFirstVaccine = type === 'first';
   }
 
   /**
@@ -99,8 +76,12 @@ export class MapComponent implements AfterViewInit {
       this.map.panInsideBounds(bounds, { animate: false });
     });
 
-    // get infection data
-    this.loadInfectionData();
+    // get data
+    if (this.showInfections) {
+      this.loadInfectionData();
+    } else {
+      this.loadVaccineData('first');
+    }
   }
 
   /**
@@ -109,7 +90,7 @@ export class MapComponent implements AfterViewInit {
   private loadInfectionData(): void {
     this.network.getAllCountyIncidences().subscribe(
       (res) => {
-        // console.log('res', res);
+        this.map.removeLayer(this.layer);
 
         const xhr = new XMLHttpRequest();
         xhr.open('GET', './assets/json/RKI_Corona_Landkreise.json');
@@ -133,6 +114,42 @@ export class MapComponent implements AfterViewInit {
   }
 
   /**
+   * loads infection data and adds it to the map
+   */
+  private loadVaccineData(type: 'first' | 'second'): void {
+    this.network.getVaccineAllStates().subscribe(
+      (res) => {
+        this.map.removeLayer(this.layer);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', './assets/json/bundeslaender.geo.json');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.responseType = 'json';
+        xhr.onload = () => {
+          if (xhr.status !== 200) {
+            return;
+          }
+          // this.vaccineJson = xhr.response;
+          this.vaccineJson = this.mapBackendDataToVaccineJSON(
+            res,
+            xhr.response
+          );
+          console.log(this.vaccineJson);
+          if (type === 'first') {
+            this.loadMapWithData(this.vaccineJson, 'firstVaccination');
+          } else if (type === 'second') {
+            this.loadMapWithData(this.vaccineJson, 'secondVaccination');
+          }
+        };
+        xhr.send();
+      },
+      (err) => {
+        console.log('error getVaccineAllStates', err);
+      }
+    );
+  }
+
+  /**
    * loads the geojson data and changes the color according to the backend data
    * @param data geojson data
    * @param type decides which data should be tinted
@@ -146,29 +163,216 @@ export class MapComponent implements AfterViewInit {
         if (type === 'firstVaccination') {
           // data gets sorted by first vaccination
           if (
-            feature?.properties.propsNetwork?.ProportionFirstVaccinations > 40
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 60
           ) {
-            return { color: '#87ceeb', fillColor: '#87ceeb', fillOpacity: 0.2 };
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.2,
+              weight: 1,
+            };
           } else if (
-            feature?.properties.propsNetwork?.ProportionFirstVaccinations < 30
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+              60 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 55
           ) {
-            return { color: '#6ca6cd', fillColor: '#6ca6cd', fillOpacity: 0.2 };
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.4,
+              weight: 1,
+            };
           } else if (
-            feature?.properties.propsNetwork?.ProportionFirstVaccinations < 20
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations <
+              55 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 50
           ) {
-            return { color: '#4a708b', fillColor: '#4a708b', fillOpacity: 0.2 };
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.6,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations <
+              50 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 0
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.8,
+              weight: 1,
+            };
           }
         } else if (type === 'incidences') {
           // data gets sorted by incidences
-          if (feature?.properties.propsNetwork?.Incidence7 > 10) {
-            return { color: '#ff1f4d', fillColor: '#ff1f4d', fillOpacity: 0.2 };
+          if (feature?.properties.propsNetwork.Incidence7 >= 90) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.3,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 90 &&
+            feature?.properties.propsNetwork.Incidence7 >= 80
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.35,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 80 &&
+            feature?.properties.propsNetwork.Incidence7 >= 70
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.4,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 70 &&
+            feature?.properties.propsNetwork.Incidence7 >= 60
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.45,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 60 &&
+            feature?.properties.propsNetwork.Incidence7 >= 50
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.5,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 50 &&
+            feature?.properties.propsNetwork.Incidence7 >= 40
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.55,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 40 &&
+            feature?.properties.propsNetwork.Incidence7 >= 30
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.6,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 30 &&
+            feature?.properties.propsNetwork.Incidence7 >= 20
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.65,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 20 &&
+            feature?.properties.propsNetwork.Incidence7 >= 10
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.7,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 10 &&
+            feature?.properties.propsNetwork.Incidence7 >= 0
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.75,
+              weight: 1,
+            };
           }
         } else if (type === 'secondVaccination') {
           // data gets sorted second vaccination
           if (
-            feature?.properties.propsNetwork?.ProportionSecondVaccinations > 20
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 31
           ) {
-            return { color: '#87ceeb', fillColor: '#87ceeb', fillOpacity: 0.2 };
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 0.3,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+              31 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
+              29.5
+          ) {
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 0.4,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+              29.5 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 28
+          ) {
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 0.5,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+              28 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
+              26.5
+          ) {
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 0.6,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+              26.5 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 25
+          ) {
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 0.7,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+              25 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 0
+          ) {
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 0.8,
+              weight: 1,
+            };
           }
         }
         return {};

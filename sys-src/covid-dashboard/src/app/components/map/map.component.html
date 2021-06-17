@@ -2,20 +2,15 @@
   <p
     class="title-badge accent-gray accent-gray-background">{{ showInfections ? 'Infektionsgeschehen' : 'Impffortschritt' }}</p>
 
-  <div class="info-bar">
-    <div (click)="this.showInfectionData()" [ngClass]="{'accent-red accent-red-background': true }"
+  <div *ngIf="!this.showInfections" class="info-bar">
+    <div (click)="this.showVaccineData('first')" [ngClass]="{'accent-blue accent-blue-background': showFirstVaccine }"
          class="info-bar__toggle-button">
-      <i class="fas fa-viruses"></i>
+      <p>1. Impfung</p>
     </div>
 
-    <div (click)="this.showVaccineData('first')" [ngClass]="{'accent-blue accent-blue-background': true }"
+    <div (click)="this.showVaccineData('second')" [ngClass]="{'accent-yellow accent-yellow-background': !showFirstVaccine }"
          class="info-bar__toggle-button">
-      <i class="fas fa-syringe"></i>
-    </div>
-
-    <div *ngIf="!this.showInfections">
-      <div (click)="this.showVaccineData('first')">erste impfung</div>
-      <div (click)="this.showVaccineData('second')" style="padding-left: 20px;">zweite impfung</div>
+      <p>2. Impfung</p>
     </div>
   </div>
 

@@ -12,6 +12,7 @@ import { ChartType } from '../barchart/barchart.component';
 })
 export class ChartoverviewComponent implements OnInit {
   public type: ChartType = ChartType.incidence7;
+  readonly chartType = ChartType;
   public timeSpan: [string, number][] = [
     ['1 Woche', 7],
     ['2 Wochen', 14],
@@ -22,7 +23,7 @@ export class ChartoverviewComponent implements OnInit {
     ['1 Jahr', 365],
     ['gesamter Zeitraum', 400],
   ];
-  public daynumber: number = 7;
+  public dayNumber: number = 7;
   public loaded: boolean = false;
   public recDeaTotalCases: AreaData[] = [];
   public showRecDeadTotal: boolean = false;

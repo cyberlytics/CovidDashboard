@@ -1,0 +1,12 @@
+.barchart {
+  display: flex;
+  width: 100%;
+  min-height: 300px;
+
+  ::ng-deep .ngx-charts {
+    text {
+      fill: #fff !important;
+      opacity: .5 !important;
+    }
+  }
+}
