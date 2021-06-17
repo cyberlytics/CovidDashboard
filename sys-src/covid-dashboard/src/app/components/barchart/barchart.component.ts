@@ -21,7 +21,7 @@ export class BarchartComponent implements OnInit, OnChanges {
   @Input() loaded: boolean = false;
 
   colorScheme = {
-    domain: ['#ff1f4d'],
+    domain: ['#a81dff'],
   };
 
   constructor(

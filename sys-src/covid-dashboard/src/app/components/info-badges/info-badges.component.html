@@ -2,7 +2,8 @@
   <p class="title-badge accent-red accent-red-background">Schnellübersicht</p>
 
   <div class="info-badges__info">
-    <p>Zuletzt aktualisiert: {{ lastUpdated | date: "long":"CEST":"de" }}</p>
+    <p>Zuletzt
+      aktualisiert: {{ (showInfectionData ? this.germanyData.incidence.Date : this.germanyData.vaccines.Date) | date: "long":"CEST":"de" }}</p>
   </div>
 
   <div class="info-badges__content">
@@ -10,19 +11,16 @@
       class="badge accent-red accent-red-background"
     >
       <div class="badge__title">
-        <p>Bestätigt</p>
+        <p>{{ showInfectionData ? 'Bestätigt' : 'Mindestens eine Impfdosis' }}</p>
       </div>
 
-      <div class="badge__caption">
-        <p>Seit 01.01.2021</p>
-      </div>
 
-      <div class="badge__difference-to-previous-day">
-        <p>+ 1.000</p>
+      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
+        <p>NaN</p>
       </div>
 
       <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{this.germanyData.incidence.TotalCases}}</p>
+        <p>{{ showInfectionData ? (this.germanyData.incidence.TotalCases | number:'':'de-DE') : ((this.germanyData.vaccines.ProportionFirstVaccinations | number:'':'de-DE') + '%') }}</p>
       </div>
     </div>
 
@@ -30,19 +28,16 @@
       class="badge accent-blue accent-blue-background"
     >
       <div class="badge__title">
-        <p>Aktiv</p>
+        <p> {{ showInfectionData ? 'Aktiv' : 'Verabreichte Impfdosen' }}</p>
       </div>
 
-      <div class="badge__caption">
-        <p>Seit 01.01.2021</p>
-      </div>
 
-      <div class="badge__difference-to-previous-day">
-        <p>+ 1.000</p>
+      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
+        <p>NaN</p>
       </div>
 
       <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{this.germanyData.incidence.ActiveCases}}</p>
+        <p>{{ (showInfectionData ? this.germanyData.incidence.ActiveCases : this.germanyData.vaccines.SumVaccinations) | number:'':'de-DE'}}</p>
       </div>
     </div>
 
@@ -50,19 +45,16 @@
       class="badge accent-green accent-green-background"
     >
       <div class="badge__title">
-        <p>Genesen</p>
+        <p>{{ showInfectionData ? 'Genesen' : 'Impfdosen AstraZeneca' }}</p>
       </div>
 
-      <div class="badge__caption">
-        <p>Seit 01.01.2021</p>
-      </div>
 
-      <div class="badge__difference-to-previous-day">
-        <p>+ 1.000</p>
+      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
+        <p>NaN</p>
       </div>
 
       <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{this.germanyData.incidence.Recovered}}</p>
+        <p>{{ (showInfectionData ? this.germanyData.incidence.Recovered : this.germanyData.vaccines.SumAstraZeneca) | number:'':'de-DE'}}</p>
       </div>
     </div>
 
@@ -70,19 +62,15 @@
       class="badge accent-purple accent-purple-background"
     >
       <div class="badge__title">
-        <p>Inzidenz</p>
+        <p>{{ showInfectionData ? '7-Tage-Inzidenz' : 'Impfdosen BioNTech/Pfizer' }}</p>
       </div>
 
-      <div class="badge__caption">
-        <p>Letzten 7 Tage</p>
-      </div>
-
-      <div class="badge__difference-to-previous-day">
-        <p>- 10</p>
+      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
+        <p>NaN</p>
       </div>
 
       <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{this.germanyData.incidence.Incidence7.toFixed(2).replace('.', ',')}}</p>
+        <p>{{ (showInfectionData ? this.germanyData.incidence.Incidence7.toFixed(1) : this.germanyData.vaccines.SumBioNTech) | number:'':'de-DE' }}</p>
       </div>
     </div>
 
@@ -90,19 +78,16 @@
       class="badge accent-gray accent-gray-background"
     >
       <div class="badge__title">
-        <p>Verstorben</p>
+        <p>{{ showInfectionData ? 'Verstorben' : 'Impfdosen Moderna' }}</p>
       </div>
 
-      <div class="badge__caption">
-        <p>Seit 01.01.2021</p>
-      </div>
 
-      <div class="badge__difference-to-previous-day">
-        <p>+ 1.000</p>
+      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
+        <p>NaN</p>
       </div>
 
       <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{this.germanyData.incidence.Deaths}}</p>
+        <p>{{ (showInfectionData ? this.germanyData.incidence.Deaths : this.germanyData.vaccines.SumModerna) | number:'':'de-DE'}}</p>
       </div>
     </div>
   </div>
