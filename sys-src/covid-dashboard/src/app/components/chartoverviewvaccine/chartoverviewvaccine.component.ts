@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AreaData } from 'src/app/services/infections/infections.service';
+import { AreaData, ScaleData, VaccineChartType } from 'src/app/services/alltypes';
 import { VaccinesService } from 'src/app/services/vaccines/vaccines.service';
-import { ScaleData, VaccineChartType } from '../barchart/barchart.component';
 
 @Component({
   selector: 'app-chartoverviewvaccine',

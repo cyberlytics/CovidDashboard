@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { County } from 'src/app/services/county';
+import { County } from 'src/app/services/alltypes';
 import { NetworkService } from 'src/app/services/network/network.service';
 import { sort } from 'fast-sort';
 

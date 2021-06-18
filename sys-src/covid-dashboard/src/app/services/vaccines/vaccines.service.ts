@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ScaleData } from 'src/app/components/barchart/barchart.component';
-import { AreaData } from '../infections/infections.service';
+import { AreaData, ScaleData } from '../alltypes';
 import { NetworkService } from '../network/network.service';
 
 @Injectable({

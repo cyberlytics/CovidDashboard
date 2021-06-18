@@ -5,7 +5,7 @@ import {
   CountyData,
   Vaccine,
   VaccineData,
-} from 'src/app/services/county';
+} from 'src/app/services/alltypes';
 import { NetworkService } from 'src/app/services/network/network.service';
 import { Router } from '@angular/router';
 
