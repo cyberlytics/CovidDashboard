@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GermanyData } from 'src/app/services/county';
+import { GermanyData } from 'src/app/services/alltypes';
 import { NetworkService } from 'src/app/services/network/network.service';
 import { Router } from '@angular/router';
 

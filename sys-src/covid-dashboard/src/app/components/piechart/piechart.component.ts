@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { VaccinesService } from 'src/app/services/vaccines/vaccines.service';
-import { ScaleData } from '../barchart/barchart.component';
+import { ScaleData } from 'src/app/services/alltypes';
 
 @Component({
   selector: 'app-piechart',

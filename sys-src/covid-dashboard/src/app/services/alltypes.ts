@@ -45,3 +45,27 @@ export interface GermanyData {
   incidence: CountyData;
   vaccines: VaccineData;
 }
+
+export type ScaleData = {
+  name: string;
+  value: number;
+};
+
+export enum InfectionChartType {
+  incidence7,
+  activeCases,
+  recovered,
+  deaths,
+  totalCases,
+}
+
+export enum VaccineChartType {
+  firstandSeond,
+  percentVaccines,
+  timeVaccines,
+}
+
+export type AreaData = {
+  name: string;
+  series: ScaleData[];
+};

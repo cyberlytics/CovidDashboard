@@ -5,6 +5,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import { InfectionChartType, ScaleData } from 'src/app/services/alltypes';
 import { InfectionsService } from 'src/app/services/infections/infections.service';
 import { NetworkService } from 'src/app/services/network/network.service';
 
@@ -63,21 +64,3 @@ export class BarchartComponent implements OnInit, OnChanges {
   }
 }
 
-export type ScaleData = {
-  name: string;
-  value: number;
-};
-
-export enum InfectionChartType {
-  incidence7,
-  activeCases,
-  recovered,
-  deaths,
-  totalCases,
-}
-
-export enum VaccineChartType {
-  firstandSeond,
-  percentVaccines,
-  timeVaccines,
-}

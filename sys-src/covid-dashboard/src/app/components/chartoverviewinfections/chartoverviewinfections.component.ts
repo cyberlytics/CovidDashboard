@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AreaData, InfectionsService } from 'src/app/services/infections/infections.service';
-import { InfectionChartType } from '../barchart/barchart.component';
+import { AreaData, InfectionChartType } from 'src/app/services/alltypes';
+import { InfectionsService } from 'src/app/services/infections/infections.service';
 
 @Component({
   selector: 'app-chartoverviewinfections',

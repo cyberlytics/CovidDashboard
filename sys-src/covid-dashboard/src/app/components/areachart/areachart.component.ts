@@ -5,7 +5,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { AreaData } from 'src/app/services/infections/infections.service';
+import { AreaData } from 'src/app/services/alltypes';
 
 @Component({
   selector: 'app-areachart',

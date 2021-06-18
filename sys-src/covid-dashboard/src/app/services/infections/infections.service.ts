@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ScaleData } from 'src/app/components/barchart/barchart.component';
+import { ScaleData, AreaData } from '../alltypes';
 import { NetworkService } from '../network/network.service';
 
 @Injectable({
@@ -78,7 +78,3 @@ export class InfectionsService {
   }
 }
 
-export type AreaData = {
-  name: string;
-  series: ScaleData[];
-};
