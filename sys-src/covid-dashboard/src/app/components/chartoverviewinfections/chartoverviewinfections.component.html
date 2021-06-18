@@ -1,0 +1,37 @@
+<div class="chart-overview">
+  <p class="title-badge accent-purple accent-purple-background">Diagramme</p>
+
+  <div class="info-bar">
+    <div (click)="this.changeType('incidence7')"
+         [ngClass]="{'accent-purple accent-purple-background': type === chartType.incidence7 && !showRecDeadTotal}"
+         class="info-bar__toggle-button">
+      <p>7 Tage Inzidenz</p>
+    </div>
+
+    <div (click)="this.changeType('activeCases')"
+         [ngClass]="{'accent-purple accent-purple-background': type === chartType.activeCases && !showRecDeadTotal }"
+         class="info-bar__toggle-button">
+      <p>Aktive Fälle</p>
+    </div>
+
+    <div (click)="this.changeType('recDeadTotal')"
+         [ngClass]="{'accent-purple accent-purple-background': showRecDeadTotal }"
+         class="info-bar__toggle-button">
+      <p>Genese, Gestorbene und gesamte Fälle</p>
+    </div>
+  </div>
+
+  <div class="info-bar">
+    <div *ngFor="let numb of this.timeSpan" (click)="this.dayNumber = numb[1]"
+         [ngClass]="{'accent-purple accent-purple-background': numb[1] === this.dayNumber }"
+         class="info-bar__toggle-button">
+      <p>{{numb[0]}}</p>
+    </div>
+  </div>
+
+  <app-barchart *ngIf="!this.showRecDeadTotal" [daynumber]="this.dayNumber" [loaded]="this.loaded"
+                [type]="this.type"></app-barchart>
+
+  <app-areachart *ngIf="this.showRecDeadTotal" [data]="this.recDeaTotalCases"
+                 [dayNumber]="this.dayNumber"></app-areachart>
+</div>

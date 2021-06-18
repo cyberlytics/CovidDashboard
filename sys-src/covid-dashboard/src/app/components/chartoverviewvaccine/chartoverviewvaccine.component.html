@@ -1,0 +1,18 @@
+<div>
+  <button (click)="this.changeType('firstandSeond')">erste und zweite Impfung</button>
+  <button (click)="this.changeType('percentVaccines')">zeitliche Impfverteilung nach Herstellern</button>
+  <button (click)="this.changeType('timeVaccines')">prozentuale Impfverteilung nach Herstellern</button>
+  <!-- <button (click)="this.changeType('recDeadTotal')">Genese, Gestorbene und gesamte Fälle</button> -->
+  <!-- <button (click)="this.changeType('recovered')">Genese Personen</button> -->
+  <!-- <button (click)="this.changeType('deaths')">Gestorbene</button> -->
+  <!-- <button (click)="this.changeType('totalCases')">Gesamte Fälle</button> -->
+</div>
+
+<div *ngIf="!this.showpercentVaccines">
+  <button (click)="this.daynumber = numb[1]" *ngFor="let numb of this.timeSpan">{{numb[0]}}</button>
+</div>
+
+<app-areachart *ngIf="!this.showpercentVaccines"  [data]="this.displayedaredData"
+               [daynumber]="this.daynumber"></app-areachart>
+
+<app-piechart *ngIf="this.showpercentVaccines" [data]="this.allvacsbyManufactor" ></app-piechart>
