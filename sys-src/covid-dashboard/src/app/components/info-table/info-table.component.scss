@@ -10,19 +10,45 @@
     grid-auto-rows: 1fr;
     grid-gap: 5px;
 
+    max-height: 325px;
+
     .row {
       display: contents;
 
       .heading {
+        flex-direction: row !important;
+        align-items: center !important;
+        min-height: 50px;
+
         text-align: center !important;
         font-weight: 700;
         background-color: $color-secondary-background;
+
+        i {
+          font-size: 16rem;
+          margin-left: 10px;
+          opacity: .5;
+        }
+
+        &:hover {
+          cursor: pointer;
+          opacity: .75;
+        }
+      }
+
+      .state {
+        align-items: center !important;
+
+        text-align: center !important;
+        background-color: $color-secondary-background;
+        opacity: .75;
       }
 
       .cell {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: flex-end;
 
         border-radius: 5px;
 

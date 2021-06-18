@@ -1,19 +1,37 @@
-<div>
-  <button (click)="this.changeType('incidence7')">7 Tage Inzdienz</button>
-  <button (click)="this.changeType('activeCases')">Aktive Fälle</button>
-  <button (click)="this.changeType('recDeadTotal')">Genese, Gestorbene und gesamte Fälle</button>
-  <!-- <button (click)="this.changeType('recovered')">Genese Personen</button> -->
-  <!-- <button (click)="this.changeType('deaths')">Gestorbene</button> -->
-  <!-- <button (click)="this.changeType('totalCases')">Gesamte Fälle</button> -->
+<div class="chart-overview">
+  <p class="title-badge accent-purple accent-purple-background">Diagramme</p>
+
+  <div class="info-bar">
+    <div (click)="this.changeType('incidence7')"
+         [ngClass]="{'accent-purple accent-purple-background': type === chartType.incidence7 && !showRecDeadTotal}"
+         class="info-bar__toggle-button">
+      <p>7 Tage Inzidenz</p>
+    </div>
+
+    <div (click)="this.changeType('activeCases')"
+         [ngClass]="{'accent-purple accent-purple-background': type === chartType.activeCases && !showRecDeadTotal }"
+         class="info-bar__toggle-button">
+      <p>Aktive Fälle</p>
+    </div>
+
+    <div (click)="this.changeType('recDeadTotal')"
+         [ngClass]="{'accent-purple accent-purple-background': showRecDeadTotal }"
+         class="info-bar__toggle-button">
+      <p>Genese, Gestorbene und gesamte Fälle</p>
+    </div>
+  </div>
+
+  <div class="info-bar">
+    <div *ngFor="let numb of this.timeSpan" (click)="this.dayNumber = numb[1]"
+         [ngClass]="{'accent-purple accent-purple-background': numb[1] === this.dayNumber }"
+         class="info-bar__toggle-button">
+      <p>{{numb[0]}}</p>
+    </div>
+  </div>
+
+  <app-barchart *ngIf="!this.showRecDeadTotal" [daynumber]="this.dayNumber" [loaded]="this.loaded"
+                [type]="this.type"></app-barchart>
+
+  <app-areachart *ngIf="this.showRecDeadTotal" [data]="this.recDeaTotalCases"
+                 [dayNumber]="this.dayNumber"></app-areachart>
 </div>
-
-<div>
-  <button (click)="this.daynumber = numb[1]" *ngFor="let numb of this.timeSpan">{{numb[0]}}</button>
-</div>
-
-
-<app-barchart *ngIf="!this.showRecDeadTotal" [daynumber]="this.daynumber" [loaded]="this.loaded"
-              [type]="this.type"></app-barchart>
-
-<app-areachart *ngIf="this.showRecDeadTotal" [data]="this.recDeaTotalCases"
-               [daynumber]="this.daynumber"></app-areachart>
