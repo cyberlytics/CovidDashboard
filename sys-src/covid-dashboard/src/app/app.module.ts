@@ -20,7 +20,6 @@ import { BarchartComponent } from './components/barchart/barchart.component';
 import { AreachartComponent } from './components/areachart/areachart.component';
 import { VaccinationsComponent } from './pages/vaccinations/vaccinations.component';
 import { InfectionsComponent } from './pages/infections/infections.component';
-import { OrderModule } from 'ngx-order-pipe';
 
 registerLocaleData(localeDe);
 
@@ -45,7 +44,6 @@ registerLocaleData(localeDe);
     HttpClientModule,
     BrowserAnimationsModule,
     NgxChartsModule,
-    OrderModule,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'de' }],
   bootstrap: [AppComponent],
