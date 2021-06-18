@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MapService } from './map.service';
+import { VaccinesService } from './vaccines.service';
 
-describe('MapService', () => {
-  let service: MapService;
+describe('VaccinesService', () => {
+  let service: VaccinesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MapService);
+    service = TestBed.inject(VaccinesService);
   });
 
   it('should be created', () => {

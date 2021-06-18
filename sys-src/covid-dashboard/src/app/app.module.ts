@@ -15,11 +15,13 @@ import { VaccineProgressBarComponent } from './components/vaccine-progress-bar/v
 import { FooterComponent } from './components/footer/footer.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ChartoverviewComponent } from './components/chartoverview/chartoverview.component';
 import { BarchartComponent } from './components/barchart/barchart.component';
 import { AreachartComponent } from './components/areachart/areachart.component';
 import { VaccinationsComponent } from './pages/vaccinations/vaccinations.component';
 import { InfectionsComponent } from './pages/infections/infections.component';
+import { ChartoverviewvaccineComponent } from './components/chartoverviewvaccine/chartoverviewvaccine.component';
+import { ChartoverviewinfectionsComponent } from './components/chartoverviewinfections/chartoverviewinfections.component';
+import { PiechartComponent } from './components/piechart/piechart.component';
 
 registerLocaleData(localeDe);
 
@@ -32,11 +34,13 @@ registerLocaleData(localeDe);
     InfoTableComponent,
     VaccineProgressBarComponent,
     FooterComponent,
-    ChartoverviewComponent,
     BarchartComponent,
     AreachartComponent,
     VaccinationsComponent,
     InfectionsComponent,
+    ChartoverviewvaccineComponent,
+    ChartoverviewinfectionsComponent,
+    PiechartComponent
   ],
   imports: [
     BrowserModule,

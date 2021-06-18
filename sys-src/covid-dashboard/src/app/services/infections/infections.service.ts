@@ -62,6 +62,7 @@ export class InfectionsService {
   }
 
   private mapScaleDataToAreaData(): void {
+    this.recoveredDeathsTotalCases = [];
     this.recoveredDeathsTotalCases.push({
       name: 'Gestorbene',
       series: this.deaths,
