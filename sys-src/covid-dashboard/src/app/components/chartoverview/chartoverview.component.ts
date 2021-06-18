@@ -3,7 +3,7 @@ import {
   AreaData,
   InfectionsService,
 } from 'src/app/services/infections/infections.service';
-import { ChartType } from '../barchart/barchart.component';
+import { InfectionChartType } from '../barchart/barchart.component';
 
 @Component({
   selector: 'app-chartoverview',
@@ -11,8 +11,8 @@ import { ChartType } from '../barchart/barchart.component';
   styleUrls: ['./chartoverview.component.scss'],
 })
 export class ChartoverviewComponent implements OnInit {
-  public type: ChartType = ChartType.incidence7;
-  readonly chartType = ChartType;
+  public type: InfectionChartType = InfectionChartType.incidence7;
+  readonly chartType = InfectionChartType;
   public timeSpan: [string, number][] = [
     ['1 Woche', 7],
     ['2 Wochen', 14],
@@ -57,15 +57,15 @@ export class ChartoverviewComponent implements OnInit {
   ): void {
     this.showRecDeadTotal = false;
     if (typ === 'incidence7') {
-      this.type = ChartType.incidence7;
+      this.type = InfectionChartType.incidence7;
     } else if (typ === 'activeCases') {
-      this.type = ChartType.activeCases;
+      this.type = InfectionChartType.activeCases;
     } else if (typ === 'recovered') {
-      this.type = ChartType.recovered;
+      this.type = InfectionChartType.recovered;
     } else if (typ === 'deaths') {
-      this.type = ChartType.deaths;
+      this.type = InfectionChartType.deaths;
     } else if (typ === 'totalCases') {
-      this.type = ChartType.totalCases;
+      this.type = InfectionChartType.totalCases;
     } else if (typ === 'recDeadTotal') {
       this.showRecDeadTotal = true;
     }

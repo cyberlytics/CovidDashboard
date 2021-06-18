@@ -14,7 +14,7 @@ import { NetworkService } from 'src/app/services/network/network.service';
   styleUrls: ['./barchart.component.scss'],
 })
 export class BarchartComponent implements OnInit, OnChanges {
-  @Input() type: ChartType = ChartType.incidence7;
+  @Input() type: InfectionChartType = InfectionChartType.incidence7;
   @Input() daynumber: number = 7;
 
   public displayedValues = [] as ScaleData[];
@@ -41,16 +41,16 @@ export class BarchartComponent implements OnInit, OnChanges {
    * @param typ selected type
    * @param count selected
    */
-  private changedInput(typ: ChartType, count: number): void {
-    if (typ === ChartType.incidence7) {
+  private changedInput(typ: InfectionChartType, count: number): void {
+    if (typ === InfectionChartType.incidence7) {
       this.displayedValues = this.infections.incidences.slice();
-    } else if (typ === ChartType.activeCases) {
+    } else if (typ === InfectionChartType.activeCases) {
       this.displayedValues = this.infections.activeCases.slice();
-    } else if (typ === ChartType.recovered) {
+    } else if (typ === InfectionChartType.recovered) {
       this.displayedValues = this.infections.recovered.slice();
-    } else if (typ === ChartType.deaths) {
+    } else if (typ === InfectionChartType.deaths) {
       this.displayedValues = this.infections.deaths.slice();
-    } else if (typ === ChartType.totalCases) {
+    } else if (typ === InfectionChartType.totalCases) {
       this.displayedValues = this.infections.totalCases.slice();
     }
 
@@ -68,10 +68,16 @@ export type ScaleData = {
   value: number;
 };
 
-export enum ChartType {
+export enum InfectionChartType {
   incidence7,
   activeCases,
   recovered,
   deaths,
   totalCases,
+}
+
+export enum VaccineChartType {
+  firstandSeond,
+  percentVaccines,
+  timeVaccines,
 }

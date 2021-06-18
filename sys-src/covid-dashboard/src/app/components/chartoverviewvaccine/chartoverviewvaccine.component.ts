@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AreaData } from 'src/app/services/infections/infections.service';
 import { VaccinesService } from 'src/app/services/vaccines/vaccines.service';
-import { ScaleData } from '../barchart/barchart.component';
+import { ScaleData, VaccineChartType } from '../barchart/barchart.component';
 
 @Component({
   selector: 'app-chartoverviewvaccine',
@@ -10,6 +10,8 @@ import { ScaleData } from '../barchart/barchart.component';
 })
 export class ChartoverviewvaccineComponent implements OnInit {
 
+  public type: VaccineChartType = VaccineChartType.firstandSeond;
+  public chartType = VaccineChartType;
   public displayedaredData: AreaData[] = [];
   public allvacsbyManufactor: ScaleData[] = [];
   public timeSpan: [string, number][] = [
@@ -21,7 +23,7 @@ export class ChartoverviewvaccineComponent implements OnInit {
     ['6 Monate', 180],
     ['gesamter Zeitraum', 200],
   ];
-  public daynumber: number = 7;
+  public dayNumber: number = 7;
   public showpercentVaccines: boolean = false;
 
   constructor(
@@ -46,7 +48,7 @@ export class ChartoverviewvaccineComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // change!!!!!!!
+
   public changeType(
     typ:
       | 'firstandSeond'
@@ -56,10 +58,13 @@ export class ChartoverviewvaccineComponent implements OnInit {
     this.showpercentVaccines = false;
     if (typ === 'firstandSeond') {
       this.displayedaredData = this.vaccine.firstSecondVaccinationSum;
+      this.type = VaccineChartType.firstandSeond;
     } else if (typ === 'percentVaccines') {
-       this.showpercentVaccines = true;
+      this.showpercentVaccines = true;
+      this.type = VaccineChartType.percentVaccines;
     } else if (typ === 'timeVaccines') {
       this.displayedaredData = this.vaccine.allVaccinsbyManTime;
+      this.type = VaccineChartType.timeVaccines;
     }
   }
 
