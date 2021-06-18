@@ -1,9 +1,10 @@
-.home {
+.vaccinations {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 
   padding: 40px;
+  margin-top: 75px;
 
   &__left {
     width: 48.5%;

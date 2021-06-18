@@ -1,5 +1,5 @@
-@media (max-width: 1370px) {
-  .home {
+@media (max-width: 1700px) {
+  .infections, .vaccinations {
     flex-direction: column !important;
 
     &__left {
@@ -13,7 +13,28 @@
   }
 }
 
-@media (max-width: 750px) {
+@media (max-width: 900px) {
+  .infections, .vaccinations {
+    margin-top: 125px !important;
+  }
+
+  .nav-bar {
+    flex-direction: column !important;
+    text-align: center !important;
+
+    &__logo {
+      flex-direction: column !important;
+
+      i {
+        display: none !important;
+      }
+    }
+
+    &__item {
+      margin-top: 15px !important;
+    }
+  }
+
   .info-badges {
     &__content {
       grid-template-columns: auto !important;

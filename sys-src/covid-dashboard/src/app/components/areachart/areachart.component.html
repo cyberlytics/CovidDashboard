@@ -1,15 +1,14 @@
-<ngx-charts-area-chart
-  [legend]="legend"
-  [results]="displayedData"
-  [scheme]="colorScheme"
-  [showXAxisLabel]="showXAxisLabel"
-  [showYAxisLabel]="showYAxisLabel"
-  [timeline]="timeline"
-  [view]="[800,400]"
-  [xAxisLabel]="xAxisLabel"
-  [xAxis]="xAxis"
-  [yAxisLabel]="yAxisLabel"
-  [yAxis]="yAxis"
->
-  <!-- (select)="onSelect($event)" -->
-</ngx-charts-area-chart>
+<div class="areachart">
+  <ngx-charts-area-chart
+    [results]="displayedData"
+    [scheme]="colorScheme"
+    [xAxis]="true"
+    [yAxis]="true"
+    [animations]="false"
+    [legend]="true"
+    [legendTitle]="''"
+    [showGridLines]="false"
+  >
+    <!-- (select)="onSelect($event)" -->
+  </ngx-charts-area-chart>
+</div>

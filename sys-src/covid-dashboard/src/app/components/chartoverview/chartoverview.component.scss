@@ -1,3 +1,9 @@
-button {
-  padding: 10px;
+@import "../../../assets/css/colors/colors.scss";
+
+.chart-overview {
+  margin-top: 50px;
+
+  button {
+    padding: 10px;
+  }
 }

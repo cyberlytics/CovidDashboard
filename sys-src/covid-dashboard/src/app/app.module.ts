@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MapComponent } from './components/map/map.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-import { HomeComponent } from './components/home/home.component';
 import { InfoBadgesComponent } from './components/info-badges/info-badges.component';
 
 import localeDe from '@angular/common/locales/de';
@@ -19,6 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartoverviewComponent } from './components/chartoverview/chartoverview.component';
 import { BarchartComponent } from './components/barchart/barchart.component';
 import { AreachartComponent } from './components/areachart/areachart.component';
+import { VaccinationsComponent } from './pages/vaccinations/vaccinations.component';
+import { InfectionsComponent } from './pages/infections/infections.component';
 
 registerLocaleData(localeDe);
 
@@ -27,7 +28,6 @@ registerLocaleData(localeDe);
     AppComponent,
     MapComponent,
     NavBarComponent,
-    HomeComponent,
     InfoBadgesComponent,
     InfoTableComponent,
     VaccineProgressBarComponent,
@@ -35,6 +35,8 @@ registerLocaleData(localeDe);
     ChartoverviewComponent,
     BarchartComponent,
     AreachartComponent,
+    VaccinationsComponent,
+    InfectionsComponent,
   ],
   imports: [
     BrowserModule,
