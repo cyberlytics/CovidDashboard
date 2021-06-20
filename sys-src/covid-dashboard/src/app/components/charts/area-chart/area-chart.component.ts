@@ -1,32 +1,23 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
-import { AreaData } from 'src/app/services/infections/infections.service';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { AreaData } from '../../../services/alltypes';
 
 @Component({
-  selector: 'app-areachart',
-  templateUrl: './areachart.component.html',
-  styleUrls: ['./areachart.component.scss'],
+  selector: 'app-area-chart',
+  templateUrl: './area-chart.component.html',
+  styleUrls: ['./area-chart.component.scss'],
 })
-export class AreachartComponent implements OnInit, OnChanges {
+export class AreaChartComponent implements OnInit {
   @Input() data: AreaData[] = [];
   @Input() dayNumber: number = 7;
-  public displayedData: AreaData[] = [];
+  @Input() colorScheme = {};
 
-  colorScheme = {
-    domain: ['#9e9688', '#62d87b', '#a81dff'],
-  };
+  public displayedData: AreaData[] = [];
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+  ngOnChanges(): void {
     this.changedInput();
   }
 

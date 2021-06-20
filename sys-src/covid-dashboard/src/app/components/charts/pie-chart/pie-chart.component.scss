@@ -1,0 +1,20 @@
+.pie-chart {
+  display: flex;
+  width: 100%;
+  min-height: 300px;
+
+  ::ng-deep {
+    .ngx-charts {
+      text {
+        fill: #fff !important;
+        opacity: 0.5 !important;
+      }
+    }
+
+    .legend-item:hover,
+    .legend-label:hover {
+      color: #ffffff !important;
+      opacity: 0.5 !important;
+    }
+  }
+}

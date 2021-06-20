@@ -1,5 +1,6 @@
 @media (max-width: 1700px) {
-  .infections, .vaccinations {
+  .infections,
+  .vaccinations {
     flex-direction: column !important;
 
     &__left {
@@ -14,7 +15,8 @@
 }
 
 @media (max-width: 900px) {
-  .infections, .vaccinations {
+  .infections,
+  .vaccinations {
     margin-top: 125px !important;
   }
 
@@ -35,9 +37,8 @@
     }
   }
 
-  .info-badges {
-    &__content {
-      grid-template-columns: auto !important;
-    }
+  .three-in-a-row,
+  .five-in-a-row {
+    grid-template-columns: repeat(1, 1fr) !important;
   }
 }

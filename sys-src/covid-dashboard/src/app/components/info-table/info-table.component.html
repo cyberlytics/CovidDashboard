@@ -1,83 +1,107 @@
 <div class="info-table">
-  <p class="title-badge accent-yellow accent-yellow-background">Landkreisübersicht</p>
+  <p class="title-badge accent-yellow accent-yellow-background">
+    Landkreisübersicht
+  </p>
 
-  <!-- div class="info-bar">
-    <div (click)="selectedBookmark = !selectedBookmark"
-         [ngClass]="{'accent-yellow accent-yellow-background': selectedBookmark}"
-         class="info-bar__toggle-button">
-      <i class="far fa-bookmark"></i>
-    </div>
-  </div -->
+  <div class="info-bar">
+    <input
+      (ngModelChange)="onSearchTermChange()"
+      [(ngModel)]="searchTerm"
+      class="info-bar__search"
+      placeholder="Landkreis suchen"
+      type="search"
+    />
+  </div>
 
   <div class="grid">
     <div class="row">
-      <div class="cell heading" (click)="sort('State')">
+      <div (click)="sort('State')" class="cell heading">
         <p>Landkreis</p>
-        <i *ngIf="ascSortingState !== null" class="fas fa-sort-alpha-{{ ascSortingState ? 'down' : 'up' }}"></i>
+        <i
+          *ngIf="ascSortingState !== null"
+          class="fas fa-sort-alpha-{{ ascSortingState ? 'down' : 'up' }}"
+        ></i>
       </div>
-      <div class="cell heading" (click)="sort('TotalCases')">
+      <div (click)="sort('TotalCases')" class="cell heading">
         <p>Bestätigt</p>
-        <i *ngIf="ascSortingTotalCases !== null" class="fas fa-sort-numeric-{{ ascSortingTotalCases ? 'down' : 'up' }}"></i>
+        <i
+          *ngIf="ascSortingTotalCases !== null"
+          class="fas fa-sort-numeric-{{ ascSortingTotalCases ? 'down' : 'up' }}"
+        ></i>
       </div>
-      <div class="cell heading" (click)="sort('ActiveCases')">
+      <div (click)="sort('ActiveCases')" class="cell heading">
         <p>Aktiv</p>
-        <i *ngIf="ascSortingActiveCases !== null" class="fas fa-sort-numeric-{{ ascSortingActiveCases ? 'down' : 'up' }}"></i>
+        <i
+          *ngIf="ascSortingActiveCases !== null"
+          class="fas fa-sort-numeric-{{
+            ascSortingActiveCases ? 'down' : 'up'
+          }}"
+        ></i>
       </div>
-      <div class="cell heading" (click)="sort('Recovered')">
+      <div (click)="sort('Recovered')" class="cell heading">
         <p>Genesen</p>
-        <i *ngIf="ascSortingRecovered !== null" class="fas fa-sort-numeric-{{ ascSortingRecovered ? 'down' : 'up' }}"></i>
+        <i
+          *ngIf="ascSortingRecovered !== null"
+          class="fas fa-sort-numeric-{{ ascSortingRecovered ? 'down' : 'up' }}"
+        ></i>
       </div>
-      <div class="cell heading" (click)="sort('Incidence7')">
+      <div (click)="sort('Incidence7')" class="cell heading">
         <p>Inzidenz</p>
-        <i *ngIf="ascSortingIncidence7 !== null" class="fas fa-sort-numeric-{{ ascSortingIncidence7 ? 'down' : 'up' }}"></i>
+        <i
+          *ngIf="ascSortingIncidence7 !== null"
+          class="fas fa-sort-numeric-{{ ascSortingIncidence7 ? 'down' : 'up' }}"
+        ></i>
       </div>
-      <div class="cell heading" (click)="sort('Deaths')">
+      <div (click)="sort('Deaths')" class="cell heading">
         <p>Verstorben</p>
-        <i *ngIf="ascSortingDeaths !== null" class="fas fa-sort-numeric-{{ ascSortingDeaths ? 'down' : 'up' }}"></i>
+        <i
+          *ngIf="ascSortingDeaths !== null"
+          class="fas fa-sort-numeric-{{ ascSortingDeaths ? 'down' : 'up' }}"
+        ></i>
       </div>
     </div>
 
-    <div *ngFor="let county of this.allCountys" class="row">
+    <div *ngFor="let county of this.searchCountys" class="row">
       <div class="cell state">
         <!-- <div class="info-bar__toggle-button" [ngClass]="{'accent-yellow accent-yellow-background': selectedBookmark}" >
           <i class="far fa-bookmark"></i>
         </div> -->
-        <p>{{county[1].State }}</p>
+        <p>{{ county[1].State }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-red">
           <i class="fas fa-arrow-down"></i>
           <p>NaN</p>
         </div>
-        <p>{{county[1].TotalCases}}</p>
+        <p>{{ county[1].TotalCases }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-blue">
           <i class="fas fa-arrow-up"></i>
           <p>NaN</p>
         </div>
-        <p>{{county[1].ActiveCases}}</p>
+        <p>{{ county[1].ActiveCases }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-green">
           <i class="fas fa-arrow-up"></i>
           <p>NaN</p>
         </div>
-        <p>{{county[1].Recovered}}</p>
+        <p>{{ county[1].Recovered }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-purple">
           <i class="fas fa-arrow-down"></i>
           <p>NaN</p>
         </div>
-        <p>{{county[1].Incidence7.toFixed(2).replace('.', ',')}}</p>
+        <p>{{ county[1].Incidence7.toFixed(2).replace(".", ",") }}</p>
       </div>
       <div class="cell">
-        <div class="cell__difference-to-previous-day accent-gray">
+        <div class="cell__difference-to-previous-day accent-light-gray">
           <i class="fas fa-arrow-down"></i>
           <p>NaN</p>
         </div>
-        <p>{{county[1].Deaths}}</p>
+        <p>{{ county[1].Deaths }}</p>
       </div>
     </div>
   </div>

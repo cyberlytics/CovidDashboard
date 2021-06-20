@@ -1,16 +1,25 @@
 <div class="switch-map">
-  <p
-    class="title-badge accent-gray accent-gray-background">{{ showInfections ? 'Infektionsgeschehen' : 'Impffortschritt' }}</p>
+  <p class="title-badge accent-gray accent-gray-background">
+    {{ showInfections ? "Infektionsgeschehen" : "Impffortschritt" }}
+  </p>
 
   <div *ngIf="!this.showInfections" class="info-bar">
-    <div (click)="this.showVaccineData('first')" [ngClass]="{'accent-blue accent-blue-background': showFirstVaccine }"
-         class="info-bar__toggle-button">
-      <p>1. Impfung</p>
+    <div
+      (click)="this.showVaccineData('first')"
+      [ngClass]="{ 'accent-blue accent-blue-background': showFirstVaccine }"
+      class="info-bar__toggle-button"
+    >
+      <p>Erstimpfung</p>
     </div>
 
-    <div (click)="this.showVaccineData('second')" [ngClass]="{'accent-yellow accent-yellow-background': !showFirstVaccine }"
-         class="info-bar__toggle-button">
-      <p>2. Impfung</p>
+    <div
+      (click)="this.showVaccineData('second')"
+      [ngClass]="{
+        'accent-yellow accent-yellow-background': !showFirstVaccine
+      }"
+      class="info-bar__toggle-button"
+    >
+      <p>Zweitimpfung</p>
     </div>
   </div>
 

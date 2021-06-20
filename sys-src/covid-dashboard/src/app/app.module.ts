@@ -15,11 +15,14 @@ import { VaccineProgressBarComponent } from './components/vaccine-progress-bar/v
 import { FooterComponent } from './components/footer/footer.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ChartoverviewComponent } from './components/chartoverview/chartoverview.component';
-import { BarchartComponent } from './components/barchart/barchart.component';
-import { AreachartComponent } from './components/areachart/areachart.component';
 import { VaccinationsComponent } from './pages/vaccinations/vaccinations.component';
 import { InfectionsComponent } from './pages/infections/infections.component';
+import { FormsModule } from '@angular/forms';
+import { AreaChartComponent } from './components/charts/area-chart/area-chart.component';
+import { BarChartComponent } from './components/charts/bar-chart/bar-chart.component';
+import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
+import { ChartOverviewVaccinationComponent } from './components/chart-overview-vaccination/chart-overview-vaccination.component';
+import { ChartOverviewInfectionsComponent } from './components/chart-overview-infections/chart-overview-infections.component';
 
 registerLocaleData(localeDe);
 
@@ -32,11 +35,13 @@ registerLocaleData(localeDe);
     InfoTableComponent,
     VaccineProgressBarComponent,
     FooterComponent,
-    ChartoverviewComponent,
-    BarchartComponent,
-    AreachartComponent,
     VaccinationsComponent,
     InfectionsComponent,
+    AreaChartComponent,
+    BarChartComponent,
+    PieChartComponent,
+    ChartOverviewVaccinationComponent,
+    ChartOverviewInfectionsComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +49,7 @@ registerLocaleData(localeDe);
     HttpClientModule,
     BrowserAnimationsModule,
     NgxChartsModule,
+    FormsModule,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'de' }],
   bootstrap: [AppComponent],
