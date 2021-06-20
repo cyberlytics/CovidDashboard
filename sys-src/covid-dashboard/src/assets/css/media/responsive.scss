@@ -35,9 +35,7 @@
     }
   }
 
-  .info-badges {
-    &__content {
-      grid-template-columns: auto !important;
-    }
+  .three-in-a-row, .five-in-a-row {
+    grid-template-columns: repeat(1, 1fr) !important;
   }
 }

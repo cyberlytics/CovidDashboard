@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { AreaData, ScaleData, VaccineChartType } from 'src/app/services/alltypes';
-import { VaccinesService } from 'src/app/services/vaccines/vaccines.service';
+import {Component, OnInit} from '@angular/core';
+import {AreaData, ScaleData, VaccineChartType} from 'src/app/services/alltypes';
+import {VaccinesService} from 'src/app/services/vaccines/vaccines.service';
 
 @Component({
   selector: 'app-chartoverviewvaccine',
@@ -9,7 +9,7 @@ import { VaccinesService } from 'src/app/services/vaccines/vaccines.service';
 })
 export class ChartoverviewvaccineComponent implements OnInit {
 
-  public type: VaccineChartType = VaccineChartType.firstandSeond;
+  public type: VaccineChartType = VaccineChartType.percentVaccines;
   public chartType = VaccineChartType;
   public displayedaredData: AreaData[] = [];
   public allvacsbyManufactor: ScaleData[] = [];
@@ -23,7 +23,17 @@ export class ChartoverviewvaccineComponent implements OnInit {
     ['gesamter Zeitraum', 200],
   ];
   public dayNumber: number = 7;
-  public showpercentVaccines: boolean = false;
+  public showpercentVaccines: boolean = true;
+  public colorScheme = {};
+  percentVaccinesColorScheme = {
+    domain: ['#62d87b', '#a81dff', '#ffc71d', '#cbd5de'],
+  };
+  timeVaccinesColorScheme = {
+    domain: ['#62d87b', '#a81dff', '#ffc71d', '#cbd5de'],
+  };
+  firstandSeondColorScheme = {
+    domain: ['#529bf2', '#ffc71d'],
+  };
 
   constructor(
     private vaccine: VaccinesService,
@@ -34,19 +44,19 @@ export class ChartoverviewvaccineComponent implements OnInit {
       this.allvacsbyManufactor = this.vaccine.allVaccinsbyManufactor;
     })
 
-     // calculate days for all time span
-     const date = new Date();
-     date.setHours(1, 0, 0);
-     const startDate = new Date('2020-12-29');
-     startDate.setHours(0, 0, 0);
-     let diff = date.getTime() - startDate.getTime();
-     diff = Math.round(diff / (1000 * 3600 * 24));
-     this.timeSpan[this.timeSpan.length - 1][1] = diff;
+    // calculate days for all time span
+    const date = new Date();
+    date.setHours(1, 0, 0);
+    const startDate = new Date('2020-12-29');
+    startDate.setHours(0, 0, 0);
+    let diff = date.getTime() - startDate.getTime();
+    diff = Math.round(diff / (1000 * 3600 * 24));
+    this.timeSpan[this.timeSpan.length - 1][1] = diff;
   }
 
   ngOnInit(): void {
+    this.colorScheme = this.percentVaccinesColorScheme;
   }
-
 
   public changeType(
     typ:
@@ -58,12 +68,15 @@ export class ChartoverviewvaccineComponent implements OnInit {
     if (typ === 'firstandSeond') {
       this.displayedaredData = this.vaccine.firstSecondVaccinationSum;
       this.type = VaccineChartType.firstandSeond;
+      this.colorScheme = this.firstandSeondColorScheme;
     } else if (typ === 'percentVaccines') {
       this.showpercentVaccines = true;
       this.type = VaccineChartType.percentVaccines;
+      this.colorScheme = this.percentVaccinesColorScheme;
     } else if (typ === 'timeVaccines') {
       this.displayedaredData = this.vaccine.allVaccinsbyManTime;
       this.type = VaccineChartType.timeVaccines;
+      this.colorScheme = this.timeVaccinesColorScheme;
     }
   }
 

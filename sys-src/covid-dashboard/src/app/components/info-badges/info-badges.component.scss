@@ -17,7 +17,6 @@
     width: 100%;
     display: grid;
     overflow: hidden;
-    grid-template-columns: repeat(5, 1fr);
     grid-auto-rows: 1fr;
     grid-gap: 5px;
 
@@ -61,5 +60,13 @@
         font-weight: 700;
       }
     }
+  }
+
+  .three-in-a-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .five-in-a-row {
+    grid-template-columns: repeat(5, 1fr);
   }
 }

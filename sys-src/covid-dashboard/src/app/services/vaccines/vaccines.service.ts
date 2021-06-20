@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { AreaData, ScaleData } from '../alltypes';
-import { NetworkService } from '../network/network.service';
+import {Injectable} from '@angular/core';
+import {AreaData, ScaleData} from '../alltypes';
+import {NetworkService} from '../network/network.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,8 @@ export class VaccinesService {
 
   constructor(
     private network: NetworkService
-  ) { }
+  ) {
+  }
 
 
   public loadData(id: number): Promise<boolean> {
@@ -108,19 +109,19 @@ export class VaccinesService {
     this.allVaccinsbyManufactor = [];
     this.allVaccinsbyManufactor.push({
       name: 'Astra Zeneca',
-      value: this.sumAstraZeneca[this.sumAstraZeneca.length-1].value
+      value: this.sumAstraZeneca[this.sumAstraZeneca.length - 1].value
     })
     this.allVaccinsbyManufactor.push({
       name: 'Biontech',
-      value: this.sumBioNTech[this.sumBioNTech.length-1].value
+      value: this.sumBioNTech[this.sumBioNTech.length - 1].value
     })
     this.allVaccinsbyManufactor.push({
       name: 'Johnson and Johnson',
-      value: this.sumJohnsonAndJohnson[this.sumJohnsonAndJohnson.length-1].value
+      value: this.sumJohnsonAndJohnson[this.sumJohnsonAndJohnson.length - 1].value
     })
     this.allVaccinsbyManufactor.push({
       name: 'Moderna',
-      value: this.sumModerna[this.sumModerna.length-1].value
+      value: this.sumModerna[this.sumModerna.length - 1].value
     })
   }
 

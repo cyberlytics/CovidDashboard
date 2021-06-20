@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { ScaleData, AreaData } from '../alltypes';
-import { NetworkService } from '../network/network.service';
+import {Injectable} from '@angular/core';
+import {AreaData, ScaleData} from '../alltypes';
+import {NetworkService} from '../network/network.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,8 @@ export class InfectionsService {
 
   public loaded: boolean = false;
 
-  constructor(private network: NetworkService) {}
+  constructor(private network: NetworkService) {
+  }
 
   /**
    * loads the data and sorts it
@@ -44,7 +45,7 @@ export class InfectionsService {
               name: element[0],
               value: element[1].Recovered,
             });
-            this.deaths.push({ name: element[0], value: element[1].Deaths });
+            this.deaths.push({name: element[0], value: element[1].Deaths});
             this.totalCases.push({
               name: element[0],
               value: element[1].TotalCases,

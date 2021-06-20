@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-nav-bar',
@@ -7,15 +7,19 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   navigate(): void {
     if (this.router.url.includes('infections')) {
-      this.router.navigate(['/vaccinations']).then(() => {});
+      this.router.navigate(['/vaccinations']).then(() => {
+      });
     } else {
-      this.router.navigate(['/infections']).then(() => {});
+      this.router.navigate(['/infections']).then(() => {
+      });
     }
   }
 }

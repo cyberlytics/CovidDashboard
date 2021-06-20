@@ -1,11 +1,5 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
-import { AreaData } from 'src/app/services/alltypes';
+import {Component, Input, OnChanges, OnInit, SimpleChanges,} from '@angular/core';
+import {AreaData} from 'src/app/services/alltypes';
 
 @Component({
   selector: 'app-areachart',
@@ -17,13 +11,13 @@ export class AreachartComponent implements OnInit, OnChanges {
   @Input() dayNumber: number = 7;
   public displayedData: AreaData[] = [];
 
-  colorScheme = {
-    domain: ['#9e9688', '#62d87b', '#a81dff'],
-  };
+  @Input() colorScheme = {};
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
@@ -33,7 +27,7 @@ export class AreachartComponent implements OnInit, OnChanges {
   private changedInput(): void {
     this.displayedData = [];
     for (const item of this.data) {
-      this.displayedData.push({ name: item.name, series: item.series.slice() });
+      this.displayedData.push({name: item.name, series: item.series.slice()});
     }
 
     for (const element of this.displayedData) {

@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { InfoTableComponent } from './info-table.component';
+import {InfoTableComponent} from './info-table.component';
 
 describe('InfoTableComponent', () => {
   let component: InfoTableComponent;
