@@ -1,38 +1,41 @@
 <div class="chart-overview">
   <p class="title-badge accent-purple accent-purple-background">Diagramme</p>
 
-  <div class="info-bar">
-    <div (click)="this.changeType('firstandSeond')"
-         [ngClass]="{'accent-purple accent-purple-background': type === chartType.firstandSeond && !showpercentVaccines}"
-         class="info-bar__toggle-button">
-      <p>erste und zweite Impfung</p>
+  <div class="content">
+    <div class="info-bar">
+      <div (click)="this.changeType('percentVaccines')"
+           [ngClass]="{'accent-purple accent-purple-background': type === chartType.percentVaccines }"
+           class="info-bar__toggle-button">
+        <p>Prozentuale Impfverteilung</p>
+      </div>
+
+      <div (click)="this.changeType('timeVaccines')"
+           [ngClass]="{'accent-purple accent-purple-background': type === chartType.timeVaccines && !showpercentVaccines }"
+           class="info-bar__toggle-button">
+        <p>Zeitliche Impfverteilung</p>
+      </div>
+
+      <div (click)="this.changeType('firstandSeond')"
+           [ngClass]="{'accent-purple accent-purple-background': type === chartType.firstandSeond && !showpercentVaccines}"
+           class="info-bar__toggle-button">
+        <p>Erst- & Zweitimpfung</p>
+      </div>
     </div>
 
-    <div (click)="this.changeType('percentVaccines')"
-         [ngClass]="{'accent-purple accent-purple-background': type === chartType.percentVaccines }"
-         class="info-bar__toggle-button">
-      <p>prozentuale Impfverteilung nach Herstellern</p>
+    <div *ngIf="!this.showpercentVaccines" class="info-bar">
+      <div (click)="this.dayNumber = numb[1]" *ngFor="let numb of this.timeSpan"
+           [ngClass]="{'accent-purple accent-purple-background': numb[1] === this.dayNumber }"
+           class="info-bar__toggle-button">
+        <p>{{numb[0]}}</p>
+      </div>
     </div>
 
-    <div (click)="this.changeType('timeVaccines')"
-         [ngClass]="{'accent-purple accent-purple-background': type === chartType.timeVaccines && !showpercentVaccines }"
-         class="info-bar__toggle-button">
-      <p>zeitliche Impfverteilung nach Herstellern</p>
-    </div>
+    <app-areachart *ngIf="!this.showpercentVaccines" [colorScheme]="this.colorScheme"
+                   [data]="this.displayedaredData" [dayNumber]="this.dayNumber"></app-areachart>
+
+    <app-piechart *ngIf="this.showpercentVaccines" [colorScheme]="this.colorScheme"
+                  [data]="this.allvacsbyManufactor"></app-piechart>
   </div>
-
-  <div class="info-bar" *ngIf="!this.showpercentVaccines">
-    <div *ngFor="let numb of this.timeSpan" (click)="this.dayNumber = numb[1]"
-         [ngClass]="{'accent-purple accent-purple-background': numb[1] === this.dayNumber }"
-         class="info-bar__toggle-button">
-      <p>{{numb[0]}}</p>
-    </div>
-  </div>
-
-  <app-areachart *ngIf="!this.showpercentVaccines"  [data]="this.displayedaredData"
-  [dayNumber]="this.dayNumber"></app-areachart>
-
-  <app-piechart *ngIf="this.showpercentVaccines" [data]="this.allvacsbyManufactor" ></app-piechart>
 </div>
 
 

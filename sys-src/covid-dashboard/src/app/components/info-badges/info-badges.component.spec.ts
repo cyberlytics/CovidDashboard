@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { InfoBadgesComponent } from './info-badges.component';
+import {InfoBadgesComponent} from './info-badges.component';
 
 describe('InfoBadgesComponent', () => {
   let component: InfoBadgesComponent;

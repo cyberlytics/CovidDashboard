@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NetworkService } from '../../services/network/network.service';
+import {Component, OnInit} from '@angular/core';
+import {NetworkService} from '../../services/network/network.service';
 
 @Component({
   selector: 'app-vaccine-progress-bar',
@@ -20,5 +20,6 @@ export class VaccineProgressBarComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

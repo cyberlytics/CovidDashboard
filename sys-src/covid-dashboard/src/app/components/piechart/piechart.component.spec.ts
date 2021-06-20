@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { PiechartComponent } from './piechart.component';
+import {PiechartComponent} from './piechart.component';
 
 describe('PiechartComponent', () => {
   let component: PiechartComponent;
@@ -8,9 +8,9 @@ describe('PiechartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PiechartComponent ]
+      declarations: [PiechartComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

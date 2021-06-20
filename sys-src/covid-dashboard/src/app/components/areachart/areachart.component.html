@@ -1,14 +1,14 @@
 <div class="areachart">
-  <ngx-charts-area-chart
+  <ngx-charts-area-chart-stacked
+    [animations]="true"
+    [legendTitle]="'Legende'"
+    [legend]="true"
     [results]="displayedData"
     [scheme]="colorScheme"
+    [showGridLines]="true"
     [xAxis]="true"
     [yAxis]="true"
-    [animations]="false"
-    [legend]="true"
-    [legendTitle]="''"
-    [showGridLines]="false"
   >
     <!-- (select)="onSelect($event)" -->
-  </ngx-charts-area-chart>
+  </ngx-charts-area-chart-stacked>
 </div>

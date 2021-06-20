@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { BarchartComponent } from './barchart.component';
+import {BarchartComponent} from './barchart.component';
 
 describe('BarchartComponent', () => {
   let component: BarchartComponent;

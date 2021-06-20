@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { County } from 'src/app/services/alltypes';
-import { NetworkService } from 'src/app/services/network/network.service';
-import { sort } from 'fast-sort';
+import {Component, OnInit} from '@angular/core';
+import {County} from 'src/app/services/alltypes';
+import {NetworkService} from 'src/app/services/network/network.service';
+import {sort} from 'fast-sort';
 
 @Component({
   selector: 'app-info-table',
@@ -31,7 +31,8 @@ export class InfoTableComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   onSearchTermChange(): void {
     this.searchCountys = this.allCountys.filter((s) => {
