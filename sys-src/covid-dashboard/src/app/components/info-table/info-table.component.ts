@@ -9,8 +9,6 @@ import { sort } from 'fast-sort';
   styleUrls: ['./info-table.component.scss'],
 })
 export class InfoTableComponent implements OnInit {
-  selectedBookmark: boolean = false;
-
   ascSortingState: any = true;
   ascSortingTotalCases: any = null;
   ascSortingActiveCases: any = null;
@@ -18,21 +16,42 @@ export class InfoTableComponent implements OnInit {
   ascSortingIncidence7: any = null;
   ascSortingDeaths: any = null;
 
+  currentSortingType: string = '';
+
   public allCountys = [] as County[];
+  public searchCountys = [] as County[];
+
+  searchTerm = '';
 
   constructor(private network: NetworkService) {
     this.network.getAllCountyIncidences().subscribe((res) => {
       this.allCountys = sort(res).asc((county) => county[1].State);
+      this.currentSortingType = 'State';
+      this.searchCountys = this.allCountys;
     });
   }
 
   ngOnInit(): void {}
 
+  onSearchTermChange(): void {
+    this.searchCountys = this.allCountys.filter((s) => {
+      let currentState = s[1].State;
+      if (currentState !== undefined) {
+        return currentState
+          .toLowerCase()
+          .includes(this.searchTerm.toLowerCase());
+      } else return false;
+    });
+    this.sort(this.currentSortingType, false);
+  }
+
   // Dirty solution, maybe refactoring later
-  sort(type: string): void {
+  sort(type: string, change: boolean = true): void {
+    this.currentSortingType = type;
+
     if (type == 'State') {
-      if (!this.ascSortingState) {
-        this.allCountys = sort(this.allCountys).asc(
+      if (!this.ascSortingState && change) {
+        this.searchCountys = sort(this.searchCountys).asc(
           (county) => county[1].State
         );
 
@@ -44,7 +63,7 @@ export class InfoTableComponent implements OnInit {
         this.ascSortingIncidence7 = null;
         this.ascSortingDeaths = null;
       } else {
-        this.allCountys = sort(this.allCountys).desc(
+        this.searchCountys = sort(this.searchCountys).desc(
           (county) => county[1].State
         );
 
@@ -57,8 +76,8 @@ export class InfoTableComponent implements OnInit {
         this.ascSortingDeaths = null;
       }
     } else if (type == 'TotalCases') {
-      if (!this.ascSortingTotalCases) {
-        this.allCountys = sort(this.allCountys).asc(
+      if (!this.ascSortingTotalCases && change) {
+        this.searchCountys = sort(this.searchCountys).asc(
           (county) => county[1].TotalCases
         );
 
@@ -71,7 +90,7 @@ export class InfoTableComponent implements OnInit {
         this.ascSortingIncidence7 = null;
         this.ascSortingDeaths = null;
       } else {
-        this.allCountys = sort(this.allCountys).desc(
+        this.searchCountys = sort(this.searchCountys).desc(
           (county) => county[1].TotalCases
         );
 
@@ -85,8 +104,8 @@ export class InfoTableComponent implements OnInit {
         this.ascSortingDeaths = null;
       }
     } else if (type == 'ActiveCases') {
-      if (!this.ascSortingActiveCases) {
-        this.allCountys = sort(this.allCountys).asc(
+      if (!this.ascSortingActiveCases && change) {
+        this.searchCountys = sort(this.searchCountys).asc(
           (county) => county[1].ActiveCases
         );
 
@@ -99,7 +118,7 @@ export class InfoTableComponent implements OnInit {
         this.ascSortingIncidence7 = null;
         this.ascSortingDeaths = null;
       } else {
-        this.allCountys = sort(this.allCountys).desc(
+        this.searchCountys = sort(this.searchCountys).desc(
           (county) => county[1].ActiveCases
         );
         this.ascSortingState = null;
@@ -112,8 +131,8 @@ export class InfoTableComponent implements OnInit {
         this.ascSortingDeaths = null;
       }
     } else if (type == 'Recovered') {
-      if (!this.ascSortingRecovered) {
-        this.allCountys = sort(this.allCountys).asc(
+      if (!this.ascSortingRecovered && change) {
+        this.searchCountys = sort(this.searchCountys).asc(
           (county) => county[1].Recovered
         );
 
@@ -126,7 +145,7 @@ export class InfoTableComponent implements OnInit {
         this.ascSortingIncidence7 = null;
         this.ascSortingDeaths = null;
       } else {
-        this.allCountys = sort(this.allCountys).desc(
+        this.searchCountys = sort(this.searchCountys).desc(
           (county) => county[1].Recovered
         );
 
@@ -140,8 +159,8 @@ export class InfoTableComponent implements OnInit {
         this.ascSortingDeaths = null;
       }
     } else if (type == 'Incidence7') {
-      if (!this.ascSortingIncidence7) {
-        this.allCountys = sort(this.allCountys).asc(
+      if (!this.ascSortingIncidence7 && change) {
+        this.searchCountys = sort(this.searchCountys).asc(
           (county) => county[1].Incidence7
         );
 
@@ -154,7 +173,7 @@ export class InfoTableComponent implements OnInit {
 
         this.ascSortingDeaths = null;
       } else {
-        this.allCountys = sort(this.allCountys).desc(
+        this.searchCountys = sort(this.searchCountys).desc(
           (county) => county[1].Incidence7
         );
 
@@ -168,8 +187,8 @@ export class InfoTableComponent implements OnInit {
         this.ascSortingDeaths = null;
       }
     } else if (type == 'Deaths') {
-      if (!this.ascSortingDeaths) {
-        this.allCountys = sort(this.allCountys).asc(
+      if (!this.ascSortingDeaths && change) {
+        this.searchCountys = sort(this.searchCountys).asc(
           (county) => county[1].Deaths
         );
 
@@ -181,7 +200,7 @@ export class InfoTableComponent implements OnInit {
 
         this.ascSortingDeaths = true;
       } else {
-        this.allCountys = sort(this.allCountys).desc(
+        this.searchCountys = sort(this.searchCountys).desc(
           (county) => county[1].Deaths
         );
 

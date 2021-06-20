@@ -1,13 +1,9 @@
 <div class="info-table">
   <p class="title-badge accent-yellow accent-yellow-background">Landkreisübersicht</p>
 
-  <!-- div class="info-bar">
-    <div (click)="selectedBookmark = !selectedBookmark"
-         [ngClass]="{'accent-yellow accent-yellow-background': selectedBookmark}"
-         class="info-bar__toggle-button">
-      <i class="far fa-bookmark"></i>
-    </div>
-  </div -->
+  <div class="info-bar">
+    <input type="search" placeholder="Landkreis suchen" class="info-bar__search" [(ngModel)]="searchTerm" (ngModelChange)="onSearchTermChange()" />
+  </div>
 
   <div class="grid">
     <div class="row">
@@ -37,7 +33,7 @@
       </div>
     </div>
 
-    <div *ngFor="let county of this.allCountys" class="row">
+    <div *ngFor="let county of this.searchCountys" class="row">
       <div class="cell state">
         <!-- <div class="info-bar__toggle-button" [ngClass]="{'accent-yellow accent-yellow-background': selectedBookmark}" >
           <i class="far fa-bookmark"></i>
