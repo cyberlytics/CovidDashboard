@@ -5,7 +5,7 @@ import {
   CountyData,
   Vaccine,
   VaccineData,
-} from 'src/app/services/county';
+} from 'src/app/services/alltypes';
 import { NetworkService } from 'src/app/services/network/network.service';
 import { Router } from '@angular/router';
 
@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 export class MapComponent implements AfterViewInit {
   public showInfections: boolean = true;
   public showFirstVaccine: boolean = true;
+
   private map = {} as L.Map;
   private countyJson = {} as GeoData;
   private vaccineJson = {} as GeoDataVaccine;
@@ -35,14 +36,6 @@ export class MapComponent implements AfterViewInit {
   }
 
   /**
-   * shows Infection Data; Button event
-   */
-  public showInfectionData(): void {
-    this.showInfections = true;
-    this.loadInfectionData();
-  }
-
-  /**
    * shows Vaccine Data
    */
   public showVaccineData(type: 'first' | 'second'): void {
@@ -53,7 +46,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   /**
-   * creats the map and shows the infection data
+   * creates the map and shows the infection data
    */
   private initMap(): void {
     this.map = L.map('map', {
@@ -103,12 +96,11 @@ export class MapComponent implements AfterViewInit {
           this.countyJson = this.mapBackendDataToCountyJSON(res, xhr.response);
 
           this.loadMapWithData(this.countyJson, 'incidences');
-          // console.log(this.countyJson);
         };
         xhr.send();
       },
       (err) => {
-        console.log('error getAllcountyIncidences', err);
+        console.log('error getAllCountyIncidences', err);
       }
     );
   }
@@ -134,7 +126,7 @@ export class MapComponent implements AfterViewInit {
             res,
             xhr.response
           );
-          console.log(this.vaccineJson);
+
           if (type === 'first') {
             this.loadMapWithData(this.vaccineJson, 'firstVaccination');
           } else if (type === 'second') {

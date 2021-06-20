@@ -9,6 +9,7 @@
     grid-template-columns: repeat(6, minmax(120px, 1fr));
     grid-auto-rows: 1fr;
     grid-gap: 5px;
+    height: 300px;
 
     max-height: 325px;
 
@@ -27,12 +28,12 @@
         i {
           font-size: 16rem;
           margin-left: 10px;
-          opacity: .5;
+          opacity: 0.5;
         }
 
         &:hover {
           cursor: pointer;
-          opacity: .75;
+          opacity: 0.75;
         }
       }
 
@@ -41,7 +42,7 @@
 
         text-align: center !important;
         background-color: $color-secondary-background;
-        opacity: .75;
+        opacity: 0.75;
       }
 
       .cell {

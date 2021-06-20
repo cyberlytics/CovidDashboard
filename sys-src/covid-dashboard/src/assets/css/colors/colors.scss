@@ -7,6 +7,7 @@ $color-accent-yellow: #ffc71d;
 $color-accent-green: #62d87b;
 $color-accent-blue: #529bf2;
 $color-accent-gray: #9e9688;
+$color-accent-light-gray: #b0b5b9;
 
 $color-background: #12131f;
 $color-secondary-background: #181926;
@@ -18,6 +19,7 @@ $color-accent-yellow-background: rgba(255, 199, 29, 0.125);
 $color-accent-green-background: rgba(40, 167, 69, 0.125);
 $color-accent-blue-background: rgba(0, 123, 255, 0.125);
 $color-accent-gray-background: rgba(108, 117, 125, 0.125);
+$color-accent-light-gray-background: rgba(203, 213, 222, 0.125);
 
 .accent-red {
   color: $color-accent-red !important;
@@ -73,6 +75,14 @@ $color-accent-gray-background: rgba(108, 117, 125, 0.125);
 
 .accent-gray-background {
   background-color: $color-accent-gray-background !important;
+}
+
+.accent-light-gray {
+  color: $color-accent-light-gray !important;
+}
+
+.accent-light-gray-background {
+  background-color: $color-accent-light-gray-background !important;
 }
 
 .hover-accent-gray-red {
