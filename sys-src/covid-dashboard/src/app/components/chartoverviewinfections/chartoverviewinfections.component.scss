@@ -2,8 +2,14 @@
 
 .chart-overview {
   margin-top: 50px;
+  overflow: auto;
 
-  button {
-    padding: 10px;
+  .content {
+    width: 100%;
+    min-width: 800px;
+
+    button {
+      padding: 10px;
+    }
   }
 }

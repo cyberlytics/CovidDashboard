@@ -6,7 +6,7 @@
       aktualisiert: {{ (showInfectionData ? this.germanyData.incidence.Date : this.germanyData.vaccines.Date) | date: "long":"CEST":"de" }}</p>
   </div>
 
-  <div class="info-badges__content">
+  <div [class]="showInfectionData ? 'five-in-a-row' : 'three-in-a-row'" class="info-badges__content">
     <div
       class="badge accent-red accent-red-background"
     >
@@ -75,7 +75,18 @@
     </div>
 
     <div
-      class="badge accent-gray accent-gray-background"
+      *ngIf="!showInfectionData" class="badge accent-yellow accent-yellow-background">
+      <div class="badge__title">
+        <p>Impfdosen Johnson & Johnson</p>
+      </div>
+
+      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
+        <p>{{ this.germanyData.vaccines.SumJohnsonAndJohnson | number:'':'de-DE' }}</p>
+      </div>
+    </div>
+
+    <div
+      class="badge accent-light-gray accent-light-gray-background"
     >
       <div class="badge__title">
         <p>{{ showInfectionData ? 'Verstorben' : 'Impfdosen Moderna' }}</p>

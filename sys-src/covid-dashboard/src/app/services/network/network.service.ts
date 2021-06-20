@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { County, GermanyData, Vaccine } from '../alltypes';
-import { map } from 'rxjs/operators';
-import { Counties, Vaccines } from '../counties';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {County, GermanyData, Vaccine} from '../alltypes';
+import {map} from 'rxjs/operators';
+import {Counties, Vaccines} from '../counties';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,8 @@ import { Counties, Vaccines } from '../counties';
 export class NetworkService {
   private url: string = 'https://covidash.de/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   public getAllCountyIncidences() {
     return this.http.get<County[]>(this.url + '/incidences/');

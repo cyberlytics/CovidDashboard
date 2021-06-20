@@ -1,13 +1,7 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
-import { InfectionChartType, ScaleData } from 'src/app/services/alltypes';
-import { InfectionsService } from 'src/app/services/infections/infections.service';
-import { NetworkService } from 'src/app/services/network/network.service';
+import {Component, Input, OnChanges, OnInit, SimpleChanges,} from '@angular/core';
+import {InfectionChartType, ScaleData} from 'src/app/services/alltypes';
+import {InfectionsService} from 'src/app/services/infections/infections.service';
+import {NetworkService} from 'src/app/services/network/network.service';
 
 @Component({
   selector: 'app-barchart',
@@ -20,17 +14,16 @@ export class BarchartComponent implements OnInit, OnChanges {
 
   public displayedValues = [] as ScaleData[];
   @Input() loaded: boolean = false;
-
-  colorScheme = {
-    domain: ['#a81dff'],
-  };
+  @Input() colorScheme = {};
 
   constructor(
     private network: NetworkService,
     private infections: InfectionsService
-  ) {}
+  ) {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     // console.log(changes);

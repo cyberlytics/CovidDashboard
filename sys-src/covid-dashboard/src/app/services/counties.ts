@@ -1,4 +1,4 @@
-import { County, Vaccine } from './alltypes';
+import {County, Vaccine} from './alltypes';
 
 export class Counties {
   static formatDate(c: County) {

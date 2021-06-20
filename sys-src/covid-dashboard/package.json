@@ -23,7 +23,6 @@
     "@swimlane/ngx-charts": "^18.0.1",
     "@types/leaflet": "^1.7.1",
     "covid-dashboard": "file:..",
-    "fsevents": "^2.3.2",
     "leaflet": "^1.7.1",
     "leaflet-ajax": "^2.1.0",
     "fast-sort": "^3.0.2",
