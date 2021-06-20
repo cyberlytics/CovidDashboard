@@ -1,11 +1,22 @@
 .areachart {
   display: flex;
+  overflow: auto;
+
   width: 100%;
+  min-width: 800px;
+
   min-height: 300px;
 
-  ::ng-deep .ngx-charts {
-    text {
-      fill: #fff !important;
+  ::ng-deep {
+    .ngx-charts {
+      text {
+        fill: #fff !important;
+        opacity: .5 !important;
+      }
+    }
+
+    .legend-item:hover, .legend-label:hover {
+      color: #ffffff !important;
       opacity: .5 !important;
     }
   }

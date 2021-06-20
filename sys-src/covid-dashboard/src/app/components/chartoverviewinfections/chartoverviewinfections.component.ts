@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { AreaData, InfectionChartType } from 'src/app/services/alltypes';
-import { InfectionsService } from 'src/app/services/infections/infections.service';
+import {Component, OnInit} from '@angular/core';
+import {AreaData, InfectionChartType} from 'src/app/services/alltypes';
+import {InfectionsService} from 'src/app/services/infections/infections.service';
 
 @Component({
   selector: 'app-chartoverviewinfections',
@@ -24,6 +24,25 @@ export class ChartoverviewinfectionsComponent implements OnInit {
   public loaded: boolean = false;
   public recDeaTotalCases: AreaData[] = [];
   public showRecDeadTotal: boolean = false;
+  public colorScheme = {};
+  incidence7ColorScheme = {
+    domain: ['#a81dff']
+  };
+  activeCasesColorScheme = {
+    domain: ['#529bf2']
+  };
+  recoveredColorScheme = {
+    domain: ['#62d87b']
+  };
+  deathsColorScheme = {
+    domain: ['#cbd5de']
+  };
+  totalCasesColorScheme = {
+    domain: ['#ff1f4d']
+  };
+  recDeaTotalCasesColorScheme = {
+    domain: ['#9e9688', '#62d87b', '#ffc71d'],
+  };
 
   constructor(private infections: InfectionsService) {
     // calculate days for all time span
@@ -41,6 +60,8 @@ export class ChartoverviewinfectionsComponent implements OnInit {
       this.loaded = bool;
       this.recDeaTotalCases = this.infections.recoveredDeathsTotalCases;
     });
+
+    this.colorScheme = this.incidence7ColorScheme;
   }
 
   public changeType(
@@ -55,16 +76,22 @@ export class ChartoverviewinfectionsComponent implements OnInit {
     this.showRecDeadTotal = false;
     if (typ === 'incidence7') {
       this.type = InfectionChartType.incidence7;
+      this.colorScheme = this.incidence7ColorScheme;
     } else if (typ === 'activeCases') {
       this.type = InfectionChartType.activeCases;
+      this.colorScheme = this.activeCasesColorScheme;
     } else if (typ === 'recovered') {
       this.type = InfectionChartType.recovered;
+      this.colorScheme = this.recoveredColorScheme;
     } else if (typ === 'deaths') {
       this.type = InfectionChartType.deaths;
+      this.colorScheme = this.deathsColorScheme;
     } else if (typ === 'totalCases') {
       this.type = InfectionChartType.totalCases;
+      this.colorScheme = this.totalCasesColorScheme;
     } else if (typ === 'recDeadTotal') {
       this.showRecDeadTotal = true;
+      this.colorScheme = this.recDeaTotalCasesColorScheme;
     }
   }
 }

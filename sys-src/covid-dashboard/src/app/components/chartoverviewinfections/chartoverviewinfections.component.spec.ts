@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ChartoverviewinfectionsComponent } from './chartoverviewinfections.component';
+import {ChartoverviewinfectionsComponent} from './chartoverviewinfections.component';
 
 describe('ChartoverviewinfectionsComponent', () => {
   let component: ChartoverviewinfectionsComponent;
@@ -8,9 +8,9 @@ describe('ChartoverviewinfectionsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChartoverviewinfectionsComponent ]
+      declarations: [ChartoverviewinfectionsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

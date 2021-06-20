@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ScaleData } from 'src/app/services/alltypes';
+import {Component, Input, OnInit} from '@angular/core';
+import {ScaleData} from 'src/app/services/alltypes';
 
 @Component({
   selector: 'app-piechart',
@@ -11,12 +11,11 @@ export class PiechartComponent implements OnInit {
   @Input() data: ScaleData[] = [];
 
   public displayedValues = [] as ScaleData[];
+  @Input() colorScheme = {};
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
-
-
-
 }

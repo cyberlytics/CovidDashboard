@@ -1,3 +1,15 @@
-button {
-  padding: 10px;
+@import "../../../assets/css/colors/colors.scss";
+
+.chart-overview {
+  margin-top: 50px;
+  overflow: auto;
+
+  .content {
+    width: 100%;
+    min-width: 800px;
+
+    button {
+      padding: 10px;
+    }
+  }
 }
