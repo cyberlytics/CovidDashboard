@@ -1,12 +1,11 @@
-import {Injectable} from '@angular/core';
-import {AreaData, ScaleData} from '../alltypes';
-import {NetworkService} from '../network/network.service';
+import { Injectable } from '@angular/core';
+import { AreaData, ScaleData } from '../alltypes';
+import { NetworkService } from '../network/network.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InfectionsService {
-  // arrays
   public incidences = [] as ScaleData[];
   public activeCases = [] as ScaleData[];
   public recovered = [] as ScaleData[];
@@ -14,14 +13,8 @@ export class InfectionsService {
   public totalCases = [] as ScaleData[];
   public recoveredDeathsTotalCases = [] as AreaData[];
 
-  public loaded: boolean = false;
+  constructor(private network: NetworkService) {}
 
-  constructor(private network: NetworkService) {
-  }
-
-  /**
-   * loads the data and sorts it
-   */
   public loadData(id: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.incidences = [];
@@ -31,7 +24,6 @@ export class InfectionsService {
       this.totalCases = [];
       this.network.getSingleCountyIncidences(id).subscribe(
         (res) => {
-          // console.log('res singel chart', res);
           for (const element of res) {
             this.incidences.push({
               name: element[0],
@@ -45,7 +37,7 @@ export class InfectionsService {
               name: element[0],
               value: element[1].Recovered,
             });
-            this.deaths.push({name: element[0], value: element[1].Deaths});
+            this.deaths.push({ name: element[0], value: element[1].Deaths });
             this.totalCases.push({
               name: element[0],
               value: element[1].TotalCases,
@@ -55,7 +47,7 @@ export class InfectionsService {
           resolve(true);
         },
         (err) => {
-          console.log('error getSingelCoutnyIncidences', err);
+          console.log('error getSingleCountyIncidences', err);
           resolve(false);
         }
       );
@@ -78,4 +70,3 @@ export class InfectionsService {
     });
   }
 }
-

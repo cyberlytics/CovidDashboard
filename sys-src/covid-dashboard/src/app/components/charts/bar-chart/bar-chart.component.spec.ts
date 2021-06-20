@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InfoBadgesComponent } from './info-badges.component';
+import { BarChartComponent } from './bar-chart.component';
 
-describe('InfoBadgesComponent', () => {
-  let component: InfoBadgesComponent;
-  let fixture: ComponentFixture<InfoBadgesComponent>;
+describe('BarChartComponent', () => {
+  let component: BarChartComponent;
+  let fixture: ComponentFixture<BarChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InfoBadgesComponent],
+      declarations: [BarChartComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoBadgesComponent);
+    fixture = TestBed.createComponent(BarChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

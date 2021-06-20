@@ -1,15 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {AreaData, InfectionChartType} from 'src/app/services/alltypes';
-import {InfectionsService} from 'src/app/services/infections/infections.service';
+import { Component, OnInit } from '@angular/core';
+import { AreaData, InfectionChartType } from '../../services/alltypes';
+import { InfectionsService } from '../../services/infections/infections.service';
 
 @Component({
-  selector: 'app-chartoverviewinfections',
-  templateUrl: './chartoverviewinfections.component.html',
-  styleUrls: ['./chartoverviewinfections.component.scss']
+  selector: 'app-chart-overview-infections',
+  templateUrl: './chart-overview-infections.component.html',
+  styleUrls: ['./chart-overview-infections.component.scss'],
 })
-export class ChartoverviewinfectionsComponent implements OnInit {
+export class ChartOverviewInfectionsComponent implements OnInit {
   public type: InfectionChartType = InfectionChartType.incidence7;
-  readonly chartType = InfectionChartType;
   public timeSpan: [string, number][] = [
     ['1 Woche', 7],
     ['2 Wochen', 14],
@@ -18,29 +17,31 @@ export class ChartoverviewinfectionsComponent implements OnInit {
     ['3 Monate', 90],
     ['6 Monate', 180],
     ['1 Jahr', 365],
-    ['gesamter Zeitraum', 400],
+    ['Gesamter Zeitraum', 400],
   ];
   public dayNumber: number = 7;
   public loaded: boolean = false;
   public recDeaTotalCases: AreaData[] = [];
   public showRecDeadTotal: boolean = false;
   public colorScheme = {};
-  incidence7ColorScheme = {
-    domain: ['#a81dff']
+
+  readonly chartType = InfectionChartType;
+  readonly incidence7ColorScheme = {
+    domain: ['#a81dff'],
   };
-  activeCasesColorScheme = {
-    domain: ['#529bf2']
+  readonly activeCasesColorScheme = {
+    domain: ['#529bf2'],
   };
-  recoveredColorScheme = {
-    domain: ['#62d87b']
+  readonly recoveredColorScheme = {
+    domain: ['#62d87b'],
   };
-  deathsColorScheme = {
-    domain: ['#cbd5de']
+  readonly deathsColorScheme = {
+    domain: ['#cbd5de'],
   };
-  totalCasesColorScheme = {
-    domain: ['#ff1f4d']
+  readonly totalCasesColorScheme = {
+    domain: ['#ff1f4d'],
   };
-  recDeaTotalCasesColorScheme = {
+  readonly recDeaTotalCasesColorScheme = {
     domain: ['#9e9688', '#62d87b', '#ffc71d'],
   };
 
