@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {County} from 'src/app/services/alltypes';
-import {NetworkService} from 'src/app/services/network/network.service';
-import {sort} from 'fast-sort';
+import { Component, OnInit } from '@angular/core';
+import { County } from 'src/app/services/alltypes';
+import { NetworkService } from 'src/app/services/network/network.service';
+import { sort } from 'fast-sort';
 
 @Component({
   selector: 'app-info-table',
@@ -9,29 +9,28 @@ import {sort} from 'fast-sort';
   styleUrls: ['./info-table.component.scss'],
 })
 export class InfoTableComponent implements OnInit {
-  ascSortingState: any = true;
-  ascSortingTotalCases: any = null;
-  ascSortingActiveCases: any = null;
-  ascSortingRecovered: any = null;
-  ascSortingIncidence7: any = null;
-  ascSortingDeaths: any = null;
+  public ascSortingState: any = true;
+  public ascSortingTotalCases: any = null;
+  public ascSortingActiveCases: any = null;
+  public ascSortingRecovered: any = null;
+  public ascSortingIncidence7: any = null;
+  public ascSortingDeaths: any = null;
 
-  currentSortingType: string = '';
+  public currentSortingType: string = '';
 
   public allCountys = [] as County[];
   public searchCountys = [] as County[];
 
-  searchTerm = '';
+  public searchTerm = '';
 
-  constructor(private network: NetworkService) {
+  constructor(private network: NetworkService) {}
+
+  ngOnInit(): void {
     this.network.getAllCountyIncidences().subscribe((res) => {
       this.allCountys = sort(res).asc((county) => county[1].State);
       this.currentSortingType = 'State';
       this.searchCountys = this.allCountys;
     });
-  }
-
-  ngOnInit(): void {
   }
 
   onSearchTermChange(): void {

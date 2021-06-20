@@ -60,7 +60,7 @@ export enum InfectionChartType {
 }
 
 export enum VaccineChartType {
-  firstandSeond,
+  firstAndSecond,
   percentVaccines,
   timeVaccines,
 }

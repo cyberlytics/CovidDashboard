@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InfoBadgesComponent } from './info-badges.component';
+import { PieChartComponent } from './pie-chart.component';
 
-describe('InfoBadgesComponent', () => {
-  let component: InfoBadgesComponent;
-  let fixture: ComponentFixture<InfoBadgesComponent>;
+describe('PieChartComponent', () => {
+  let component: PieChartComponent;
+  let fixture: ComponentFixture<PieChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InfoBadgesComponent],
+      declarations: [PieChartComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoBadgesComponent);
+    fixture = TestBed.createComponent(PieChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
