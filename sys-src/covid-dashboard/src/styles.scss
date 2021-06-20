@@ -60,4 +60,23 @@ body {
 
     cursor: pointer;
   }
+
+  &__search {
+    width: auto;
+    min-height: 40px;
+    height: auto;
+
+    padding: 10px 15px;
+
+    border: none;
+    border-radius: 5px;
+
+    color: $color-accent-gray;
+    background-color: $color-accent-gray-background;
+
+    &:focus{
+      outline: none;
+    }
+  }
+
 }

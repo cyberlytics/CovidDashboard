@@ -19,6 +19,7 @@ import { BarchartComponent } from './components/barchart/barchart.component';
 import { AreachartComponent } from './components/areachart/areachart.component';
 import { VaccinationsComponent } from './pages/vaccinations/vaccinations.component';
 import { InfectionsComponent } from './pages/infections/infections.component';
+import { FormsModule } from '@angular/forms';
 import { ChartoverviewvaccineComponent } from './components/chartoverviewvaccine/chartoverviewvaccine.component';
 import { ChartoverviewinfectionsComponent } from './components/chartoverviewinfections/chartoverviewinfections.component';
 import { PiechartComponent } from './components/piechart/piechart.component';
@@ -48,6 +49,7 @@ registerLocaleData(localeDe);
     HttpClientModule,
     BrowserAnimationsModule,
     NgxChartsModule,
+    FormsModule,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'de' }],
   bootstrap: [AppComponent],
