@@ -1,4 +1,4 @@
-.piechart {
+.bar-chart {
   display: flex;
   width: 100%;
   min-height: 300px;
@@ -7,13 +7,14 @@
     .ngx-charts {
       text {
         fill: #fff !important;
-        opacity: .5 !important;
+        opacity: 0.5 !important;
       }
     }
 
-    .legend-item:hover, .legend-label:hover {
+    .legend-item:hover,
+    .legend-label:hover {
       color: #ffffff !important;
-      opacity: .5 !important;
+      opacity: 0.5 !important;
     }
   }
 }

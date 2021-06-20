@@ -2,67 +2,30 @@
   <p class="title-badge accent-red accent-red-background">Schnellübersicht</p>
 
   <div class="info-badges__info">
-    <p>Zuletzt
-      aktualisiert: {{ (showInfectionData ? this.germanyData.incidence.Date : this.germanyData.vaccines.Date) | date: "long":"CEST":"de" }}</p>
+    <p
+      *ngIf="
+        this.germanyData.incidence != null && this.germanyData.vaccines != null
+      "
+    >
+      Zuletzt aktualisiert:
+      {{
+        (showInfectionData
+          ? this.germanyData.incidence.Date
+          : this.germanyData.vaccines.Date
+        ) | date: "long":"CEST":"de"
+      }}
+    </p>
   </div>
 
-  <div [class]="showInfectionData ? 'five-in-a-row' : 'three-in-a-row'" class="info-badges__content">
-    <div
-      class="badge accent-red accent-red-background"
-    >
+  <div
+    [class]="showInfectionData ? 'five-in-a-row' : 'three-in-a-row'"
+    class="info-badges__content"
+  >
+    <div class="badge accent-red accent-red-background">
       <div class="badge__title">
-        <p>{{ showInfectionData ? 'Bestätigt' : 'Mindestens eine Impfdosis' }}</p>
-      </div>
-
-
-      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
-        <p>NaN</p>
-      </div>
-
-      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{ showInfectionData ? (this.germanyData.incidence.TotalCases | number:'':'de-DE') : ((this.germanyData.vaccines.ProportionFirstVaccinations | number:'':'de-DE') + '%') }}</p>
-      </div>
-    </div>
-
-    <div
-      class="badge accent-blue accent-blue-background"
-    >
-      <div class="badge__title">
-        <p> {{ showInfectionData ? 'Aktiv' : 'Verabreichte Impfdosen' }}</p>
-      </div>
-
-
-      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
-        <p>NaN</p>
-      </div>
-
-      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{ (showInfectionData ? this.germanyData.incidence.ActiveCases : this.germanyData.vaccines.SumVaccinations) | number:'':'de-DE'}}</p>
-      </div>
-    </div>
-
-    <div
-      class="badge accent-green accent-green-background"
-    >
-      <div class="badge__title">
-        <p>{{ showInfectionData ? 'Genesen' : 'Impfdosen AstraZeneca' }}</p>
-      </div>
-
-
-      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
-        <p>NaN</p>
-      </div>
-
-      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{ (showInfectionData ? this.germanyData.incidence.Recovered : this.germanyData.vaccines.SumAstraZeneca) | number:'':'de-DE'}}</p>
-      </div>
-    </div>
-
-    <div
-      class="badge accent-purple accent-purple-background"
-    >
-      <div class="badge__title">
-        <p>{{ showInfectionData ? '7-Tage-Inzidenz' : 'Impfdosen BioNTech/Pfizer' }}</p>
+        <p>
+          {{ showInfectionData ? "Bestätigt" : "Mindestens eine Impfdosis" }}
+        </p>
       </div>
 
       <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
@@ -70,35 +33,119 @@
       </div>
 
       <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{ (showInfectionData ? this.germanyData.incidence.Incidence7.toFixed(1) : this.germanyData.vaccines.SumBioNTech) | number:'':'de-DE' }}</p>
+        <p>
+          {{
+            showInfectionData
+              ? (this.germanyData.incidence.TotalCases | number: "":"de-DE")
+              : (this.germanyData.vaccines.ProportionFirstVaccinations
+                  | number: "":"de-DE") + "%"
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="badge accent-blue accent-blue-background">
+      <div class="badge__title">
+        <p>{{ showInfectionData ? "Aktiv" : "Verabreichte Impfdosen" }}</p>
+      </div>
+
+      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
+        <p>NaN</p>
+      </div>
+
+      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
+        <p>
+          {{
+            (showInfectionData
+              ? this.germanyData.incidence.ActiveCases
+              : this.germanyData.vaccines.SumVaccinations
+            ) | number: "":"de-DE"
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="badge accent-green accent-green-background">
+      <div class="badge__title">
+        <p>{{ showInfectionData ? "Genesen" : "Impfdosen AstraZeneca" }}</p>
+      </div>
+
+      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
+        <p>NaN</p>
+      </div>
+
+      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
+        <p>
+          {{
+            (showInfectionData
+              ? this.germanyData.incidence.Recovered
+              : this.germanyData.vaccines.SumAstraZeneca
+            ) | number: "":"de-DE"
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="badge accent-purple accent-purple-background">
+      <div class="badge__title">
+        <p>
+          {{
+            showInfectionData ? "7-Tage-Inzidenz" : "Impfdosen BioNTech/Pfizer"
+          }}
+        </p>
+      </div>
+
+      <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
+        <p>NaN</p>
+      </div>
+
+      <div *ngIf="this.germanyData.incidence" class="badge__total-number">
+        <p>
+          {{
+            (showInfectionData
+              ? this.germanyData.incidence.Incidence7.toFixed(1)
+              : this.germanyData.vaccines.SumBioNTech
+            ) | number: "":"de-DE"
+          }}
+        </p>
       </div>
     </div>
 
     <div
-      *ngIf="!showInfectionData" class="badge accent-yellow accent-yellow-background">
+      *ngIf="!showInfectionData"
+      class="badge accent-yellow accent-yellow-background"
+    >
       <div class="badge__title">
         <p>Impfdosen Johnson & Johnson</p>
       </div>
 
       <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{ this.germanyData.vaccines.SumJohnsonAndJohnson | number:'':'de-DE' }}</p>
+        <p>
+          {{
+            this.germanyData.vaccines.SumJohnsonAndJohnson | number: "":"de-DE"
+          }}
+        </p>
       </div>
     </div>
 
-    <div
-      class="badge accent-light-gray accent-light-gray-background"
-    >
+    <div class="badge accent-light-gray accent-light-gray-background">
       <div class="badge__title">
-        <p>{{ showInfectionData ? 'Verstorben' : 'Impfdosen Moderna' }}</p>
+        <p>{{ showInfectionData ? "Verstorben" : "Impfdosen Moderna" }}</p>
       </div>
-
 
       <div *ngIf="showInfectionData" class="badge__difference-to-previous-day">
         <p>NaN</p>
       </div>
 
       <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p>{{ (showInfectionData ? this.germanyData.incidence.Deaths : this.germanyData.vaccines.SumModerna) | number:'':'de-DE'}}</p>
+        <p>
+          {{
+            (showInfectionData
+              ? this.germanyData.incidence.Deaths
+              : this.germanyData.vaccines.SumModerna
+            ) | number: "":"de-DE"
+          }}
+        </p>
       </div>
     </div>
   </div>

@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InfoBadgesComponent } from './info-badges.component';
+import { AreaChartComponent } from './area-chart.component';
 
-describe('InfoBadgesComponent', () => {
-  let component: InfoBadgesComponent;
-  let fixture: ComponentFixture<InfoBadgesComponent>;
+describe('AreaChartComponent', () => {
+  let component: AreaChartComponent;
+  let fixture: ComponentFixture<AreaChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InfoBadgesComponent],
+      declarations: [AreaChartComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoBadgesComponent);
+    fixture = TestBed.createComponent(AreaChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

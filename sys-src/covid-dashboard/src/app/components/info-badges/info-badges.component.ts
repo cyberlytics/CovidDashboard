@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {GermanyData} from 'src/app/services/alltypes';
-import {NetworkService} from 'src/app/services/network/network.service';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { GermanyData } from 'src/app/services/alltypes';
+import { NetworkService } from 'src/app/services/network/network.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-info-badges',
@@ -9,18 +9,16 @@ import {Router} from '@angular/router';
   styleUrls: ['./info-badges.component.scss'],
 })
 export class InfoBadgesComponent implements OnInit {
-  showInfectionData = false;
-
   public germanyData: GermanyData = {} as GermanyData;
+  public showInfectionData = false;
 
-  constructor(private network: NetworkService, private router: Router) {
-    this.network.getSummaryGermany().subscribe((res) => {
-      console.log('res', res);
-      this.germanyData = res;
-    });
-  }
+  constructor(private network: NetworkService, private router: Router) {}
 
   ngOnInit(): void {
+    this.network.getSummaryGermany().subscribe((res) => {
+      this.germanyData = res;
+    });
+
     this.showInfectionData = this.router.url.includes('infections');
   }
 }

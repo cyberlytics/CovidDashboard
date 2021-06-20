@@ -1,12 +1,12 @@
-<div class="barchart">
+<div class="bar-chart">
   <ngx-charts-bar-vertical
-    *ngIf="this.loaded"
-    [animations]="true"
-    [legend]="false"
     [results]="displayedValues"
     [scheme]="colorScheme"
+    [animations]="true"
+    [legend]="false"
     [showGridLines]="true"
     [xAxis]="true"
-    [yAxis]="true">
+    [yAxis]="true"
+  >
   </ngx-charts-bar-vertical>
 </div>
