@@ -28,12 +28,12 @@
         i {
           font-size: 16rem;
           margin-left: 10px;
-          opacity: .5;
+          opacity: 0.5;
         }
 
         &:hover {
           cursor: pointer;
-          opacity: .75;
+          opacity: 0.75;
         }
       }
 
@@ -42,7 +42,7 @@
 
         text-align: center !important;
         background-color: $color-secondary-background;
-        opacity: .75;
+        opacity: 0.75;
       }
 
       .cell {

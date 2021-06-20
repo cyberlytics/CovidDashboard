@@ -1,4 +1,4 @@
-import {County, Vaccine} from './alltypes';
+import { County, Vaccine } from './alltypes';
 
 export class Counties {
   static formatDate(c: County) {
@@ -8,7 +8,7 @@ export class Counties {
     };
   }
 
-  static returnCorrecData(c: any) {
+  static returnCorrectData(c: any) {
     return {
       1: c[1],
     };

@@ -1,14 +1,14 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges,} from '@angular/core';
-import {InfectionChartType, ScaleData} from 'src/app/services/alltypes';
-import {InfectionsService} from 'src/app/services/infections/infections.service';
-import {NetworkService} from 'src/app/services/network/network.service';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { InfectionChartType, ScaleData } from '../../../services/alltypes';
+import { NetworkService } from '../../../services/network/network.service';
+import { InfectionsService } from '../../../services/infections/infections.service';
 
 @Component({
-  selector: 'app-barchart',
-  templateUrl: './barchart.component.html',
-  styleUrls: ['./barchart.component.scss'],
+  selector: 'app-bar-chart',
+  templateUrl: './bar-chart.component.html',
+  styleUrls: ['./bar-chart.component.scss'],
 })
-export class BarchartComponent implements OnInit, OnChanges {
+export class BarChartComponent implements OnInit {
   @Input() type: InfectionChartType = InfectionChartType.incidence7;
   @Input() daynumber: number = 7;
 
@@ -19,32 +19,29 @@ export class BarchartComponent implements OnInit, OnChanges {
   constructor(
     private network: NetworkService,
     private infections: InfectionsService
-  ) {
-  }
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // console.log(changes);
+  ngOnChanges(): void {
     this.changedInput(this.type, this.daynumber);
   }
 
   /**
    * changes the displayed values
-   * @param typ selected type
+   * @param type selected type
    * @param count selected
    */
-  private changedInput(typ: InfectionChartType, count: number): void {
-    if (typ === InfectionChartType.incidence7) {
+  private changedInput(type: InfectionChartType, count: number): void {
+    if (type === InfectionChartType.incidence7) {
       this.displayedValues = this.infections.incidences.slice();
-    } else if (typ === InfectionChartType.activeCases) {
+    } else if (type === InfectionChartType.activeCases) {
       this.displayedValues = this.infections.activeCases.slice();
-    } else if (typ === InfectionChartType.recovered) {
+    } else if (type === InfectionChartType.recovered) {
       this.displayedValues = this.infections.recovered.slice();
-    } else if (typ === InfectionChartType.deaths) {
+    } else if (type === InfectionChartType.deaths) {
       this.displayedValues = this.infections.deaths.slice();
-    } else if (typ === InfectionChartType.totalCases) {
+    } else if (type === InfectionChartType.totalCases) {
       this.displayedValues = this.infections.totalCases.slice();
     }
 
@@ -56,4 +53,3 @@ export class BarchartComponent implements OnInit, OnChanges {
     }
   }
 }
-

@@ -1,8 +1,13 @@
-import {AfterViewInit, Component} from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import * as L from 'leaflet';
-import {County, CountyData, Vaccine, VaccineData,} from 'src/app/services/alltypes';
-import {NetworkService} from 'src/app/services/network/network.service';
-import {Router} from '@angular/router';
+import {
+  County,
+  CountyData,
+  Vaccine,
+  VaccineData,
+} from 'src/app/services/alltypes';
+import { NetworkService } from 'src/app/services/network/network.service';
+import { Router } from '@angular/router';
 
 // import * as La from 'leaflet-ajax';
 
@@ -14,13 +19,13 @@ import {Router} from '@angular/router';
 export class MapComponent implements AfterViewInit {
   public showInfections: boolean = true;
   public showFirstVaccine: boolean = true;
+
   private map = {} as L.Map;
   private countyJson = {} as GeoData;
   private vaccineJson = {} as GeoDataVaccine;
   private layer = {} as L.Layer;
 
-  constructor(private network: NetworkService, private router: Router) {
-  }
+  constructor(private network: NetworkService, private router: Router) {}
 
   ngOnInit(): void {
     this.showInfections = this.router.url.includes('infections');
@@ -28,14 +33,6 @@ export class MapComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initMap();
-  }
-
-  /**
-   * shows Infection Data; Button event
-   */
-  public showInfectionData(): void {
-    this.showInfections = true;
-    this.loadInfectionData();
   }
 
   /**
@@ -49,7 +46,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   /**
-   * creats the map and shows the infection data
+   * creates the map and shows the infection data
    */
   private initMap(): void {
     this.map = L.map('map', {
@@ -69,7 +66,7 @@ export class MapComponent implements AfterViewInit {
     ]);
     this.map.setMaxBounds(bounds);
     this.map.on('drag', () => {
-      this.map.panInsideBounds(bounds, {animate: false});
+      this.map.panInsideBounds(bounds, { animate: false });
     });
 
     // get data
@@ -99,12 +96,11 @@ export class MapComponent implements AfterViewInit {
           this.countyJson = this.mapBackendDataToCountyJSON(res, xhr.response);
 
           this.loadMapWithData(this.countyJson, 'incidences');
-          // console.log(this.countyJson);
         };
         xhr.send();
       },
       (err) => {
-        console.log('error getAllcountyIncidences', err);
+        console.log('error getAllCountyIncidences', err);
       }
     );
   }
@@ -130,7 +126,7 @@ export class MapComponent implements AfterViewInit {
             res,
             xhr.response
           );
-          console.log(this.vaccineJson);
+
           if (type === 'first') {
             this.loadMapWithData(this.vaccineJson, 'firstVaccination');
           } else if (type === 'second') {
@@ -169,7 +165,7 @@ export class MapComponent implements AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            60 &&
+              60 &&
             feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 55
           ) {
             return {
@@ -180,7 +176,7 @@ export class MapComponent implements AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionFirstVaccinations <
-            55 &&
+              55 &&
             feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 50
           ) {
             return {
@@ -191,7 +187,7 @@ export class MapComponent implements AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionFirstVaccinations <
-            50 &&
+              50 &&
             feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 0
           ) {
             return {
@@ -314,9 +310,9 @@ export class MapComponent implements AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            31 &&
+              31 &&
             feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
-            29.5
+              29.5
           ) {
             return {
               color: '#ffc71d',
@@ -326,7 +322,7 @@ export class MapComponent implements AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            29.5 &&
+              29.5 &&
             feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 28
           ) {
             return {
@@ -337,9 +333,9 @@ export class MapComponent implements AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            28 &&
+              28 &&
             feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
-            26.5
+              26.5
           ) {
             return {
               color: '#ffc71d',
@@ -349,7 +345,7 @@ export class MapComponent implements AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            26.5 &&
+              26.5 &&
             feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 25
           ) {
             return {
@@ -360,7 +356,7 @@ export class MapComponent implements AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            25 &&
+              25 &&
             feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 0
           ) {
             return {
