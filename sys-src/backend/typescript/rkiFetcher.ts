@@ -190,7 +190,7 @@ function fullData(): Promise<RKIRawData[]> {
     });
 }
 
-const HISTORY_DAYS = daysSince("2020-01-01");
+const beginDate = getMidnightUTC(new Date('2020-01-01T00:00:00Z'));
 
 export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
     return new Promise((resolve, reject) => {
@@ -236,7 +236,6 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                         .then((p) => {
                             fullData()
                                 .then((d) => {
-                                    console.log('begin aggregation', new Date());
                                     // Sort by date to optimize for-loop a couple lines down
                                     d.sort((a, b) => a.Date.valueOf() - b.Date.valueOf());
 
@@ -277,7 +276,6 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                         map.get(dateNumber)!.Recovered += data.NewRecovered;
                                     }
 
-                                    const beginDate = getMidnightUTC(new Date('2020-01-01T00:00:00Z'));
                                     groupPerCounty.forEach((values, countyId) => {
                                         // Aggregate all data before 2020-01-01
                                         const countyMap = new Map<number, RKIData>();
@@ -299,12 +297,11 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                                 sumToMap(countyMap, e);
                                             }
                                             else {
+                                                // Optimization because of sorted array
                                                 break;
                                             }
                                         }
-
                                         // Now we have the aggregation for all data before 2020-01-01
-
                                         let currentDate = beginDate;
                                         for (; i < values.length; i++) {
                                             const e = values[i];
@@ -322,7 +319,6 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                         expandData(countyMap, currentDate.valueOf(), getMidnightUTC(addDays(new Date(), -1)).valueOf());
 
                                         calculate7DaysIncidence(countyMap, p);
-
                                         result.set(countyId, countyMap);
                                     });
 
@@ -354,8 +350,6 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                     );
                                     calculate7DaysIncidence(germanyDataSorted, undefined);
                                     result.set(0, germanyDataSorted);
-
-                                    console.log('end   aggregation', new Date());
                                     resolve(stringify(result));
                                 })
                                 .catch(reject);
