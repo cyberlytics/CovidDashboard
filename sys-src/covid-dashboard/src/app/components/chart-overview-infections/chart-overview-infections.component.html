@@ -14,50 +14,6 @@
       </div>
 
       <div
-        (click)="this.changeType('activeCases')"
-        [ngClass]="{
-          'accent-blue accent-blue-background':
-            type === chartType.activeCases && !showRecDeadTotal
-        }"
-        class="info-bar__toggle-button"
-      >
-        <p>Aktive Fälle</p>
-      </div>
-
-      <div
-        (click)="this.changeType('recovered')"
-        [ngClass]="{
-          'accent-green accent-green-background':
-            type === chartType.recovered && !showRecDeadTotal
-        }"
-        class="info-bar__toggle-button"
-      >
-        <p>Genesen</p>
-      </div>
-
-      <div
-        (click)="this.changeType('deaths')"
-        [ngClass]="{
-          'accent-light-gray accent-light-gray-background':
-            type === chartType.deaths && !showRecDeadTotal
-        }"
-        class="info-bar__toggle-button"
-      >
-        <p>Verstorben</p>
-      </div>
-
-      <div
-        (click)="this.changeType('totalCases')"
-        [ngClass]="{
-          'accent-red accent-red-background':
-            type === chartType.totalCases && !showRecDeadTotal
-        }"
-        class="info-bar__toggle-button"
-      >
-        <p>Bestätigt</p>
-      </div>
-
-      <div
         (click)="this.changeType('recDeadTotal')"
         [ngClass]="{
           'accent-yellow accent-yellow-background': showRecDeadTotal
