@@ -17,13 +17,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements AfterViewInit {
-  public showInfections: boolean = true;
-  public showFirstVaccine: boolean = true;
-
-  private map = {} as L.Map;
+  // data
   private countyJson = {} as GeoData;
   private vaccineJson = {} as GeoDataVaccine;
+
+  // map
+  private map = {} as L.Map;
   private layer = {} as L.Layer;
+  public showInfections: boolean = true;
+  public showFirstVaccine: boolean = true;
 
   constructor(private network: NetworkService, private router: Router) {}
 

@@ -9,20 +9,24 @@ import { InfectionsService } from '../../../services/infections/infections.servi
   styleUrls: ['./bar-chart.component.scss'],
 })
 export class BarChartComponent implements OnInit {
+  // inputs for type, daynumber, colorscheme and loaded
   @Input() type: InfectionChartType = InfectionChartType.incidence7;
   @Input() daynumber: number = 7;
-
-  public displayedValues = [] as ScaleData[];
   @Input() loaded: boolean = false;
   @Input() colorScheme = {};
 
+  // displayed array
+  public displayedValues = [] as ScaleData[];
+
   constructor(
-    private network: NetworkService,
     private infections: InfectionsService
   ) {}
 
   ngOnInit(): void {}
 
+  /**
+   * is called every time the data form the parent component changes
+   */
   ngOnChanges(): void {
     this.changedInput(this.type, this.daynumber);
   }

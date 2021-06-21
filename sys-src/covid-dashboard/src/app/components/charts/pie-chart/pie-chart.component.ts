@@ -7,9 +7,11 @@ import { ScaleData } from '../../../services/alltypes';
   styleUrls: ['./pie-chart.component.scss'],
 })
 export class PieChartComponent implements OnInit {
+  // inputs for data and colorscheme
   @Input() data: ScaleData[] = [];
   @Input() colorScheme = {};
 
+  // displayed data
   public displayedValues = [] as ScaleData[];
 
   constructor() {}

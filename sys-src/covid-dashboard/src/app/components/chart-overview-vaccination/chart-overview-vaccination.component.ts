@@ -55,6 +55,10 @@ export class ChartOverviewVaccinationComponent implements OnInit {
     this.colorScheme = this.percentVaccinesColorScheme;
   }
 
+  /**
+   * changes the type and color scheme of the chart
+   * @param typ of the chart
+   */
   public changeType(
     typ: 'firstAndSecond' | 'percentVaccines' | 'timeVaccines'
   ): void {
