@@ -6,15 +6,23 @@ import { NetworkService } from '../network/network.service';
   providedIn: 'root',
 })
 export class InfectionsService {
+  // arrays for the charts
   public incidences = [] as ScaleData[];
   public activeCases = [] as ScaleData[];
   public recovered = [] as ScaleData[];
   public deaths = [] as ScaleData[];
   public totalCases = [] as ScaleData[];
+
+  // comibend array with multiple data types
   public recoveredDeathsTotalCases = [] as AreaData[];
 
   constructor(private network: NetworkService) {}
 
+  /**
+   * loads the data for a specific county and saves the data filtered by type
+   * @param id id of the county
+   * @returns if data was saved correctly
+   */
   public loadData(id: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.incidences = [];
@@ -54,6 +62,9 @@ export class InfectionsService {
     });
   }
 
+  /**
+   * groups data to array
+   */
   private mapScaleDataToAreaData(): void {
     this.recoveredDeathsTotalCases = [];
     this.recoveredDeathsTotalCases.push({

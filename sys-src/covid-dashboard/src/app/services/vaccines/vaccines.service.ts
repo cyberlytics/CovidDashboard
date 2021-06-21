@@ -6,6 +6,7 @@ import { NetworkService } from '../network/network.service';
   providedIn: 'root',
 })
 export class VaccinesService {
+  // arrays for the charts
   public sumAstraZeneca = [] as ScaleData[];
   public sumBioNTech = [] as ScaleData[];
   public sumJohnsonAndJohnson = [] as ScaleData[];
@@ -19,12 +20,18 @@ export class VaccinesService {
   public proportionFirstVaccinations = [] as ScaleData[];
   public proportionSecondVaccinations = [] as ScaleData[];
 
+  // combined arrays for the charts
   public firstSecondVaccinationSum = [] as AreaData[];
   public allVaccinesByManufacturer = [] as ScaleData[];
   public allVaccinesByManTime = [] as AreaData[];
 
   constructor(private network: NetworkService) {}
 
+  /**
+   * loads the data for a specific state and saves it to the specific arrays
+   * @param id of the state
+   * @returns if data was saved correctly
+   */
   public loadData(id: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.network.getVaccineSingleState(id).subscribe(
@@ -90,6 +97,9 @@ export class VaccinesService {
     });
   }
 
+  /**
+   * bundles the first and second vaccination array
+   */
   private bundleFirstSecondVaccinationSum() {
     this.firstSecondVaccinationSum = [];
     this.firstSecondVaccinationSum.push({
@@ -102,6 +112,9 @@ export class VaccinesService {
     });
   }
 
+  /**
+   * bundles the vaccines from the different manufactors for the last day
+   */
   private bundleAllVaccinesPercent() {
     this.allVaccinesByManufacturer = [];
     this.allVaccinesByManufacturer.push({
@@ -123,6 +136,9 @@ export class VaccinesService {
     });
   }
 
+  /**
+   * bundles all manufactors by time
+   */
   private bundleAllVaccinesTime() {
     this.allVaccinesByManTime = [];
     this.allVaccinesByManTime.push({

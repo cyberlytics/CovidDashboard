@@ -65,6 +65,10 @@ export class ChartOverviewInfectionsComponent implements OnInit {
     this.colorScheme = this.incidence7ColorScheme;
   }
 
+  /**
+   * changes the type and color scheme of the chart
+   * @param typ of the chart
+   */
   public changeType(
     typ:
       | 'incidence7'
