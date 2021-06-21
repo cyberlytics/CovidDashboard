@@ -1,7 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
-import {dataPerCounty, getNames, RKIData, vaccinationPerState,} from "./typescript/rkiFetcher";
-import {lastElementPerMap, mapToObject} from "./typescript/util";
+import { dataPerCounty, getNames, RKIData, vaccinationPerState, } from "./typescript/rkiFetcher";
+import { lastElementPerMap, mapToObject } from "./typescript/util";
+import { testIfBothAreEquivalent } from "./typescript/test";
 
 const compression = require("compression");
 const cors = require("cors");
@@ -81,6 +82,12 @@ app.get("/api/summary", (req, res, next) => {
             next();
         });
     });
+});
+
+app.get("/api/test", (req, res, next) => {
+    testIfBothAreEquivalent();
+    res.send('testing');
+    next();
 });
 
 const port = process.env.PORT || 3000;

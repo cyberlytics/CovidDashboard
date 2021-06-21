@@ -1,7 +1,7 @@
 import Papa from "papaparse";
 import getFromCache from "./filestore";
 import fetch from "node-fetch";
-import {addDays, daysSince, lastDays, parse, parseRKIDate, stringify,} from "./util";
+import { addDays, daysSince, getMidnightUTC, lastDays, parse, parseRKIDate, stringify, } from "./util";
 
 const RKIDataPath =
     "https://opendata.arcgis.com/api/v3/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/downloads/data?format=csv&spatialRefId=4326";
@@ -190,7 +190,7 @@ function fullData(): Promise<RKIRawData[]> {
     });
 }
 
-const HISTORY_DAYS = daysSince("2020-01-01");
+const beginDate = getMidnightUTC(new Date('2020-01-01T00:00:00Z'));
 
 export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
     return new Promise((resolve, reject) => {
@@ -248,37 +248,78 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                     });
 
                                     const result = new Map<number, Map<number, RKIData>>();
-                                    groupPerCounty.forEach((v, k) => {
-                                        const daysMap = new Map<number, RKIData>();
-                                        lastDays(HISTORY_DAYS).forEach((day) => {
-                                            const dayValue = day.valueOf();
-                                            for (let i = 0; i < v.length; i++) {
-                                                const e = v[i];
-                                                if (e.Date < day) {
-                                                    if (!daysMap.has(dayValue)) {
-                                                        daysMap.set(dayValue, {
-                                                            CountyId: k,
-                                                            StateId: e.StateId,
-                                                            TotalCases: 0,
-                                                            Recovered: 0,
-                                                            Deaths: 0,
-                                                            ActiveCases: 0,
-                                                            Incidence7: -1,
-                                                            Population: 0,
-                                                            Date: day,
-                                                        });
-                                                    }
-                                                    daysMap.get(dayValue)!.TotalCases +=
-                                                        e.NewCases + e.NewDeaths + e.NewRecovered;
-                                                    daysMap.get(dayValue)!.Deaths += e.NewDeaths;
-                                                    daysMap.get(dayValue)!.Recovered += e.NewRecovered;
-                                                } else {
-                                                    break;
-                                                }
-                                            }
+
+                                    function expandData(map: Map<number, RKIData>, oldDay: number, newDay: number): void {
+                                        const MS_PER_DAY = 1000 * 60 * 60 * 24;
+                                        let oldData = map.get(oldDay);
+                                        if (typeof oldData === 'undefined')
+                                            throw 'oldDay does not exist in map';
+                                        for (let date = oldDay + MS_PER_DAY; date <= newDay; date += MS_PER_DAY) {
+                                            map.set(date, {
+                                                ActiveCases: oldData.ActiveCases,
+                                                CountyId: oldData.CountyId,
+                                                Date: new Date(date),
+                                                Deaths: oldData.Deaths,
+                                                Incidence7: -1,
+                                                Population: 0,
+                                                Recovered: oldData.Recovered,
+                                                StateId: oldData.StateId,
+                                                TotalCases: oldData.TotalCases,
+                                            });
+                                        }
+                                    }
+
+                                    function sumToMap(map: Map<number, RKIData>, data: RKIRawData): void {
+                                        const dateNumber = data.Date.valueOf();
+                                        map.get(dateNumber)!.TotalCases += data.NewCases + data.NewDeaths + data.NewRecovered;
+                                        map.get(dateNumber)!.Deaths += data.NewDeaths;
+                                        map.get(dateNumber)!.Recovered += data.NewRecovered;
+                                    }
+
+                                    groupPerCounty.forEach((values, countyId) => {
+                                        // Aggregate all data before 2020-01-01
+                                        const countyMap = new Map<number, RKIData>();
+                                        countyMap.set(beginDate.valueOf(), {
+                                            ActiveCases: 0,
+                                            CountyId: countyId,
+                                            Date: beginDate,
+                                            Deaths: 0,
+                                            Incidence7: -1,
+                                            Population: 0,  // Set afterwards
+                                            Recovered: 0,
+                                            StateId: values[0]?.StateId,
+                                            TotalCases: 0,
                                         });
-                                        calculate7DaysIncidence(daysMap, p);
-                                        result.set(k, daysMap);
+                                        let i: number;
+                                        for (i = 0; i < values.length; i++) {
+                                            const e = values[i];
+                                            if (e.Date < beginDate) {
+                                                sumToMap(countyMap, e);
+                                            }
+                                            else {
+                                                // Optimization because of sorted array
+                                                break;
+                                            }
+                                        }
+                                        // Now we have the aggregation for all data before 2020-01-01
+                                        let currentDate = beginDate;
+                                        for (; i < values.length; i++) {
+                                            const e = values[i];
+                                            if(e.Date > currentDate) {
+                                                // We reached a new day
+                                                // -> copy everything from yesterday and continue with aggregation
+                                                expandData(countyMap, currentDate.valueOf(), e.Date.valueOf());
+                                                currentDate = e.Date;
+                                            }
+                                            sumToMap(countyMap, e);
+                                        }
+
+                                        // Now expand the data up to yesterday (if some entries are missing)
+                                        // There can not be any data of today because RKI's data submission deadline is at midnight.
+                                        expandData(countyMap, currentDate.valueOf(), getMidnightUTC(addDays(new Date(), -1)).valueOf());
+
+                                        calculate7DaysIncidence(countyMap, p);
+                                        result.set(countyId, countyMap);
                                     });
 
                                     const germanyData = new Map<number, RKIData>();
@@ -309,7 +350,6 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                     );
                                     calculate7DaysIncidence(germanyDataSorted, undefined);
                                     result.set(0, germanyDataSorted);
-
                                     resolve(stringify(result));
                                 })
                                 .catch(reject);
@@ -366,7 +406,7 @@ export function getNames(): Promise<Names> {
                                 }
                             });
 
-                            resolve(stringify({Counties: counties, States: states}));
+                            resolve(stringify({ Counties: counties, States: states }));
                         })
                         .catch(reject);
                 });
@@ -400,7 +440,7 @@ export function vaccinationPerState(): Promise<Map<number, Map<number, RKIVaccin
                         obj: any
                     ): Map<number, Map<number, RKIVaccinationData>> {
                         const map = new Map<number, Map<number, RKIVaccinationData>>();
-                        obj.features.forEach(({attributes}: any) => {
+                        obj.features.forEach(({ attributes }: any) => {
                             const stateIdentifier = attributes.RS;
                             if (stateIdentifier === "DE") return; // Ignore "Impfzentren Bund*"
                             const stateId =

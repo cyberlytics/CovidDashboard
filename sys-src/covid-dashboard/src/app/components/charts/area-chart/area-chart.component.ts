@@ -7,20 +7,28 @@ import { AreaData } from '../../../services/alltypes';
   styleUrls: ['./area-chart.component.scss'],
 })
 export class AreaChartComponent implements OnInit {
+  // inputs for data, daynumber and colorscheme
   @Input() data: AreaData[] = [];
   @Input() dayNumber: number = 7;
   @Input() colorScheme = {};
 
+  // array which displays the data
   public displayedData: AreaData[] = [];
 
   constructor() {}
 
   ngOnInit(): void {}
 
+  /**
+   * is called every time the data form the parent component changes
+   */
   ngOnChanges(): void {
     this.changedInput();
   }
 
+  /**
+   * gets the new data and trims the array to the selected time span
+   */
   private changedInput(): void {
     this.displayedData = [];
     for (const item of this.data) {

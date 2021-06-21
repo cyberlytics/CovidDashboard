@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { County } from 'src/app/services/alltypes';
 import { NetworkService } from 'src/app/services/network/network.service';
-import { sort } from 'fast-sort';
+import { FavoritesService } from '../../services/favorites/favorites.service';
+import { County } from '../../services/alltypes';
 
 @Component({
   selector: 'app-info-table',
@@ -9,209 +9,59 @@ import { sort } from 'fast-sort';
   styleUrls: ['./info-table.component.scss'],
 })
 export class InfoTableComponent implements OnInit {
-  public ascSortingState: any = true;
-  public ascSortingTotalCases: any = null;
-  public ascSortingActiveCases: any = null;
-  public ascSortingRecovered: any = null;
-  public ascSortingIncidence7: any = null;
-  public ascSortingDeaths: any = null;
-
-  public currentSortingType: string = '';
+  public selectedFavorites: boolean = false;
 
   public allCountys = [] as County[];
   public searchCountys = [] as County[];
 
   public searchTerm = '';
 
-  constructor(private network: NetworkService) {}
+  public key: string = 'State';
+  public reverse: boolean = false;
+
+  constructor(
+    private network: NetworkService,
+    public favoriteService: FavoritesService
+  ) {}
 
   ngOnInit(): void {
     this.network.getAllCountyIncidences().subscribe((res) => {
-      this.allCountys = sort(res).asc((county) => county[1].State);
-      this.currentSortingType = 'State';
-      this.searchCountys = this.allCountys;
+      let tempData: Array<any> = res;
+      for (let i = 0; i < tempData.length; i++) {
+        tempData[i] = tempData[i][1];
+      }
+      this.allCountys = tempData;
+      this.searchCountys = tempData;
     });
   }
 
-  onSearchTermChange(): void {
+  change(toggleFavorites: boolean = false): void {
+    if (toggleFavorites) {
+      this.selectedFavorites = !this.selectedFavorites;
+    }
+
     this.searchCountys = this.allCountys.filter((s) => {
-      let currentState = s[1].State;
-      if (currentState !== undefined) {
-        return currentState
-          .toLowerCase()
-          .includes(this.searchTerm.toLowerCase());
+      // @ts-ignore
+      let countyId = s.CountyId;
+      // @ts-ignore
+      let currentState = s.State;
+      if (currentState !== undefined && countyId !== undefined) {
+        if (this.selectedFavorites) {
+          return (
+            this.favoriteService.isFavorite(countyId) &&
+            currentState.toLowerCase().includes(this.searchTerm.toLowerCase())
+          );
+        } else {
+          return currentState
+            .toLowerCase()
+            .includes(this.searchTerm.toLowerCase());
+        }
       } else return false;
     });
-    this.sort(this.currentSortingType, false);
   }
 
-  // Dirty solution, maybe refactoring later
-  sort(type: string, change: boolean = true): void {
-    this.currentSortingType = type;
-
-    if (type == 'State') {
-      if (!this.ascSortingState && change) {
-        this.searchCountys = sort(this.searchCountys).asc(
-          (county) => county[1].State
-        );
-
-        this.ascSortingState = true;
-
-        this.ascSortingTotalCases = null;
-        this.ascSortingActiveCases = null;
-        this.ascSortingRecovered = null;
-        this.ascSortingIncidence7 = null;
-        this.ascSortingDeaths = null;
-      } else {
-        this.searchCountys = sort(this.searchCountys).desc(
-          (county) => county[1].State
-        );
-
-        this.ascSortingState = false;
-
-        this.ascSortingTotalCases = null;
-        this.ascSortingActiveCases = null;
-        this.ascSortingRecovered = null;
-        this.ascSortingIncidence7 = null;
-        this.ascSortingDeaths = null;
-      }
-    } else if (type == 'TotalCases') {
-      if (!this.ascSortingTotalCases && change) {
-        this.searchCountys = sort(this.searchCountys).asc(
-          (county) => county[1].TotalCases
-        );
-
-        this.ascSortingState = null;
-
-        this.ascSortingTotalCases = true;
-
-        this.ascSortingActiveCases = null;
-        this.ascSortingRecovered = null;
-        this.ascSortingIncidence7 = null;
-        this.ascSortingDeaths = null;
-      } else {
-        this.searchCountys = sort(this.searchCountys).desc(
-          (county) => county[1].TotalCases
-        );
-
-        this.ascSortingState = null;
-
-        this.ascSortingTotalCases = false;
-
-        this.ascSortingActiveCases = null;
-        this.ascSortingRecovered = null;
-        this.ascSortingIncidence7 = null;
-        this.ascSortingDeaths = null;
-      }
-    } else if (type == 'ActiveCases') {
-      if (!this.ascSortingActiveCases && change) {
-        this.searchCountys = sort(this.searchCountys).asc(
-          (county) => county[1].ActiveCases
-        );
-
-        this.ascSortingState = null;
-        this.ascSortingTotalCases = null;
-
-        this.ascSortingActiveCases = true;
-
-        this.ascSortingRecovered = null;
-        this.ascSortingIncidence7 = null;
-        this.ascSortingDeaths = null;
-      } else {
-        this.searchCountys = sort(this.searchCountys).desc(
-          (county) => county[1].ActiveCases
-        );
-        this.ascSortingState = null;
-        this.ascSortingTotalCases = null;
-
-        this.ascSortingActiveCases = false;
-
-        this.ascSortingRecovered = null;
-        this.ascSortingIncidence7 = null;
-        this.ascSortingDeaths = null;
-      }
-    } else if (type == 'Recovered') {
-      if (!this.ascSortingRecovered && change) {
-        this.searchCountys = sort(this.searchCountys).asc(
-          (county) => county[1].Recovered
-        );
-
-        this.ascSortingState = null;
-        this.ascSortingTotalCases = null;
-        this.ascSortingActiveCases = null;
-
-        this.ascSortingRecovered = true;
-
-        this.ascSortingIncidence7 = null;
-        this.ascSortingDeaths = null;
-      } else {
-        this.searchCountys = sort(this.searchCountys).desc(
-          (county) => county[1].Recovered
-        );
-
-        this.ascSortingState = null;
-        this.ascSortingTotalCases = null;
-        this.ascSortingActiveCases = null;
-
-        this.ascSortingRecovered = false;
-
-        this.ascSortingIncidence7 = null;
-        this.ascSortingDeaths = null;
-      }
-    } else if (type == 'Incidence7') {
-      if (!this.ascSortingIncidence7 && change) {
-        this.searchCountys = sort(this.searchCountys).asc(
-          (county) => county[1].Incidence7
-        );
-
-        this.ascSortingState = null;
-        this.ascSortingTotalCases = null;
-        this.ascSortingActiveCases = null;
-        this.ascSortingRecovered = null;
-
-        this.ascSortingIncidence7 = true;
-
-        this.ascSortingDeaths = null;
-      } else {
-        this.searchCountys = sort(this.searchCountys).desc(
-          (county) => county[1].Incidence7
-        );
-
-        this.ascSortingState = null;
-        this.ascSortingTotalCases = null;
-        this.ascSortingActiveCases = null;
-        this.ascSortingRecovered = null;
-
-        this.ascSortingIncidence7 = false;
-
-        this.ascSortingDeaths = null;
-      }
-    } else if (type == 'Deaths') {
-      if (!this.ascSortingDeaths && change) {
-        this.searchCountys = sort(this.searchCountys).asc(
-          (county) => county[1].Deaths
-        );
-
-        this.ascSortingState = null;
-        this.ascSortingTotalCases = null;
-        this.ascSortingActiveCases = null;
-        this.ascSortingRecovered = null;
-        this.ascSortingIncidence7 = null;
-
-        this.ascSortingDeaths = true;
-      } else {
-        this.searchCountys = sort(this.searchCountys).desc(
-          (county) => county[1].Deaths
-        );
-
-        this.ascSortingState = null;
-        this.ascSortingTotalCases = null;
-        this.ascSortingActiveCases = null;
-        this.ascSortingRecovered = null;
-        this.ascSortingIncidence7 = null;
-
-        this.ascSortingDeaths = false;
-      }
-    }
+  sort(key: string) {
+    this.key = key;
+    this.reverse = !this.reverse;
   }
 }
