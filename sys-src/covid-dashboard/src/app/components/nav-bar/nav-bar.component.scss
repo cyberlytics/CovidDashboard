@@ -42,6 +42,16 @@
     }
   }
 
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    a {
+      margin-left: 15px;
+    }
+  }
+
   &__item {
     display: flex;
     flex-direction: row;

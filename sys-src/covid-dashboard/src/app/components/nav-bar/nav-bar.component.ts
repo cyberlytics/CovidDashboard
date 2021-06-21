@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { FavoritesService } from '../../services/favorites/favorites.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -7,7 +8,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent implements OnInit {
-  constructor(private router: Router) {}
+  public shareButtonText: string = 'Favoriten teilen';
+
+  constructor(
+    private router: Router,
+    public favoriteService: FavoritesService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -17,5 +23,13 @@ export class NavBarComponent implements OnInit {
     } else {
       this.router.navigate(['/infections']).then(() => {});
     }
+  }
+
+  generateShareLink() {
+    this.favoriteService.generateShareLink();
+    this.shareButtonText = 'Kopiert';
+    setTimeout(() => {
+      this.shareButtonText = 'Favoriten teilen';
+    }, 1500);
   }
 }
