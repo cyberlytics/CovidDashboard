@@ -17,7 +17,16 @@
 @media (max-width: 900px) {
   .infections,
   .vaccinations {
-    margin-top: 125px !important;
+    margin-top: 175px !important;
+  }
+
+  .info-bar {
+    flex-direction: column !important;
+    margin-bottom: 10px !important;
+
+    &__toggle-button, &__search {
+      margin-bottom: 5px;
+    }
   }
 
   .nav-bar {
@@ -30,6 +39,16 @@
       i {
         display: none !important;
       }
+    }
+
+    &__buttons {
+      flex-direction: column !important;
+      justify-content: center;
+      align-items: center;
+
+       a {
+         margin-left: 0 !important;
+       }
     }
 
     &__item {

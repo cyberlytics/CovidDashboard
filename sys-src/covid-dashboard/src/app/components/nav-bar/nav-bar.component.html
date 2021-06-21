@@ -6,11 +6,22 @@
       <p class="accent-yellow caption">Infektions- & Impfdashboard</p>
     </a>
   </div>
-  <a
-    (click)="navigate()"
-    class="accent-yellow accent-yellow-background nav-bar__item"
-  >
-    <p>Dashboard wechseln</p>
-    <i class="fas fa-arrow-circle-right"></i>
-  </a>
+
+  <div class="nav-bar__buttons">
+    <a
+      (click)="generateShareLink()"
+      class="accent-light-gray accent-light-gray-background nav-bar__item"
+    >
+      <p>{{ shareButtonText }}</p>
+      <i class="fas fa-share-alt"></i>
+    </a>
+
+    <a
+      (click)="navigate()"
+      class="accent-yellow accent-yellow-background nav-bar__item"
+    >
+      <p>Dashboard wechseln</p>
+      <i class="fas fa-arrow-circle-right"></i>
+    </a>
+  </div>
 </div>

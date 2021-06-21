@@ -23,6 +23,8 @@ import { BarChartComponent } from './components/charts/bar-chart/bar-chart.compo
 import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
 import { ChartOverviewVaccinationComponent } from './components/chart-overview-vaccination/chart-overview-vaccination.component';
 import { ChartOverviewInfectionsComponent } from './components/chart-overview-infections/chart-overview-infections.component';
+import { ShareComponent } from './pages/share/share.component';
+import { OrderModule } from 'ngx-order-pipe';
 
 registerLocaleData(localeDe);
 
@@ -42,6 +44,7 @@ registerLocaleData(localeDe);
     PieChartComponent,
     ChartOverviewVaccinationComponent,
     ChartOverviewInfectionsComponent,
+    ShareComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +53,7 @@ registerLocaleData(localeDe);
     BrowserAnimationsModule,
     NgxChartsModule,
     FormsModule,
+    OrderModule,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'de' }],
   bootstrap: [AppComponent],
