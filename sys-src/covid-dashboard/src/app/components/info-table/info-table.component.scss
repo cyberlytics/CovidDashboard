@@ -6,12 +6,9 @@
   .grid {
     display: grid;
     overflow: auto;
-    grid-template-columns: repeat(6, minmax(120px, 1fr));
-    grid-auto-rows: 1fr;
+    grid-template-columns:repeat(6, minmax(150px, 1fr));
     grid-gap: 5px;
-    height: 300px;
-
-    max-height: 325px;
+    max-height: 300px;
 
     .row {
       display: contents;
@@ -38,11 +35,22 @@
       }
 
       .state {
+        display: flex;
         align-items: center !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
 
-        text-align: center !important;
+        text-align: left !important;
+
+        padding: 10px !important;
+
         background-color: $color-secondary-background;
         opacity: 0.75;
+
+        i {
+          padding: 5px;
+          cursor: pointer;
+        }
       }
 
       .cell {
