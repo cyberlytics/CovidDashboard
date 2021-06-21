@@ -36,7 +36,7 @@ export function lastDays(amount: number = 14): Date[] {
     return dates;
 }
 
-function getMidnightUTC(date: Date): Date {
+export function getMidnightUTC(date: Date): Date {
     return new Date(
         Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
     );
