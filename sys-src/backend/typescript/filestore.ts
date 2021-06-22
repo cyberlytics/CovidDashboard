@@ -1,6 +1,6 @@
 import fs from "fs";
 import sevenZip from "7zip-min";
-import {dateToString} from "./util";
+import { dateToString } from "./util";
 
 const filesFolder = "./data";
 const archiveFolder = "./archive";
@@ -29,9 +29,22 @@ export default function getFromCache<T>(
                 handleLoading();
             } else {
                 const lastArchiveDate = new Date(Date.parse(data.toString()));
-                if (lastArchiveDate < archiveDate && new Date().getHours() > 4) {
+                if (lastArchiveDate < archiveDate && new Date().getHours() >= 4) {
                     // Make sure RKI has enough time to publish new data
                     cache.clear();
+                    // Now force garbage collection because having twice the data will crash the server
+                    try {
+                        if (global.gc) {
+                            global.gc();
+                            console.log('garbage collection forced');
+                        }
+                        else {
+                            console.log('please start node with flag --expose-gc');
+                        }
+                    }
+                    catch (e) {
+                        console.log('severe error running garbage collection', e);
+                    }
                     fs.rm(
                         filesTempFolder,
                         {
