@@ -74,6 +74,24 @@ export function lastElementPerMap<T>(
     return m;
 }
 
+export function last2ElementsPerMap<T>(
+    map: Map<number, Map<number, T>>
+): Map<number, [T, T]> {
+    const m = new Map<number, [T, T]>();
+    map.forEach((v, key) => {
+        let last: T | undefined = undefined;
+        let penultimate: T | undefined = undefined;
+        v.forEach((e) => {
+            penultimate = last;
+            last = e;
+        });
+        if(typeof penultimate !== "undefined") {
+            m.set(key, [penultimate, last!]);
+        }
+    });
+    return m;
+}
+
 export function daysSince(date: string): number {
     return Math.ceil(
         (new Date().valueOf() - new Date(Date.parse(date)).valueOf()) /

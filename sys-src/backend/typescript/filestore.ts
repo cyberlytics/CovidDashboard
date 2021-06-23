@@ -9,10 +9,53 @@ const filesTempFolder = "./data_temp";
 const lastUpdateFileName = filesFolder + "/last_update.txt";
 const cache = new Map<string, any>();
 
+let lock: boolean = false;
+
+function waitForLock(func: (finished: () => void) => void): void {
+    if (lock) {
+        setTimeout(() => waitForLock(func), 100);
+    }
+    else {
+        lock = true;
+        //console.log('lock aquired');
+        func(() => {
+            //console.log('lock removed');
+            lock = false;
+        });
+    }
+}
+
 export default function getFromCache<T>(
     path: string,
     fetchDataCallback: () => Promise<string>,
     transformData: (text: string) => Promise<T>
+): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+        let lockFinishedAlreadyCalled = false;
+        waitForLock((lockFinished) => {
+            getFromCacheInternal<T>(path, fetchDataCallback, transformData, () => {
+                if (!lockFinishedAlreadyCalled) lockFinished();
+                lockFinishedAlreadyCalled = true;
+            })
+                .then((t) => {
+                    if (!lockFinishedAlreadyCalled) lockFinished();
+                    lockFinishedAlreadyCalled = true;
+                    resolve(t);
+                })
+                .catch((e) => {
+                    if (!lockFinishedAlreadyCalled) lockFinished();
+                    lockFinishedAlreadyCalled = true;
+                    reject(e);
+                });
+        });
+    });
+};
+
+function getFromCacheInternal<T>(
+    path: string,
+    fetchDataCallback: () => Promise<string>,
+    transformData: (text: string) => Promise<T>,
+    lockFinished: () => void,
 ): Promise<T> {
     return new Promise<T>((resolve, reject) => {
         ensureFolder(archiveFolder, reject, () => {
@@ -26,7 +69,8 @@ export default function getFromCache<T>(
                                 reject(err);
                             }
                         });
-                        handleLoading();
+                        lockFinished();
+                        handleLoading(path, fetchDataCallback, transformData, resolve, reject);
                     } else {
                         const lastArchiveDate = new Date(Date.parse(data.toString()));
                         if (lastArchiveDate < archiveDate && new Date().getHours() >= 4) {
@@ -45,7 +89,7 @@ export default function getFromCache<T>(
                             catch (e) {
                                 console.log('severe error running garbage collection', e);
                             }
-                            rimraf(filesFolder,
+                            rimraf(filesTempFolder,
                                 (err) => {
                                     if (err) {
                                         reject(err);
@@ -53,8 +97,7 @@ export default function getFromCache<T>(
                                     }
                                     fs.rename(filesFolder, filesTempFolder, (err) => {
                                         if (err) {
-                                            reject(err);
-                                            return;
+                                            console.log(err);
                                         }
                                         ensureFolder(filesFolder, reject, () => {
                                             sevenZip.pack(
@@ -75,50 +118,59 @@ export default function getFromCache<T>(
                                                     );
                                                 }
                                             );
-                                            handleLoading();
+                                            lockFinished();
+                                            handleLoading(path, fetchDataCallback, transformData, resolve, reject);
                                         });
                                     });
                                 }
                             );
                         } else {
-                            handleLoading();
+                            lockFinished();
+                            handleLoading(path, fetchDataCallback, transformData, resolve, reject);
                         }
                     }
                 });
             });
         });
-        function handleLoading() {
-            if (cache && cache.has(path)) {
-                resolve(cache.get(path));
-            } else {
-                const filePath = `${filesFolder}/${path}`;
-                fs.readFile(filePath, (err, data) => {
-                    if (err) {
-                        fetchDataCallback()
-                            .then((data) => {
-                                fs.writeFile(filePath, data, (err) => {
-                                    reject(err);
-                                });
-                                transformData(data)
-                                    .then((transformed) => {
-                                        cache.set(path, transformed);
-                                        resolve(transformed);
-                                    })
-                                    .catch(reject);
-                            })
-                            .catch(reject);
-                    } else {
-                        transformData(data.toString())
+    });
+}
+
+function handleLoading<T>(
+    path: string,
+    fetchDataCallback: () => Promise<string>,
+    transformData: (text: string) => Promise<T>,
+    resolve: (value: T | PromiseLike<T>) => void,
+    reject: (reason?: any) => void
+): void {
+    if (cache && cache.has(path)) {
+        resolve(cache.get(path));
+    } else {
+        const filePath = `${filesFolder}/${path}`;
+        fs.readFile(filePath, (err, data) => {
+            if (err) {
+                fetchDataCallback()
+                    .then((data) => {
+                        fs.writeFile(filePath, data, (err) => {
+                            reject(err);
+                        });
+                        transformData(data)
                             .then((transformed) => {
                                 cache.set(path, transformed);
                                 resolve(transformed);
                             })
                             .catch(reject);
-                    }
-                });
+                    })
+                    .catch(reject);
+            } else {
+                transformData(data.toString())
+                    .then((transformed) => {
+                        cache.set(path, transformed);
+                        resolve(transformed);
+                    })
+                    .catch(reject);
             }
-        }
-    });
+        });
+    }
 }
 
 function ensureFolder(path: string, reject: (a: any) => void, next: () => void): void {
