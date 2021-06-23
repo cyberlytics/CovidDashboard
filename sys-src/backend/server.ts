@@ -60,12 +60,14 @@ app.get("/api/incidences", (req, res, next) => {
         .then((d) => {
             getNames().then((n) => {
                 const incidences = lastElementPerMap(d);
-                incidences.forEach((v) => {
+                const data = new Map<number, RKIData & { County: string }>();
+                incidences.forEach((v, countyId) => {
                     // parse(stringify(XXX)) => make copy of XXX
-                    const e = parse(stringify(v)) as RKIData & { State: string };
-                    e.State = n.Counties.get(v.CountyId)!;
+                    const e = parse(stringify(v)) as RKIData & { County: string };
+                    e.County = n.Counties.get(v.CountyId)!;
+                    data.set(countyId, e);
                 });
-                res.send(mapToObject(incidences));
+                res.send(mapToObject(data));
                 next();
             });
         })

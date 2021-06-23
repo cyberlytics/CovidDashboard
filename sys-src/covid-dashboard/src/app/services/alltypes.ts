@@ -11,7 +11,7 @@ export type CountyData = {
   Incidence7: number;
   Population: number;
   Recovered: number;
-  State: string;
+  County: string;
   StateId: number;
   TotalCases: number;
 };
