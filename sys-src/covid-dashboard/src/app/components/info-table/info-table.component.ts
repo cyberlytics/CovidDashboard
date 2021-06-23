@@ -16,7 +16,7 @@ export class InfoTableComponent implements OnInit {
 
   public searchTerm = '';
 
-  public key: string = 'State';
+  public key: string = 'County';
   public reverse: boolean = false;
 
   constructor(
@@ -44,15 +44,15 @@ export class InfoTableComponent implements OnInit {
       // @ts-ignore
       let countyId = s.CountyId;
       // @ts-ignore
-      let currentState = s.State;
-      if (currentState !== undefined && countyId !== undefined) {
+      let currentCounty = s.County;
+      if (currentCounty !== undefined && countyId !== undefined) {
         if (this.selectedFavorites) {
           return (
             this.favoriteService.isFavorite(countyId) &&
-            currentState.toLowerCase().includes(this.searchTerm.toLowerCase())
+            currentCounty.toLowerCase().includes(this.searchTerm.toLowerCase())
           );
         } else {
-          return currentState
+          return currentCounty
             .toLowerCase()
             .includes(this.searchTerm.toLowerCase());
         }

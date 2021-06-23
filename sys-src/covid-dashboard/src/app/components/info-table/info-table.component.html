@@ -17,9 +17,9 @@
 
   <div class="grid">
     <div class="row">
-      <div class="cell heading" (click)="sort('State')">
+      <div class="cell heading" (click)="sort('County')">
         <p>Landkreis</p>
-        <i *ngIf="key == 'State'" class="fas fa-sort-alpha-{{ reverse ? 'up' : 'down' }}"></i>
+        <i *ngIf="key == 'County'" class="fas fa-sort-alpha-{{ reverse ? 'up' : 'down' }}"></i>
       </div>
       <div class="cell heading" (click)="sort('Incidence7')">
         <p>Inzidenz</p>
@@ -46,7 +46,7 @@
     <div *ngFor="let county of this.searchCountys | orderBy: key: reverse" class="row">
       <div class="cell state">
         <p
-          [style.font-weight]="this.favoriteService.isFavorite(county.CountyId) ? 'bold': 'normal'">{{ county.StateId == 0 ? 'Deutschland' : county.State }}</p>
+          [style.font-weight]="this.favoriteService.isFavorite(county.CountyId) ? 'bold': 'normal'">{{ county.StateId == 0 ? 'Deutschland' : county.County }}</p>
         <i class="fa{{ this.favoriteService.isFavorite(county.CountyId) ? 's' : 'r' }} fa-bookmark"
            (click)="this.favoriteService.toggleFavorite(county.CountyId)"
            [style.color]="this.favoriteService.isFavorite(county.CountyId) ? '#ffc71d': '#9e9688'" *ngIf="county.StateId != 0"></i>
