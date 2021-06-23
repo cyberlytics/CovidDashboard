@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NetworkService } from 'src/app/services/network/network.service';
 import { FavoritesService } from '../../services/favorites/favorites.service';
-import { County } from '../../services/alltypes';
+import { County, Vaccine, VaccineCombined } from '../../services/alltypes';
+import { VaccinesService } from 'src/app/services/vaccines/vaccines.service';
 
 @Component({
   selector: 'app-info-table',
@@ -9,10 +10,15 @@ import { County } from '../../services/alltypes';
   styleUrls: ['./info-table.component.scss'],
 })
 export class InfoTableComponent implements OnInit {
+
+  @Input() showInfection: boolean = false;
   public selectedFavorites: boolean = false;
 
   public allCountys = [] as County[];
   public searchCountys = [] as County[];
+
+  public allStates = [] as VaccineCombined[];
+  public searchStates = [] as VaccineCombined[];
 
   public searchTerm = '';
 
@@ -21,21 +27,46 @@ export class InfoTableComponent implements OnInit {
 
   constructor(
     private network: NetworkService,
-    public favoriteService: FavoritesService
+    public favoriteService: FavoritesService,
+    private vaccines: VaccinesService
   ) {}
 
   ngOnInit(): void {
-    this.network.getAllCountyIncidences().subscribe((res) => {
-      let tempData: Array<any> = res;
-      for (let i = 0; i < tempData.length; i++) {
-        tempData[i] = tempData[i][1];
-      }
-      this.allCountys = tempData;
-      this.searchCountys = tempData;
-    });
+    if (this.showInfection) {
+      this.network.getAllCountyIncidences().subscribe((res) => {
+        let tempData: Array<any> = res;
+        for (let i = 0; i < tempData.length; i++) {
+          tempData[i] = tempData[i][1];
+        }
+        this.allCountys = tempData;
+        this.searchCountys = tempData;
+        // console.log(tempData);
+      });
+    } else {
+      this.network.getVaccineAllStates().subscribe((res) => {
+        let tempData: Array<any> = res;
+        for (let i = 0; i < tempData.length; i++) {
+          tempData[i] = tempData[i][1];
+          tempData[i].StateName = this.vaccines.statesMap.find(item => item.id === tempData[i].StateId)?.name;
+        }
+        console.log(tempData);
+        // this.searchStates = tempData;
+        this.key = 'StateName';
+        this.network.getStatesWithDiff().subscribe((anwser) => {
+          console.log(anwser);
+          for (const element of tempData) {
+            element.diff = anwser.find(item => item[0] === element.StateId)?.[1];
+          }
+          this.allStates = tempData;
+          this.searchStates = tempData;
+          console.log(this.allStates)
+        })
+      })
+
+    }
   }
 
-  change(toggleFavorites: boolean = false): void {
+  public change(toggleFavorites: boolean = false): void {
     if (toggleFavorites) {
       this.selectedFavorites = !this.selectedFavorites;
     }
@@ -60,7 +91,26 @@ export class InfoTableComponent implements OnInit {
     });
   }
 
-  sort(key: string) {
+  public changeStates(): void {
+    this.searchStates = this.allStates.filter((s) => {
+      // @ts-ignore
+      let stateId = s.StateId;
+      // @ts-ignore
+      let currentCounty = s.StateName;
+      if (currentCounty !== undefined && stateId !== undefined) {
+        return currentCounty
+          .toLowerCase()
+          .includes(this.searchTerm.toLowerCase());
+      } else return false;
+    });
+  }
+
+  public sort(key: string) {
+    this.key = key;
+    this.reverse = !this.reverse;
+  }
+
+  public sortStates(key: string) {
     this.key = key;
     this.reverse = !this.reverse;
   }
