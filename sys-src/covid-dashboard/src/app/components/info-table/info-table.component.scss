@@ -79,4 +79,8 @@
       }
     }
   }
+
+  #vaccines{
+    grid-template-columns:repeat(7, minmax(150px, 1fr));
+  }
 }

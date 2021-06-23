@@ -1,9 +1,13 @@
 <div class="info-table">
-  <p class="title-badge accent-yellow accent-yellow-background">
+  <p *ngIf="this.showInfection" class="title-badge accent-yellow accent-yellow-background">
     Landkreisübersicht
   </p>
+  <p *ngIf="!this.showInfection" class="title-badge accent-yellow accent-yellow-background">
+    Bundeslandübersicht
+  </p>
 
-  <div class="info-bar">
+  <!-- Infektionen  -->
+  <div class="info-bar" *ngIf="this.showInfection">
     <input
       (input)="change()"
       [(ngModel)]="searchTerm"
@@ -15,7 +19,20 @@
     </div>
   </div>
 
-  <div class="grid">
+  <!-- Impfungen  -->
+  <div class="info-bar" *ngIf="!this.showInfection">
+    <input
+      (input)="changeStates()"
+      [(ngModel)]="searchTerm"
+      class="info-bar__search"
+      placeholder="Bundesland suchen"
+    />
+    <div *ngIf="this.showInfection" class="info-bar__toggle-button" [ngClass]="{'accent-yellow accent-yellow-background': selectedFavorites}" (click)="change(true)">
+      <i class="far fa-bookmark"></i>
+    </div>
+  </div>
+
+  <div class="grid" *ngIf="this.showInfection">
     <div class="row">
       <div class="cell heading" (click)="sort('County')">
         <p>Landkreis</p>
@@ -85,6 +102,98 @@
           <p>NaN</p>
         </div>
         <p>{{ county.Deaths }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Impfungenen -->
+
+  <div class="grid" id="vaccines" *ngIf="!this.showInfection">
+    <div class="row">
+      <div class="cell heading" (click)="sortStates('StateName')">
+        <p>Bundesland</p>
+        <i *ngIf="key == 'StateName'" class="fas fa-sort-alpha-{{ reverse ? 'up' : 'down' }}"></i>
+      </div>
+      <div class="cell heading" (click)="sortStates('ProportionFirstVaccinations')">
+        <p>erste Impfung</p>
+        <i *ngIf="key == 'ProportionFirstVaccinations'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+      </div>
+      <div class="cell heading" (click)="sortStates('SumVaccinations')">
+        <p>Gesamt</p>
+        <i *ngIf="key == 'SumVaccinations'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+      </div>
+      <div class="cell heading" (click)="sortStates('SumAstraZeneca')">
+        <p>AstraZeneca</p>
+        <i *ngIf="key == 'SumAstraZeneca'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+      </div>
+      <div class="cell heading" (click)="sortStates('SumBioNTech')">
+        <p>BioNTech/Pfizer</p>
+        <i *ngIf="key == 'SumBioNTech'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+      </div>
+      <div class="cell heading" (click)="sortStates('SumJohnsonAndJohnson')">
+        <p>Johnson & Johson</p>
+        <i *ngIf="key == 'SumJohnsonAndJohnson'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+      </div>
+      <div class="cell heading" (click)="sortStates('SumModerna')">
+        <p>Moderna</p>
+        <i *ngIf="key == 'SumModerna'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+      </div>
+    </div>
+
+    <div *ngFor="let state of this.searchStates | orderBy: key: reverse" class="row">
+      <div class="cell state">
+        <p
+          [style.font-weight]="this.favoriteService.isFavorite(state.StateId) ? 'bold': 'normal'">{{ state.StateName }}</p>
+        <!-- <i class="fa{{ this.favoriteService.isFavorite(state.StateId) ? 's' : 'r' }} fa-bookmark"
+           [style.color]="this.favoriteService.isFavorite(state.StateId) ? '#ffc71d': '#9e9688'" *ngIf="state.StateId != 0"></i> -->
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-purple">
+          <i *ngIf="this.state.diff.DeltaProportionFirstVaccinations < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="this.state.diff.DeltaProportionFirstVaccinations > 0" class="fas fa-arrow-up"></i>
+          <p>{{ state.diff.DeltaProportionFirstVaccinations.toFixed(2) }}</p>
+        </div>
+        <p>{{ state.ProportionFirstVaccinations}} %</p>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-red">
+          <i *ngIf="this.state.diff.DeltaSumVaccinations < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="this.state.diff.DeltaSumVaccinations > 0" class="fas fa-arrow-up"></i>
+          <p>{{ state.diff.DeltaSumVaccinations | number: "":"de-DE"}}</p>
+        </div>
+        <p>{{ (state.SumVaccinations | number: "":"de-DE") }}</p>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-blue">
+          <i *ngIf="this.state.diff.DeltaSumAstraZeneca < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="this.state.diff.DeltaSumAstraZeneca > 0" class="fas fa-arrow-up"></i>
+          <p>{{ state.diff.DeltaSumAstraZeneca | number: "":"de-DE"}}</p>
+        </div>
+        <p>{{ (state.SumAstraZeneca | number: "":"de-DE") }}</p>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-green">
+          <i *ngIf="this.state.diff.DeltaSumBioNTech < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="this.state.diff.DeltaSumBioNTech > 0" class="fas fa-arrow-up"></i>
+          <p>{{ state.diff.DeltaSumBioNTech | number: "":"de-DE"}}</p>
+        </div>
+        <p>{{ (state.SumBioNTech | number: "":"de-DE") }}</p>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-light-gray">
+          <i *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson > 0" class="fas fa-arrow-up"></i>
+          <p>{{ state.diff.DeltaSumJohnsonAndJohnson | number: "":"de-DE" }}</p>
+        </div>
+        <p>{{ (state.SumJohnsonAndJohnson | number: "":"de-DE") }}</p>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-light-gray">
+          <i *ngIf="this.state.diff.DeltaSumModerna < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="this.state.diff.DeltaSumModerna > 0" class="fas fa-arrow-up"></i>
+          <p>{{ state.diff.DeltaSumModerna | number: "":"de-DE" }}</p>
+        </div>
+        <p>{{ (state.SumModerna | number: "":"de-DE") }}</p>
       </div>
     </div>
   </div>
