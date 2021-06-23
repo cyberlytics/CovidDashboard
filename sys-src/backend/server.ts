@@ -73,21 +73,19 @@ app.get("/api/vaccines", (req, res, next) => {
 });
 
 app.get("/api/summary", (req, res, next) => {
-    dataPerCounty().then((d) => {
-        vaccinationPerState().then((v) => {
-            res.send({
-                incidence: d.get(0)!.get(Math.max(...d.get(0)!.keys())),
-                vaccines: v.get(0)!.get(Math.max(...v.get(0)!.keys())),
-            });
-            next();
-        });
-    });
-});
-
-app.get("/api/test", (req, res, next) => {
-    testIfBothAreEquivalent();
-    res.send('testing');
-    next();
+    dataPerCounty()
+        .then((d) => {
+            vaccinationPerState()
+                .then((v) => {
+                    res.send({
+                        incidence: d.get(0)!.get(Math.max(...d.get(0)!.keys())),
+                        vaccines: v.get(0)!.get(Math.max(...v.get(0)!.keys())),
+                    });
+                    next();
+                })
+                .catch((err) => console.log("error:", err));
+        })
+        .catch((err) => console.log("error:", err));
 });
 
 const port = process.env.PORT || 3000;
