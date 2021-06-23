@@ -1,6 +1,7 @@
 import fs from "fs";
 import sevenZip from "7zip-min";
 import { dateToString } from "./util";
+import rimraf from "rimraf";
 
 const filesFolder = "./data";
 const archiveFolder = "./archive";
@@ -14,80 +15,78 @@ export default function getFromCache<T>(
     transformData: (text: string) => Promise<T>
 ): Promise<T> {
     return new Promise<T>((resolve, reject) => {
-        ensureFolder(archiveFolder, reject);
-        ensureFolder(filesFolder, reject);
+        ensureFolder(archiveFolder, reject, () => {
+            ensureFolder(filesFolder, reject, () => {
+                const archiveDate = new Date(Date.parse(dateToString(new Date())));
 
-        const archiveDate = new Date(Date.parse(dateToString(new Date())));
-
-        fs.readFile(lastUpdateFileName, (err, data) => {
-            if (err) {
-                fs.writeFile(lastUpdateFileName, dateToString(archiveDate), (err) => {
+                fs.readFile(lastUpdateFileName, (err, data) => {
                     if (err) {
-                        reject(err);
-                    }
-                });
-                handleLoading();
-            } else {
-                const lastArchiveDate = new Date(Date.parse(data.toString()));
-                if (lastArchiveDate < archiveDate && new Date().getHours() >= 4) {
-                    // Make sure RKI has enough time to publish new data
-                    cache.clear();
-                    // Now force garbage collection because having twice the data will crash the server
-                    try {
-                        if (global.gc) {
-                            global.gc();
-                            console.log('garbage collection forced');
-                        }
-                        else {
-                            console.log('please start node with flag --expose-gc');
-                        }
-                    }
-                    catch (e) {
-                        console.log('severe error running garbage collection', e);
-                    }
-                    fs.rm(
-                        filesTempFolder,
-                        {
-                            force: true,
-                            recursive: true,
-                        },
-                        (err) => {
+                        fs.writeFile(lastUpdateFileName, dateToString(archiveDate), (err) => {
                             if (err) {
                                 reject(err);
                             }
-                            fs.rename(filesFolder, filesTempFolder, (err) => {
-                                ensureFolder(filesFolder, reject);
-                                if (err) {
-                                    reject(err);
+                        });
+                        handleLoading();
+                    } else {
+                        const lastArchiveDate = new Date(Date.parse(data.toString()));
+                        if (lastArchiveDate < archiveDate && new Date().getHours() >= 4) {
+                            // Make sure RKI has enough time to publish new data
+                            cache.clear();
+                            // Now force garbage collection because having twice the data will crash the server
+                            try {
+                                if (global.gc) {
+                                    global.gc();
+                                    console.log('garbage collection forced');
                                 }
-                                sevenZip.pack(
-                                    filesTempFolder,
-                                    `${archiveFolder}/data_${dateToString(archiveDate)}.7z`,
-                                    (err) => {
+                                else {
+                                    console.log('please start node with flag --expose-gc');
+                                }
+                            }
+                            catch (e) {
+                                console.log('severe error running garbage collection', e);
+                            }
+                            rimraf(filesFolder,
+                                (err) => {
+                                    if (err) {
+                                        reject(err);
+                                        return;
+                                    }
+                                    fs.rename(filesFolder, filesTempFolder, (err) => {
                                         if (err) {
                                             reject(err);
+                                            return;
                                         }
-                                        fs.writeFile(
-                                            lastUpdateFileName,
-                                            dateToString(archiveDate),
-                                            (err) => {
-                                                if (err) {
-                                                    reject(err);
+                                        ensureFolder(filesFolder, reject, () => {
+                                            sevenZip.pack(
+                                                filesTempFolder,
+                                                `${archiveFolder}/data_${dateToString(archiveDate)}.7z`,
+                                                (err) => {
+                                                    if (err) {
+                                                        reject(err);
+                                                    }
+                                                    fs.writeFile(
+                                                        lastUpdateFileName,
+                                                        dateToString(archiveDate),
+                                                        (err) => {
+                                                            if (err) {
+                                                                reject(err);
+                                                            }
+                                                        }
+                                                    );
                                                 }
-                                            }
-                                        );
-                                    }
-                                );
-                                handleLoading();
-                            });
+                                            );
+                                            handleLoading();
+                                        });
+                                    });
+                                }
+                            );
+                        } else {
+                            handleLoading();
                         }
-                    );
-                } else {
-                    handleLoading();
-                }
-            }
+                    }
+                });
+            });
         });
-
         function handleLoading() {
             if (cache && cache.has(path)) {
                 resolve(cache.get(path));
@@ -122,7 +121,7 @@ export default function getFromCache<T>(
     });
 }
 
-function ensureFolder(path: string, reject: (a: any) => void): void {
+function ensureFolder(path: string, reject: (a: any) => void, next: () => void): void {
     fs.mkdir(
         path,
         {
@@ -131,6 +130,9 @@ function ensureFolder(path: string, reject: (a: any) => void): void {
         (err) => {
             if (err) {
                 reject(err);
+            }
+            else {
+                next();
             }
         }
     );
