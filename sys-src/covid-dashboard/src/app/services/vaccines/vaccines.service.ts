@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { AreaData, ScaleData } from '../alltypes';
 import { NetworkService } from '../network/network.service';
 
@@ -24,6 +25,10 @@ export class VaccinesService {
   public firstSecondVaccinationSum = [] as AreaData[];
   public allVaccinesByManufacturer = [] as ScaleData[];
   public allVaccinesByManTime = [] as AreaData[];
+
+  public selectedStateId: number = 0;
+  private selectedStateChanged: Subject<number>;
+  private newDataLoadedSubject: Subject<void>;
 
   public statesMap = [
     {
@@ -96,7 +101,10 @@ export class VaccinesService {
     }
   ]
 
-  constructor(private network: NetworkService) {}
+  constructor(private network: NetworkService) {
+    this.selectedStateChanged = new Subject<number>();
+    this.newDataLoadedSubject = new Subject<void>();
+  }
 
   /**
    * loads the data for a specific state and saves it to the specific arrays
@@ -158,6 +166,7 @@ export class VaccinesService {
           this.bundleFirstSecondVaccinationSum();
           this.bundleAllVaccinesPercent();
           this.bundleAllVaccinesTime();
+          this.newDataLoadedSubject.next();
           resolve(true);
         },
         (err) => {
@@ -228,5 +237,26 @@ export class VaccinesService {
       name: 'Moderna',
       series: this.sumModerna,
     });
+  }
+
+  public setSelectedStateId(id: number) {
+    this.selectedStateId = id;
+    this.selectedStateChanged.next(id);
+  }
+
+  public getSelectedStateInfo() {
+    return this.selectedStateChanged.asObservable();
+  }
+
+  public newDataLoaded() {
+    return this.newDataLoadedSubject.asObservable();
+  }
+
+  public getStateNameFromId(id: number): string {
+    let temp = this.statesMap.find(item => item.id === id)?.name;
+    if (temp) {
+      return temp;
+    }
+    return '';
   }
 }

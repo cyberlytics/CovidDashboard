@@ -23,6 +23,7 @@ export class ChartOverviewVaccinationComponent implements OnInit {
   public dayNumber: number = 7;
   public showPercentVaccines: boolean = true;
   public colorScheme = {};
+  public stateName: string = 'Deutschland';
 
   readonly chartType = VaccineChartType;
   readonly percentVaccinesColorScheme = {
@@ -36,10 +37,7 @@ export class ChartOverviewVaccinationComponent implements OnInit {
   };
 
   constructor(private vaccine: VaccinesService) {
-    this.vaccine.loadData(2).then(() => {
-      this.displayedAreaData = this.vaccine.firstSecondVaccinationSum;
-      this.allVaccinesByManufacturer = this.vaccine.allVaccinesByManufacturer;
-    });
+    this.loadData(0);
 
     // calculate days for all time span
     const date = new Date();
@@ -49,6 +47,10 @@ export class ChartOverviewVaccinationComponent implements OnInit {
     let diff = date.getTime() - startDate.getTime();
     diff = Math.round(diff / (1000 * 3600 * 24));
     this.timeSpan[this.timeSpan.length - 1][1] = diff;
+
+    this.vaccine.getSelectedStateInfo().subscribe((id) => {
+      this.loadData(id);
+    })
   }
 
   ngOnInit(): void {
@@ -76,5 +78,13 @@ export class ChartOverviewVaccinationComponent implements OnInit {
       this.type = VaccineChartType.timeVaccines;
       this.colorScheme = this.timeVaccinesColorScheme;
     }
+  }
+
+  private loadData(id: number) {
+    this.vaccine.loadData(id).then(() => {
+      this.displayedAreaData = this.vaccine.firstSecondVaccinationSum;
+      this.allVaccinesByManufacturer = this.vaccine.allVaccinesByManufacturer;
+      this.stateName = this.vaccine.getStateNameFromId(this.vaccine.selectedStateId);
+    });
   }
 }

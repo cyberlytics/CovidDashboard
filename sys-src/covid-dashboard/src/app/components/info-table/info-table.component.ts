@@ -135,7 +135,11 @@ export class InfoTableComponent implements OnInit {
     this.reverse = !this.reverse;
   }
 
-  public selecetCounty(county: CountyCombined) {
+  public selectCounty(county: CountyCombined) {
     this.infections.setSelectedCountyId(county.CountyId);
+  }
+
+  public selectState(state: VaccineCombined) {
+    this.vaccines.setSelectedStateId(state.StateId);
   }
 }
