@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { AreaData, ScaleData } from '../alltypes';
 import { NetworkService } from '../network/network.service';
 
@@ -16,7 +17,14 @@ export class InfectionsService {
   // comibend array with multiple data types
   public recoveredDeathsTotalCases = [] as AreaData[];
 
-  constructor(private network: NetworkService) {}
+  public selectedCountyId: number = 0;
+  private selectedCountyChanged: Subject<number>;
+  private newDataLoadedSubject: Subject<void>;
+
+  constructor(private network: NetworkService) {
+    this.selectedCountyChanged = new Subject<number>();
+    this.newDataLoadedSubject = new Subject<void>();
+  }
 
   /**
    * loads the data for a specific county and saves the data filtered by type
@@ -32,6 +40,7 @@ export class InfectionsService {
       this.totalCases = [];
       this.network.getSingleCountyIncidences(id).subscribe(
         (res) => {
+          console.log('res', res);
           for (const element of res) {
             this.incidences.push({
               name: element[0],
@@ -52,6 +61,7 @@ export class InfectionsService {
             });
           }
           this.mapScaleDataToAreaData();
+          this.newDataLoadedSubject.next();
           resolve(true);
         },
         (err) => {
@@ -79,5 +89,18 @@ export class InfectionsService {
       name: 'Gesamte Fälle',
       series: this.totalCases,
     });
+  }
+
+  public setSelectedCountyId(id: number) {
+    this.selectedCountyId = id;
+    this.selectedCountyChanged.next(id);
+  }
+
+  public getSelectedCountyInfo() {
+    return this.selectedCountyChanged.asObservable();
+  }
+
+  public newDataLoaded() {
+    return this.newDataLoadedSubject.asObservable();
   }
 }
