@@ -32,6 +32,7 @@
     </div>
   </div>
 
+  <!-- Infektionen -->
   <div class="grid" *ngIf="this.showInfection">
     <div class="row">
       <div class="cell heading" (click)="sort('County')">
@@ -70,36 +71,44 @@
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-purple">
-          <i class="fas fa-arrow-down"></i>
-          <p>NaN</p>
+          <i *ngIf="county.diff.DeltaIncidence7 < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="county.diff.DeltaIncidence7 > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="county.diff.DeltaIncidence7 === 0" class="fas fa-arrow-right"></i>
+          <p>{{ county.diff.DeltaIncidence7.toFixed(1).replace(".", ",") }}</p>
         </div>
         <p>{{ county.Incidence7.toFixed(1).replace(".", ",") }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-red">
-          <i class="fas fa-arrow-down"></i>
-          <p>NaN</p>
+          <i *ngIf="county.diff.DeltaTotalCases < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="county.diff.DeltaTotalCases > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="county.diff.DeltaTotalCases === 0" class="fas fa-arrow-right"></i>
+          <p>{{ county.diff.DeltaTotalCases }}</p>
         </div>
         <p>{{ county.TotalCases }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-blue">
-          <i class="fas fa-arrow-up"></i>
+          <!-- <i class="fas fa-arrow-up"></i> -->
           <p>NaN</p>
         </div>
         <p>{{ county.ActiveCases }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-green">
-          <i class="fas fa-arrow-up"></i>
-          <p>NaN</p>
+          <i *ngIf="county.diff.DeltaRecovered < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="county.diff.DeltaRecovered > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="county.diff.DeltaRecovered === 0" class="fas fa-arrow-right"></i>
+          <p>{{ county.diff.DeltaRecovered }}</p>
         </div>
         <p>{{ county.Recovered }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-light-gray">
-          <i class="fas fa-arrow-down"></i>
-          <p>NaN</p>
+          <i *ngIf="county.diff.DeltaDeaths < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="county.diff.DeltaDeaths > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="county.diff.DeltaDeaths === 0" class="fas fa-arrow-right"></i>
+          <p>{{ county.diff.DeltaDeaths }}</p>
         </div>
         <p>{{ county.Deaths }}</p>
       </div>
