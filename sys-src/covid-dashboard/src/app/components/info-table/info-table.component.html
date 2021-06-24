@@ -63,7 +63,7 @@
 
     <div *ngFor="let county of this.searchCountys | orderBy: key: reverse" class="row">
       <div class="cell state">
-        <p (click)="this.selecetCounty(county)" class="pointer"
+        <p (click)="this.selectCounty(county)" class="pointer"
           [style.font-weight]="this.favoriteService.isFavorite(county.CountyId) ? 'bold': 'normal'">{{ county.StateId == 0 ? 'Deutschland' : county.County }}</p>
         <i class="fa{{ this.favoriteService.isFavorite(county.CountyId) ? 's' : 'r' }} fa-bookmark"
            (click)="this.favoriteService.toggleFavorite(county.CountyId)"
@@ -151,7 +151,7 @@
 
     <div *ngFor="let state of this.searchStates | orderBy: key: reverse" class="row">
       <div class="cell state">
-        <p
+        <p (click)="this.selectState(state)" class="pointer"
           [style.font-weight]="this.favoriteService.isFavorite(state.StateId) ? 'bold': 'normal'">{{ state.StateName }}</p>
         <!-- <i class="fa{{ this.favoriteService.isFavorite(state.StateId) ? 's' : 'r' }} fa-bookmark"
            [style.color]="this.favoriteService.isFavorite(state.StateId) ? '#ffc71d': '#9e9688'" *ngIf="state.StateId != 0"></i> -->
