@@ -69,4 +69,8 @@ export class NetworkService {
   public getStatesWithDiff() {
     return this.http.get<VaccineDiff[]>(this.url + '/vaccines/diff');
   }
+
+  public getCountyDiff(){
+    return this.http.get<Array<any>>(this.url + '/incidences/diff');
+  }
 }

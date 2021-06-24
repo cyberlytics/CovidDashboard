@@ -114,3 +114,24 @@ export type VaccineCombined = {
   SumVaccinations: number;
   diff: VaccineDiffDetails;
 }
+
+export type CountyCombined = {
+  ActiveCases: number;
+  County: string;
+  CountyId: number;
+  Date: string;
+  Deaths: number;
+  Incidence7: number;
+  Population: number;
+  Recovered: number;
+  StateId: number;
+  TotalCases: number;
+  diff: CountyDiffDetails
+}
+
+export type CountyDiffDetails = {
+  DeltaDeaths: number;
+  DeltaIncidence7: number;
+  DeltaRecovered: number;
+  DeltaTotalCases: number;
+}
