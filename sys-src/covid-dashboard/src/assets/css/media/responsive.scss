@@ -24,7 +24,8 @@
     flex-direction: column !important;
     margin-bottom: 10px !important;
 
-    &__toggle-button, &__search {
+    &__toggle-button,
+    &__search {
       margin-bottom: 5px;
     }
   }
@@ -46,9 +47,9 @@
       justify-content: center;
       align-items: center;
 
-       a {
-         margin-left: 0 !important;
-       }
+      a {
+        margin-left: 0 !important;
+      }
     }
 
     &__item {
