@@ -135,3 +135,8 @@ export type CountyDiffDetails = {
   DeltaRecovered: number;
   DeltaTotalCases: number;
 }
+
+export interface CountyIDandName {
+  0: number;
+  1: string;
+}

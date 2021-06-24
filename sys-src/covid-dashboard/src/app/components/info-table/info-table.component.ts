@@ -3,6 +3,7 @@ import { NetworkService } from 'src/app/services/network/network.service';
 import { FavoritesService } from '../../services/favorites/favorites.service';
 import { County, CountyCombined, Vaccine, VaccineCombined } from '../../services/alltypes';
 import { VaccinesService } from 'src/app/services/vaccines/vaccines.service';
+import { InfectionsService } from 'src/app/services/infections/infections.service';
 
 @Component({
   selector: 'app-info-table',
@@ -28,7 +29,8 @@ export class InfoTableComponent implements OnInit {
   constructor(
     private network: NetworkService,
     public favoriteService: FavoritesService,
-    private vaccines: VaccinesService
+    private vaccines: VaccinesService,
+    private infections: InfectionsService
   ) {}
 
   // called after the constructor
@@ -131,5 +133,9 @@ export class InfoTableComponent implements OnInit {
   public sortStates(key: string) {
     this.key = key;
     this.reverse = !this.reverse;
+  }
+
+  public selecetCounty(county: CountyCombined) {
+    this.infections.setSelectedCountyId(county.CountyId);
   }
 }

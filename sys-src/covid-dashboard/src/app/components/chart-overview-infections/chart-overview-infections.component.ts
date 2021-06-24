@@ -24,6 +24,7 @@ export class ChartOverviewInfectionsComponent implements OnInit {
   public recDeaTotalCases: AreaData[] = [];
   public showRecDeadTotal: boolean = false;
   public colorScheme = {};
+  public countyName: string = 'Deutschland';
 
   readonly chartType = InfectionChartType;
   readonly incidence7ColorScheme = {
@@ -56,8 +57,7 @@ export class ChartOverviewInfectionsComponent implements OnInit {
     this.timeSpan[this.timeSpan.length - 1][1] = diff;
 
     this.infections.getSelectedCountyInfo().subscribe((id) => {
-      console.log('id', id);
-      this.infections.loadData(id);
+      this.loadData(id);
     })
   }
 
@@ -106,6 +106,9 @@ export class ChartOverviewInfectionsComponent implements OnInit {
     this.infections.loadData(id).then((bool) => {
       this.loaded = bool;
       this.recDeaTotalCases = this.infections.recoveredDeathsTotalCases;
+      this.countyName = this.infections.getCountyNameFromId(this.infections.selectedCountyId);
+    }, (err) => {
+      console.log('error load Data', err);
     });
   }
 }
