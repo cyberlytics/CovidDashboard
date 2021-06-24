@@ -6,76 +6,85 @@
   .grid {
     display: grid;
     overflow: auto;
-    grid-template-columns:repeat(6, minmax(150px, 1fr));
+    grid-template-columns: repeat(6, minmax(130px, 1fr));
     grid-gap: 5px;
     max-height: 300px;
+    margin-bottom: 5px;
+  }
 
-    .row {
-      display: contents;
+  .vaccines {
+    grid-template-columns: repeat(7, minmax(115px, 1fr));
+  }
+}
 
-      .heading {
-        flex-direction: row !important;
-        align-items: center !important;
-        min-height: 50px;
+.pointer {
+  cursor: pointer;
+}
 
-        text-align: center !important;
-        font-weight: 700;
-        background-color: $color-secondary-background;
+.row {
+  display: contents;
 
-        i {
-          font-size: 16rem;
-          margin-left: 10px;
-          opacity: 0.5;
-        }
+  .heading {
+    flex-direction: row !important;
+    align-items: center !important;
+    min-height: 50px;
 
-        &:hover {
-          cursor: pointer;
-          opacity: 0.75;
-        }
-      }
+    text-align: center !important;
+    font-weight: 700;
+    background-color: $color-secondary-background;
 
-      .state {
-        display: flex;
-        align-items: center !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
+    i {
+      font-size: 16rem;
+      margin-left: 10px;
+      opacity: 0.5;
+    }
 
-        text-align: left !important;
+    &:hover {
+      cursor: pointer;
+      opacity: 0.75;
+    }
+  }
 
-        padding: 10px !important;
+  .state {
+    display: flex;
+    align-items: center !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
 
-        background-color: $color-secondary-background;
-        opacity: 0.75;
+    text-align: left !important;
 
-        i {
-          padding: 5px;
-          cursor: pointer;
-        }
-      }
+    padding: 10px !important;
 
-      .cell {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-end;
+    background-color: $color-secondary-background;
+    opacity: 0.75;
 
-        border-radius: 5px;
+    i {
+      padding: 5px;
+      cursor: pointer;
+    }
+  }
 
-        padding: 5px;
+  .cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
 
-        font-size: 13rem;
-        text-align: right;
-        word-break: break-word;
+    border-radius: 5px;
 
-        &__difference-to-previous-day {
-          display: flex;
-          flex-direction: row;
-          justify-content: flex-end;
+    padding: 5px;
 
-          i {
-            margin-right: 2.5px;
-          }
-        }
+    font-size: 13rem;
+    text-align: right;
+    word-break: break-word;
+
+    &__difference-to-previous-day {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+
+      i {
+        margin-right: 2.5px;
       }
     }
   }

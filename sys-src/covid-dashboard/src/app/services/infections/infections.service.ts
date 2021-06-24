@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AreaData, ScaleData } from '../alltypes';
+import { Subject } from 'rxjs';
+import { AreaData, CountyIDandName, ScaleData } from '../alltypes';
 import { NetworkService } from '../network/network.service';
 
 @Injectable({
@@ -16,7 +17,18 @@ export class InfectionsService {
   // comibend array with multiple data types
   public recoveredDeathsTotalCases = [] as AreaData[];
 
-  constructor(private network: NetworkService) {}
+  public selectedCountyId: number = 0;
+  public selectedCountyName: string = 'Deutschland';
+  private selectedCountyChanged: Subject<number>;
+  private newDataLoadedSubject: Subject<void>;
+
+  public countyIDandNameList: CountyIDandName[] = [];
+
+  constructor(private network: NetworkService) {
+    this.selectedCountyChanged = new Subject<number>();
+    this.newDataLoadedSubject = new Subject<void>();
+    this.saveCountyIDandName();
+  }
 
   /**
    * loads the data for a specific county and saves the data filtered by type
@@ -52,6 +64,7 @@ export class InfectionsService {
             });
           }
           this.mapScaleDataToAreaData();
+          this.newDataLoadedSubject.next();
           resolve(true);
         },
         (err) => {
@@ -79,5 +92,37 @@ export class InfectionsService {
       name: 'Gesamte Fälle',
       series: this.totalCases,
     });
+  }
+
+  public setSelectedCountyId(id: number) {
+    this.selectedCountyId = id;
+    this.selectedCountyChanged.next(id);
+  }
+
+  public getSelectedCountyInfo() {
+    return this.selectedCountyChanged.asObservable();
+  }
+
+  public newDataLoaded() {
+    return this.newDataLoadedSubject.asObservable();
+  }
+
+  private saveCountyIDandName() {
+    this.network.getCountyOverview().subscribe((res) => {
+      this.countyIDandNameList = res;
+    });
+  }
+
+  public getCountyNameFromId(id: number): string {
+    let temp;
+    if (id === 0) {
+      temp = 'Deutschland';
+    } else {
+      temp = this.countyIDandNameList.find((item) => item[0] === id)?.[1];
+    }
+    if (temp) {
+      return temp;
+    }
+    return '';
   }
 }

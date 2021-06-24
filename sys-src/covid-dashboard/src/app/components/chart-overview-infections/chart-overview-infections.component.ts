@@ -24,6 +24,7 @@ export class ChartOverviewInfectionsComponent implements OnInit {
   public recDeaTotalCases: AreaData[] = [];
   public showRecDeadTotal: boolean = false;
   public colorScheme = {};
+  public countyName: string = 'Deutschland';
 
   readonly chartType = InfectionChartType;
   readonly incidence7ColorScheme = {
@@ -54,13 +55,14 @@ export class ChartOverviewInfectionsComponent implements OnInit {
     let diff = date.getTime() - startDate.getTime();
     diff = Math.round(diff / (1000 * 3600 * 24));
     this.timeSpan[this.timeSpan.length - 1][1] = diff;
+
+    this.infections.getSelectedCountyInfo().subscribe((id) => {
+      this.loadData(id);
+    });
   }
 
   ngOnInit(): void {
-    this.infections.loadData(9361).then((bool) => {
-      this.loaded = bool;
-      this.recDeaTotalCases = this.infections.recoveredDeathsTotalCases;
-    });
+    this.loadData(0);
 
     this.colorScheme = this.incidence7ColorScheme;
   }
@@ -98,5 +100,20 @@ export class ChartOverviewInfectionsComponent implements OnInit {
       this.showRecDeadTotal = true;
       this.colorScheme = this.recDeaTotalCasesColorScheme;
     }
+  }
+
+  private loadData(id: number) {
+    this.infections.loadData(id).then(
+      (bool) => {
+        this.loaded = bool;
+        this.recDeaTotalCases = this.infections.recoveredDeathsTotalCases;
+        this.countyName = this.infections.getCountyNameFromId(
+          this.infections.selectedCountyId
+        );
+      },
+      (err) => {
+        console.log('error load Data', err);
+      }
+    );
   }
 }
