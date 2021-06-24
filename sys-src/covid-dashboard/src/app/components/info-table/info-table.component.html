@@ -60,8 +60,8 @@
         <i *ngIf="key == 'Deaths'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
       </div>
     </div>
-</div>
-<div class="grid">
+  </div>
+  <div class="grid">
     <div *ngFor="let county of this.searchCountys | orderBy: key: reverse" class="row">
       <div class="cell state">
         <p (click)="this.selectCounty(county)" class="pointer"
@@ -114,10 +114,65 @@
         <p>{{ county.Deaths }}</p>
       </div>
     </div>
+
+
+    <div *ngFor="let county of this.searchCountys | orderBy: key: reverse" class="row">
+      <div class="cell state">
+        <p (click)="this.selectCounty(county)" class="pointer"
+          [style.font-weight]="this.favoriteService.isFavorite(county.CountyId) ? 'bold': 'normal'">{{ county.StateId == 0 ? 'Deutschland' : county.County }}</p>
+        <i class="fa{{ this.favoriteService.isFavorite(county.CountyId) ? 's' : 'r' }} fa-bookmark"
+           (click)="this.favoriteService.toggleFavorite(county.CountyId)"
+           [style.color]="this.favoriteService.isFavorite(county.CountyId) ? '#ffc71d': '#9e9688'" *ngIf="county.StateId != 0"></i>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-purple">
+          <i *ngIf="county.diff.DeltaIncidence7 < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="county.diff.DeltaIncidence7 > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="county.diff.DeltaIncidence7 === 0" class="fas fa-arrow-right"></i>
+          <p>{{ county.diff.DeltaIncidence7.toFixed(1).replace(".", ",") }}</p>
+        </div>
+        <p>{{ county.Incidence7.toFixed(1).replace(".", ",") }}</p>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-red">
+          <i *ngIf="county.diff.DeltaTotalCases < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="county.diff.DeltaTotalCases > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="county.diff.DeltaTotalCases === 0" class="fas fa-arrow-right"></i>
+          <p>{{ county.diff.DeltaTotalCases }}</p>
+        </div>
+        <p>{{ county.TotalCases }}</p>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-blue">
+          <!-- <i class="fas fa-arrow-up"></i> -->
+          <p>NaN</p>
+        </div>
+        <p>{{ county.ActiveCases }}</p>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-green">
+          <i *ngIf="county.diff.DeltaRecovered < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="county.diff.DeltaRecovered > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="county.diff.DeltaRecovered === 0" class="fas fa-arrow-right"></i>
+          <p>{{ county.diff.DeltaRecovered }}</p>
+        </div>
+        <p>{{ county.Recovered }}</p>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-light-gray">
+          <i *ngIf="county.diff.DeltaDeaths < 0" class="fas fa-arrow-down"></i>
+          <i *ngIf="county.diff.DeltaDeaths > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="county.diff.DeltaDeaths === 0" class="fas fa-arrow-right"></i>
+          <p>{{ county.diff.DeltaDeaths }}</p>
+        </div>
+        <p>{{ county.Deaths }}</p>
+      </div>
+    </div>
+
+
   </div>
 
   <!-- Impfungenen -->
-
   <div class="grid" id="vaccines" *ngIf="!this.showInfection">
     <div class="row">
       <div class="cell heading" (click)="sortStates('StateName')">
@@ -149,7 +204,8 @@
         <i *ngIf="key == 'SumModerna'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
       </div>
     </div>
-
+  </div>
+  <div class="grid"  id="vaccines" >
     <div *ngFor="let state of this.searchStates | orderBy: key: reverse" class="row">
       <div class="cell state">
         <p (click)="this.selectState(state)" class="pointer"
