@@ -15,23 +15,26 @@ _Eine ausführliche textuelle Ausformulierung ist unter dem Ordner [sys-doc](htt
 ### **Versionen**
 
 - Node.js®: v**14.17.1** LTS ([Download | Node.js](https://nodejs.org/en/download/))
-- npm: v**7.17.0** (Bei obiger Node.js®-Installation bereits enthalten)
+- npm: v**7.18.1** (Muss bei obiger Node.js®-Installation noch mit Hilfe des Befehls `npm install -g npm@7.18.1` aktualisiert werden)
 - Angular CLI: v**12.0.4** ([Angular - Setting up the local environment and workspace](https://angular.io/guide/setup-local#install-the-angular-cli))
 
 ### **Erstinstallation**
 
-> 1. In den Ordner `sys-src/backend` navigieren.
-> 2. Den Befehl `npm install` ausführen, um alle benötigten Module herunterzuladen.
-> 3. In den Ordner `sys-src/covid-dashboard` navigieren.
-> 4. Den Befehl `npm install` ausführen, um alle benötigten Module herunterzuladen.
+> 1. In den Ordner `sys-src/covid-dashboard` navigieren.
+> 2. Den Befehl `npm run client-install` ausführen, um alle benötigten Module herunterzuladen.
 
-### **Node.js ausführen**
+### **Gesamte Anwendung ausführen**
+
+> 1. In den Ordner `sys-src/covid-dashboard` navigieren.
+> 2. Mit Hilfe des Befehls `npm run dev` wird sowohl Frontend als auch Backend automatisch gestartet.
+
+### **Backend separat starten**
 
 > 1. In den Ordner `sys-src/backend` navigieren.
 > 2. (**Für Entwicklungsumgebung**) Mit Hilfe des Befehls `npm run server` wird der Node.js Server im Hintergrund mit Hilfe von `nodemon` gestartet und automatisch aktuell gehalten.
-> 3. (**Für Produktivumgebung**) Mit Hilfe des Befehls `npm run start` wird der Node.js Server im Hintergrund gestartet.
+> 3. (**Für Produktivumgebung**) Mit Hilfe des Befehls `npm run start` wird der Node.js Server über ts-node gestartet.
 
-### **Angular-Projekt ausführen**
+### **Frontend separat ausführen**
 
 > 1. In den Ordner `sys-src/covid-dashboard` navigieren.
 > 2. Mit Hilfe des Befehls `npm run start` kann das Projekt gebaut und automatisch lokal ausgeführt werden.
@@ -44,4 +47,4 @@ _Eine ausführliche textuelle Ausformulierung ist unter dem Ordner [sys-doc](htt
 ### **Angular-Projekt bauen**
 
 > 1. In den Ordner `sys-src/covid-dashboard` navigieren.
-> 2. Mit Hilfe des Befehls `npm run build` kann das Projekt gebaut werden.
+> 2. Mit Hilfe des Befehls `npm run build-prod` kann das Projekt gebaut werden.
