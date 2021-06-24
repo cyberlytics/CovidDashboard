@@ -8,6 +8,7 @@ import {
 } from 'src/app/services/alltypes';
 import { NetworkService } from 'src/app/services/network/network.service';
 import { Router } from '@angular/router';
+import { InfectionsService } from 'src/app/services/infections/infections.service';
 
 // import * as La from 'leaflet-ajax';
 
@@ -27,7 +28,11 @@ export class MapComponent implements AfterViewInit {
   public showInfections: boolean = true;
   public showFirstVaccine: boolean = true;
 
-  constructor(private network: NetworkService, private router: Router) {}
+  constructor(
+    private network: NetworkService,
+    private router: Router,
+    private infection: InfectionsService
+    ) {}
 
   ngOnInit(): void {
     this.showInfections = this.router.url.includes('infections');
@@ -377,8 +382,11 @@ export class MapComponent implements AfterViewInit {
       onEachFeature: (feature, layer) => {
         layer.on('click', (e) => {
           // e = event
-          console.log(e);
+          // console.log(e);
           console.log(e.target.feature.properties);
+          console.log(e.target.feature.properties.AdmUnitId);
+          // this.infection.selectedCountyId = e.target.feature.properties.AdmUnitId;
+          this.infection.setSelectedCountyId(e.target.feature.properties.AdmUnitId);
         });
       },
     });

@@ -20,7 +20,12 @@ export class BarChartComponent implements OnInit {
 
   constructor(
     private infections: InfectionsService
-  ) {}
+  ) {
+    this.infections.newDataLoaded().subscribe(() => {
+      console.log('loaded');
+      this.changedInput(this.type, this.daynumber);
+    })
+  }
 
   ngOnInit(): void {}
 
@@ -28,6 +33,7 @@ export class BarChartComponent implements OnInit {
    * is called every time the data form the parent component changes
    */
   ngOnChanges(): void {
+    console.log('changed');
     this.changedInput(this.type, this.daynumber);
   }
 
@@ -55,5 +61,6 @@ export class BarChartComponent implements OnInit {
         this.displayedValues.length
       );
     }
+    console.log('displayed values', this.displayedValues);
   }
 }
