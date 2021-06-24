@@ -73,7 +73,7 @@ export type AreaData = {
 export type VaccineDiff = {
   0: number;
   1: VaccineDiffDetails;
-}
+};
 
 export type VaccineDiffDetails = {
   DeltaProportionFirstVaccinations: number;
@@ -91,7 +91,7 @@ export type VaccineDiffDetails = {
   DeltaSumSecondModerna: number;
   DeltaSumSecondVaccinations: number;
   DeltaSumVaccinations: number;
-}
+};
 
 export type VaccineCombined = {
   Date: string;
@@ -113,7 +113,7 @@ export type VaccineCombined = {
   SumSecondVaccinations: number;
   SumVaccinations: number;
   diff: VaccineDiffDetails;
-}
+};
 
 export type CountyCombined = {
   ActiveCases: number;
@@ -126,15 +126,15 @@ export type CountyCombined = {
   Recovered: number;
   StateId: number;
   TotalCases: number;
-  diff: CountyDiffDetails
-}
+  diff: CountyDiffDetails;
+};
 
 export type CountyDiffDetails = {
   DeltaDeaths: number;
   DeltaIncidence7: number;
   DeltaRecovered: number;
   DeltaTotalCases: number;
-}
+};
 
 export interface CountyIDandName {
   0: number;

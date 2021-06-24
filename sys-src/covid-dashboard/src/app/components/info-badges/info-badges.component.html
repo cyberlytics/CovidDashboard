@@ -33,8 +33,15 @@
       </div>
 
       <div *ngIf="this.germanyData.incidence" class="badge__total-number">
-        <p *ngIf="this.showInfectionData">{{(this.germanyData.incidence.TotalCases | number: "":"de-DE")}}</p>
-        <p *ngIf="!this.showInfectionData">{{(this.germanyData.vaccines.ProportionFirstVaccinations | number: "":"de-DE")}}%</p>
+        <p *ngIf="this.showInfectionData">
+          {{ this.germanyData.incidence.TotalCases | number: "":"de-DE" }}
+        </p>
+        <p *ngIf="!this.showInfectionData">
+          {{
+            this.germanyData.vaccines.ProportionFirstVaccinations
+              | number: "":"de-DE"
+          }}%
+        </p>
       </div>
     </div>
 

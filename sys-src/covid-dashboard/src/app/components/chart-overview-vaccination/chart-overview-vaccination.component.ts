@@ -50,7 +50,7 @@ export class ChartOverviewVaccinationComponent implements OnInit {
 
     this.vaccine.getSelectedStateInfo().subscribe((id) => {
       this.loadData(id);
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -84,7 +84,9 @@ export class ChartOverviewVaccinationComponent implements OnInit {
     this.vaccine.loadData(id).then(() => {
       this.displayedAreaData = this.vaccine.firstSecondVaccinationSum;
       this.allVaccinesByManufacturer = this.vaccine.allVaccinesByManufacturer;
-      this.stateName = this.vaccine.getStateNameFromId(this.vaccine.selectedStateId);
+      this.stateName = this.vaccine.getStateNameFromId(
+        this.vaccine.selectedStateId
+      );
     });
   }
 }

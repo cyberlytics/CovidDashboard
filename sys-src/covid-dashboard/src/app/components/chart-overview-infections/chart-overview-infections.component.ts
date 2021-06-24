@@ -58,7 +58,7 @@ export class ChartOverviewInfectionsComponent implements OnInit {
 
     this.infections.getSelectedCountyInfo().subscribe((id) => {
       this.loadData(id);
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -103,12 +103,17 @@ export class ChartOverviewInfectionsComponent implements OnInit {
   }
 
   private loadData(id: number) {
-    this.infections.loadData(id).then((bool) => {
-      this.loaded = bool;
-      this.recDeaTotalCases = this.infections.recoveredDeathsTotalCases;
-      this.countyName = this.infections.getCountyNameFromId(this.infections.selectedCountyId);
-    }, (err) => {
-      console.log('error load Data', err);
-    });
+    this.infections.loadData(id).then(
+      (bool) => {
+        this.loaded = bool;
+        this.recDeaTotalCases = this.infections.recoveredDeathsTotalCases;
+        this.countyName = this.infections.getCountyNameFromId(
+          this.infections.selectedCountyId
+        );
+      },
+      (err) => {
+        console.log('error load Data', err);
+      }
+    );
   }
 }
