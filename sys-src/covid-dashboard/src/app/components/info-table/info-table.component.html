@@ -160,6 +160,7 @@
         <div class="cell__difference-to-previous-day accent-purple">
           <i *ngIf="this.state.diff.DeltaProportionFirstVaccinations < 0" class="fas fa-arrow-down"></i>
           <i *ngIf="this.state.diff.DeltaProportionFirstVaccinations > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="this.state.diff.DeltaProportionFirstVaccinations === 0" class="fas fa-arrow-right"></i>
           <p>{{ state.diff.DeltaProportionFirstVaccinations.toFixed(2) }}</p>
         </div>
         <p>{{ state.ProportionFirstVaccinations}} %</p>
@@ -168,6 +169,7 @@
         <div class="cell__difference-to-previous-day accent-red">
           <i *ngIf="this.state.diff.DeltaSumVaccinations < 0" class="fas fa-arrow-down"></i>
           <i *ngIf="this.state.diff.DeltaSumVaccinations > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="this.state.diff.DeltaSumVaccinations === 0" class="fas fa-arrow-right"></i>
           <p>{{ state.diff.DeltaSumVaccinations | number: "":"de-DE"}}</p>
         </div>
         <p>{{ (state.SumVaccinations | number: "":"de-DE") }}</p>
@@ -176,6 +178,7 @@
         <div class="cell__difference-to-previous-day accent-blue">
           <i *ngIf="this.state.diff.DeltaSumAstraZeneca < 0" class="fas fa-arrow-down"></i>
           <i *ngIf="this.state.diff.DeltaSumAstraZeneca > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="this.state.diff.DeltaSumAstraZeneca === 0" class="fas fa-arrow-right"></i>
           <p>{{ state.diff.DeltaSumAstraZeneca | number: "":"de-DE"}}</p>
         </div>
         <p>{{ (state.SumAstraZeneca | number: "":"de-DE") }}</p>
@@ -184,6 +187,7 @@
         <div class="cell__difference-to-previous-day accent-green">
           <i *ngIf="this.state.diff.DeltaSumBioNTech < 0" class="fas fa-arrow-down"></i>
           <i *ngIf="this.state.diff.DeltaSumBioNTech > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="this.state.diff.DeltaSumBioNTech === 0" class="fas fa-arrow-right"></i>
           <p>{{ state.diff.DeltaSumBioNTech | number: "":"de-DE"}}</p>
         </div>
         <p>{{ (state.SumBioNTech | number: "":"de-DE") }}</p>
@@ -192,6 +196,7 @@
         <div class="cell__difference-to-previous-day accent-light-gray">
           <i *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson < 0" class="fas fa-arrow-down"></i>
           <i *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson === 0" class="fas fa-arrow-right"></i>
           <p>{{ state.diff.DeltaSumJohnsonAndJohnson | number: "":"de-DE" }}</p>
         </div>
         <p>{{ (state.SumJohnsonAndJohnson | number: "":"de-DE") }}</p>
@@ -200,6 +205,7 @@
         <div class="cell__difference-to-previous-day accent-light-gray">
           <i *ngIf="this.state.diff.DeltaSumModerna < 0" class="fas fa-arrow-down"></i>
           <i *ngIf="this.state.diff.DeltaSumModerna > 0" class="fas fa-arrow-up"></i>
+          <i *ngIf="this.state.diff.DeltaSumModerna === 0" class="fas fa-arrow-right"></i>
           <p>{{ state.diff.DeltaSumModerna | number: "":"de-DE" }}</p>
         </div>
         <p>{{ (state.SumModerna | number: "":"de-DE") }}</p>
