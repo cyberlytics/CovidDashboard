@@ -110,15 +110,15 @@ export class InfectionsService {
   private saveCountyIDandName() {
     this.network.getCountyOverview().subscribe((res) => {
       this.countyIDandNameList = res;
-    })
+    });
   }
 
   public getCountyNameFromId(id: number): string {
     let temp;
     if (id === 0) {
-      temp = 'Deutschland'
+      temp = 'Deutschland';
     } else {
-      temp = this.countyIDandNameList.find(item => item[0] === id)?.[1];
+      temp = this.countyIDandNameList.find((item) => item[0] === id)?.[1];
     }
     if (temp) {
       return temp;

@@ -1,8 +1,14 @@
 <div class="info-table">
-  <p *ngIf="this.showInfection" class="title-badge accent-yellow accent-yellow-background">
+  <p
+    *ngIf="this.showInfection"
+    class="title-badge accent-yellow accent-yellow-background"
+  >
     Landkreisübersicht
   </p>
-  <p *ngIf="!this.showInfection" class="title-badge accent-yellow accent-yellow-background">
+  <p
+    *ngIf="!this.showInfection"
+    class="title-badge accent-yellow accent-yellow-background"
+  >
     Bundeslandübersicht
   </p>
 
@@ -14,7 +20,13 @@
       class="info-bar__search"
       placeholder="Landkreis suchen"
     />
-    <div class="info-bar__toggle-button" [ngClass]="{'accent-yellow accent-yellow-background': selectedFavorites}" (click)="change(true)">
+    <div
+      class="info-bar__toggle-button"
+      [ngClass]="{
+        'accent-yellow accent-yellow-background': selectedFavorites
+      }"
+      (click)="change(true)"
+    >
       <i class="far fa-bookmark"></i>
     </div>
   </div>
@@ -27,7 +39,14 @@
       class="info-bar__search"
       placeholder="Bundesland suchen"
     />
-    <div *ngIf="this.showInfection" class="info-bar__toggle-button" [ngClass]="{'accent-yellow accent-yellow-background': selectedFavorites}" (click)="change(true)">
+    <div
+      *ngIf="this.showInfection"
+      class="info-bar__toggle-button"
+      [ngClass]="{
+        'accent-yellow accent-yellow-background': selectedFavorites
+      }"
+      (click)="change(true)"
+    >
       <i class="far fa-bookmark"></i>
     </div>
   </div>
@@ -37,53 +56,103 @@
     <div class="row">
       <div class="cell heading" (click)="sort('County')">
         <p>Landkreis</p>
-        <i *ngIf="key == 'County'" class="fas fa-sort-alpha-{{ reverse ? 'up' : 'down' }}"></i>
+        <i
+          *ngIf="key == 'County'"
+          class="fas fa-sort-alpha-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
       <div class="cell heading" (click)="sort('Incidence7')">
         <p>Inzidenz</p>
-        <i *ngIf="key == 'Incidence7'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+        <i
+          *ngIf="key == 'Incidence7'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
       <div class="cell heading" (click)="sort('TotalCases')">
         <p>Bestätigt</p>
-        <i *ngIf="key == 'TotalCases'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+        <i
+          *ngIf="key == 'TotalCases'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
       <div class="cell heading" (click)="sort('ActiveCases')">
         <p>Aktiv</p>
-        <i *ngIf="key == 'ActiveCases'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+        <i
+          *ngIf="key == 'ActiveCases'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
       <div class="cell heading" (click)="sort('Recovered')">
         <p>Genesen</p>
-        <i *ngIf="key == 'Recovered'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+        <i
+          *ngIf="key == 'Recovered'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
       <div class="cell heading" (click)="sort('Deaths')">
         <p>Verstorben</p>
-        <i *ngIf="key == 'Deaths'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+        <i
+          *ngIf="key == 'Deaths'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
     </div>
   </div>
+
   <div class="grid">
-    <div *ngFor="let county of this.searchCountys | orderBy: key: reverse" class="row">
-      <div class="cell state">
-        <p (click)="this.selectCounty(county)" class="pointer"
-          [style.font-weight]="this.favoriteService.isFavorite(county.CountyId) ? 'bold': 'normal'">{{ county.StateId == 0 ? 'Deutschland' : county.County }}</p>
-        <i class="fa{{ this.favoriteService.isFavorite(county.CountyId) ? 's' : 'r' }} fa-bookmark"
-           (click)="this.favoriteService.toggleFavorite(county.CountyId)"
-           [style.color]="this.favoriteService.isFavorite(county.CountyId) ? '#ffc71d': '#9e9688'" *ngIf="county.StateId != 0"></i>
+    <div
+      *ngFor="let county of this.searchCountys | orderBy: key:reverse"
+      class="row"
+    >
+      <div class="cell state pointer" (click)="this.selectCounty(county)">
+        <p [style.font-weight]="this.favoriteService.isFavorite(county.CountyId) ? 'bold' : 'normal'">
+          {{ county.StateId == 0 ? "Deutschland" : county.County }}
+        </p>
+        <i
+          class="fa{{
+            this.favoriteService.isFavorite(county.CountyId) ? 's' : 'r'
+          }} fa-bookmark"
+          (click)="this.favoriteService.toggleFavorite(county.CountyId)"
+          [style.color]="
+            this.favoriteService.isFavorite(county.CountyId)
+              ? '#ffc71d'
+              : '#9e9688'
+          "
+          *ngIf="county.StateId != 0"
+        ></i>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-purple">
-          <i *ngIf="county.diff.DeltaIncidence7 < 0" class="fas fa-arrow-down"></i>
-          <i *ngIf="county.diff.DeltaIncidence7 > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="county.diff.DeltaIncidence7 === 0" class="fas fa-arrow-right"></i>
+          <i
+            *ngIf="county.diff.DeltaIncidence7 < 0"
+            class="fas fa-arrow-down"
+          ></i>
+          <i
+            *ngIf="county.diff.DeltaIncidence7 > 0"
+            class="fas fa-arrow-up"
+          ></i>
+          <i
+            *ngIf="county.diff.DeltaIncidence7 === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ county.diff.DeltaIncidence7.toFixed(1).replace(".", ",") }}</p>
         </div>
         <p>{{ county.Incidence7.toFixed(1).replace(".", ",") }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-red">
-          <i *ngIf="county.diff.DeltaTotalCases < 0" class="fas fa-arrow-down"></i>
-          <i *ngIf="county.diff.DeltaTotalCases > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="county.diff.DeltaTotalCases === 0" class="fas fa-arrow-right"></i>
+          <i
+            *ngIf="county.diff.DeltaTotalCases < 0"
+            class="fas fa-arrow-down"
+          ></i>
+          <i
+            *ngIf="county.diff.DeltaTotalCases > 0"
+            class="fas fa-arrow-up"
+          ></i>
+          <i
+            *ngIf="county.diff.DeltaTotalCases === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ county.diff.DeltaTotalCases }}</p>
         </div>
         <p>{{ county.TotalCases }}</p>
@@ -97,9 +166,15 @@
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-green">
-          <i *ngIf="county.diff.DeltaRecovered < 0" class="fas fa-arrow-down"></i>
+          <i
+            *ngIf="county.diff.DeltaRecovered < 0"
+            class="fas fa-arrow-down"
+          ></i>
           <i *ngIf="county.diff.DeltaRecovered > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="county.diff.DeltaRecovered === 0" class="fas fa-arrow-right"></i>
+          <i
+            *ngIf="county.diff.DeltaRecovered === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ county.diff.DeltaRecovered }}</p>
         </div>
         <p>{{ county.Recovered }}</p>
@@ -108,36 +183,75 @@
         <div class="cell__difference-to-previous-day accent-light-gray">
           <i *ngIf="county.diff.DeltaDeaths < 0" class="fas fa-arrow-down"></i>
           <i *ngIf="county.diff.DeltaDeaths > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="county.diff.DeltaDeaths === 0" class="fas fa-arrow-right"></i>
+          <i
+            *ngIf="county.diff.DeltaDeaths === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ county.diff.DeltaDeaths }}</p>
         </div>
         <p>{{ county.Deaths }}</p>
       </div>
     </div>
 
-
-    <div *ngFor="let county of this.searchCountys | orderBy: key: reverse" class="row">
+    <div
+      *ngFor="let county of this.searchCountys | orderBy: key:reverse"
+      class="row"
+    >
       <div class="cell state">
-        <p (click)="this.selectCounty(county)" class="pointer"
-          [style.font-weight]="this.favoriteService.isFavorite(county.CountyId) ? 'bold': 'normal'">{{ county.StateId == 0 ? 'Deutschland' : county.County }}</p>
-        <i class="fa{{ this.favoriteService.isFavorite(county.CountyId) ? 's' : 'r' }} fa-bookmark"
-           (click)="this.favoriteService.toggleFavorite(county.CountyId)"
-           [style.color]="this.favoriteService.isFavorite(county.CountyId) ? '#ffc71d': '#9e9688'" *ngIf="county.StateId != 0"></i>
+        <p
+          (click)="this.selectCounty(county)"
+          class="pointer"
+          [style.font-weight]="
+            this.favoriteService.isFavorite(county.CountyId) ? 'bold' : 'normal'
+          "
+        >
+          {{ county.StateId == 0 ? "Deutschland" : county.County }}
+        </p>
+        <i
+          class="fa{{
+            this.favoriteService.isFavorite(county.CountyId) ? 's' : 'r'
+          }} fa-bookmark"
+          (click)="this.favoriteService.toggleFavorite(county.CountyId)"
+          [style.color]="
+            this.favoriteService.isFavorite(county.CountyId)
+              ? '#ffc71d'
+              : '#9e9688'
+          "
+          *ngIf="county.StateId != 0"
+        ></i>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-purple">
-          <i *ngIf="county.diff.DeltaIncidence7 < 0" class="fas fa-arrow-down"></i>
-          <i *ngIf="county.diff.DeltaIncidence7 > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="county.diff.DeltaIncidence7 === 0" class="fas fa-arrow-right"></i>
+          <i
+            *ngIf="county.diff.DeltaIncidence7 < 0"
+            class="fas fa-arrow-down"
+          ></i>
+          <i
+            *ngIf="county.diff.DeltaIncidence7 > 0"
+            class="fas fa-arrow-up"
+          ></i>
+          <i
+            *ngIf="county.diff.DeltaIncidence7 === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ county.diff.DeltaIncidence7.toFixed(1).replace(".", ",") }}</p>
         </div>
         <p>{{ county.Incidence7.toFixed(1).replace(".", ",") }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-red">
-          <i *ngIf="county.diff.DeltaTotalCases < 0" class="fas fa-arrow-down"></i>
-          <i *ngIf="county.diff.DeltaTotalCases > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="county.diff.DeltaTotalCases === 0" class="fas fa-arrow-right"></i>
+          <i
+            *ngIf="county.diff.DeltaTotalCases < 0"
+            class="fas fa-arrow-down"
+          ></i>
+          <i
+            *ngIf="county.diff.DeltaTotalCases > 0"
+            class="fas fa-arrow-up"
+          ></i>
+          <i
+            *ngIf="county.diff.DeltaTotalCases === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ county.diff.DeltaTotalCases }}</p>
         </div>
         <p>{{ county.TotalCases }}</p>
@@ -151,9 +265,15 @@
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-green">
-          <i *ngIf="county.diff.DeltaRecovered < 0" class="fas fa-arrow-down"></i>
+          <i
+            *ngIf="county.diff.DeltaRecovered < 0"
+            class="fas fa-arrow-down"
+          ></i>
           <i *ngIf="county.diff.DeltaRecovered > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="county.diff.DeltaRecovered === 0" class="fas fa-arrow-right"></i>
+          <i
+            *ngIf="county.diff.DeltaRecovered === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ county.diff.DeltaRecovered }}</p>
         </div>
         <p>{{ county.Recovered }}</p>
@@ -162,110 +282,198 @@
         <div class="cell__difference-to-previous-day accent-light-gray">
           <i *ngIf="county.diff.DeltaDeaths < 0" class="fas fa-arrow-down"></i>
           <i *ngIf="county.diff.DeltaDeaths > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="county.diff.DeltaDeaths === 0" class="fas fa-arrow-right"></i>
+          <i
+            *ngIf="county.diff.DeltaDeaths === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ county.diff.DeltaDeaths }}</p>
         </div>
         <p>{{ county.Deaths }}</p>
       </div>
     </div>
-
-
   </div>
 
-  <!-- Impfungenen -->
-  <div class="grid" id="vaccines" *ngIf="!this.showInfection">
+  <!-- Impfungen -->
+  <div class="grid vaccines" *ngIf="!this.showInfection">
     <div class="row">
       <div class="cell heading" (click)="sortStates('StateName')">
         <p>Bundesland</p>
-        <i *ngIf="key == 'StateName'" class="fas fa-sort-alpha-{{ reverse ? 'up' : 'down' }}"></i>
+        <i
+          *ngIf="key == 'StateName'"
+          class="fas fa-sort-alpha-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
-      <div class="cell heading" (click)="sortStates('ProportionFirstVaccinations')">
-        <p>erste Impfung</p>
-        <i *ngIf="key == 'ProportionFirstVaccinations'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+      <div
+        class="cell heading"
+        (click)="sortStates('ProportionFirstVaccinations')"
+      >
+        <p>Mindestens eine Impfdosis</p>
+        <i
+          *ngIf="key == 'ProportionFirstVaccinations'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
       <div class="cell heading" (click)="sortStates('SumVaccinations')">
-        <p>Gesamt</p>
-        <i *ngIf="key == 'SumVaccinations'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+        <p>Verabreichte Impfdosen</p>
+        <i
+          *ngIf="key == 'SumVaccinations'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
       <div class="cell heading" (click)="sortStates('SumAstraZeneca')">
-        <p>AstraZeneca</p>
-        <i *ngIf="key == 'SumAstraZeneca'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+        <p>Impfdosen AstraZeneca</p>
+        <i
+          *ngIf="key == 'SumAstraZeneca'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
       <div class="cell heading" (click)="sortStates('SumBioNTech')">
-        <p>BioNTech/Pfizer</p>
-        <i *ngIf="key == 'SumBioNTech'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+        <p>Impfdosen BioNTech/Pfizer</p>
+        <i
+          *ngIf="key == 'SumBioNTech'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
       <div class="cell heading" (click)="sortStates('SumJohnsonAndJohnson')">
-        <p>Johnson & Johson</p>
-        <i *ngIf="key == 'SumJohnsonAndJohnson'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+        <p>Impfdosen Johnson & Johnson</p>
+        <i
+          *ngIf="key == 'SumJohnsonAndJohnson'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
       <div class="cell heading" (click)="sortStates('SumModerna')">
-        <p>Moderna</p>
-        <i *ngIf="key == 'SumModerna'" class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"></i>
+        <p>Impfdosen Moderna</p>
+        <i
+          *ngIf="key == 'SumModerna'"
+          class="fas fa-sort-numeric-{{ reverse ? 'up' : 'down' }}"
+        ></i>
       </div>
     </div>
   </div>
-  <div class="grid"  id="vaccines" >
-    <div *ngFor="let state of this.searchStates | orderBy: key: reverse" class="row">
-      <div class="cell state">
-        <p (click)="this.selectState(state)" class="pointer"
-          [style.font-weight]="this.favoriteService.isFavorite(state.StateId) ? 'bold': 'normal'">{{ state.StateName }}</p>
+
+  <div class="grid vaccines">
+    <div
+      *ngFor="let state of this.searchStates | orderBy: key:reverse"
+      class="row"
+    >
+      <div class="cell state pointer" (click)="this.selectState(state)">
+        <p
+          [style.font-weight]="
+            this.favoriteService.isFavorite(state.StateId) ? 'bold' : 'normal'
+          "
+        >
+          {{ state.StateName }}
+        </p>
         <!-- <i class="fa{{ this.favoriteService.isFavorite(state.StateId) ? 's' : 'r' }} fa-bookmark"
            [style.color]="this.favoriteService.isFavorite(state.StateId) ? '#ffc71d': '#9e9688'" *ngIf="state.StateId != 0"></i> -->
       </div>
       <div class="cell">
-        <div class="cell__difference-to-previous-day accent-purple">
-          <i *ngIf="this.state.diff.DeltaProportionFirstVaccinations < 0" class="fas fa-arrow-down"></i>
-          <i *ngIf="this.state.diff.DeltaProportionFirstVaccinations > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="this.state.diff.DeltaProportionFirstVaccinations === 0" class="fas fa-arrow-right"></i>
+        <div class="cell__difference-to-previous-day accent-red">
+          <i
+            *ngIf="this.state.diff.DeltaProportionFirstVaccinations < 0"
+            class="fas fa-arrow-down"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaProportionFirstVaccinations > 0"
+            class="fas fa-arrow-up"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaProportionFirstVaccinations === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ state.diff.DeltaProportionFirstVaccinations.toFixed(2) }}</p>
         </div>
-        <p>{{ state.ProportionFirstVaccinations}} %</p>
-      </div>
-      <div class="cell">
-        <div class="cell__difference-to-previous-day accent-red">
-          <i *ngIf="this.state.diff.DeltaSumVaccinations < 0" class="fas fa-arrow-down"></i>
-          <i *ngIf="this.state.diff.DeltaSumVaccinations > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="this.state.diff.DeltaSumVaccinations === 0" class="fas fa-arrow-right"></i>
-          <p>{{ state.diff.DeltaSumVaccinations | number: "":"de-DE"}}</p>
-        </div>
-        <p>{{ (state.SumVaccinations | number: "":"de-DE") }}</p>
+        <p>{{ state.ProportionFirstVaccinations }} %</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-blue">
-          <i *ngIf="this.state.diff.DeltaSumAstraZeneca < 0" class="fas fa-arrow-down"></i>
-          <i *ngIf="this.state.diff.DeltaSumAstraZeneca > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="this.state.diff.DeltaSumAstraZeneca === 0" class="fas fa-arrow-right"></i>
-          <p>{{ state.diff.DeltaSumAstraZeneca | number: "":"de-DE"}}</p>
+          <i
+            *ngIf="this.state.diff.DeltaSumVaccinations < 0"
+            class="fas fa-arrow-down"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumVaccinations > 0"
+            class="fas fa-arrow-up"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumVaccinations === 0"
+            class="fas fa-arrow-right"
+          ></i>
+          <p>{{ state.diff.DeltaSumVaccinations | number: "":"de-DE" }}</p>
         </div>
-        <p>{{ (state.SumAstraZeneca | number: "":"de-DE") }}</p>
+        <p>{{ state.SumVaccinations | number: "":"de-DE" }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-green">
-          <i *ngIf="this.state.diff.DeltaSumBioNTech < 0" class="fas fa-arrow-down"></i>
-          <i *ngIf="this.state.diff.DeltaSumBioNTech > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="this.state.diff.DeltaSumBioNTech === 0" class="fas fa-arrow-right"></i>
-          <p>{{ state.diff.DeltaSumBioNTech | number: "":"de-DE"}}</p>
+          <i
+            *ngIf="this.state.diff.DeltaSumAstraZeneca < 0"
+            class="fas fa-arrow-down"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumAstraZeneca > 0"
+            class="fas fa-arrow-up"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumAstraZeneca === 0"
+            class="fas fa-arrow-right"
+          ></i>
+          <p>{{ state.diff.DeltaSumAstraZeneca | number: "":"de-DE" }}</p>
         </div>
-        <p>{{ (state.SumBioNTech | number: "":"de-DE") }}</p>
+        <p>{{ state.SumAstraZeneca | number: "":"de-DE" }}</p>
       </div>
       <div class="cell">
-        <div class="cell__difference-to-previous-day accent-light-gray">
-          <i *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson < 0" class="fas fa-arrow-down"></i>
-          <i *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson === 0" class="fas fa-arrow-right"></i>
+        <div class="cell__difference-to-previous-day accent-purple">
+          <i
+            *ngIf="this.state.diff.DeltaSumBioNTech < 0"
+            class="fas fa-arrow-down"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumBioNTech > 0"
+            class="fas fa-arrow-up"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumBioNTech === 0"
+            class="fas fa-arrow-right"
+          ></i>
+          <p>{{ state.diff.DeltaSumBioNTech | number: "":"de-DE" }}</p>
+        </div>
+        <p>{{ state.SumBioNTech | number: "":"de-DE" }}</p>
+      </div>
+      <div class="cell">
+        <div class="cell__difference-to-previous-day accent-yellow">
+          <i
+            *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson < 0"
+            class="fas fa-arrow-down"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson > 0"
+            class="fas fa-arrow-up"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ state.diff.DeltaSumJohnsonAndJohnson | number: "":"de-DE" }}</p>
         </div>
-        <p>{{ (state.SumJohnsonAndJohnson | number: "":"de-DE") }}</p>
+        <p>{{ state.SumJohnsonAndJohnson | number: "":"de-DE" }}</p>
       </div>
       <div class="cell">
         <div class="cell__difference-to-previous-day accent-light-gray">
-          <i *ngIf="this.state.diff.DeltaSumModerna < 0" class="fas fa-arrow-down"></i>
-          <i *ngIf="this.state.diff.DeltaSumModerna > 0" class="fas fa-arrow-up"></i>
-          <i *ngIf="this.state.diff.DeltaSumModerna === 0" class="fas fa-arrow-right"></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumModerna < 0"
+            class="fas fa-arrow-down"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumModerna > 0"
+            class="fas fa-arrow-up"
+          ></i>
+          <i
+            *ngIf="this.state.diff.DeltaSumModerna === 0"
+            class="fas fa-arrow-right"
+          ></i>
           <p>{{ state.diff.DeltaSumModerna | number: "":"de-DE" }}</p>
         </div>
-        <p>{{ (state.SumModerna | number: "":"de-DE") }}</p>
+        <p>{{ state.SumModerna | number: "":"de-DE" }}</p>
       </div>
     </div>
   </div>

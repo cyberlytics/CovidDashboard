@@ -32,74 +32,74 @@ export class VaccinesService {
 
   public statesMap = [
     {
-    id: 0,
-    name: 'Deutschland'
+      id: 0,
+      name: 'Deutschland',
     },
     {
       id: 1,
-      name: 'Schleswig-Holstein'
+      name: 'Schleswig-Holstein',
     },
     {
       id: 2,
-      name: 'Hamburg'
+      name: 'Hamburg',
     },
     {
       id: 3,
-      name: 'Niedersachsen'
+      name: 'Niedersachsen',
     },
     {
       id: 4,
-      name: 'Bremen'
+      name: 'Bremen',
     },
     {
       id: 5,
-      name: 'Nordrhein-Westfalen'
+      name: 'Nordrhein-Westfalen',
     },
     {
       id: 6,
-      name: 'Hessen'
+      name: 'Hessen',
     },
     {
       id: 7,
-      name: 'Rheinland-Pfalz'
+      name: 'Rheinland-Pfalz',
     },
     {
       id: 8,
-      name: 'Baden-Württemberg'
+      name: 'Baden-Württemberg',
     },
     {
       id: 9,
-      name: 'Bayern'
+      name: 'Bayern',
     },
     {
       id: 10,
-      name: 'Saarland'
+      name: 'Saarland',
     },
     {
       id: 11,
-      name: 'Berlin'
+      name: 'Berlin',
     },
     {
       id: 12,
-      name: 'Brandenburg'
+      name: 'Brandenburg',
     },
     {
       id: 13,
-      name: 'Mecklenburg-Vorpommern'
+      name: 'Mecklenburg-Vorpommern',
     },
     {
       id: 14,
-      name: 'Sachsen'
+      name: 'Sachsen',
     },
     {
       id: 15,
-      name: 'Sachsen-Anhalt'
+      name: 'Sachsen-Anhalt',
     },
     {
       id: 16,
-      name: 'Thüringen'
-    }
-  ]
+      name: 'Thüringen',
+    },
+  ];
 
   constructor(private network: NetworkService) {
     this.selectedStateChanged = new Subject<number>();
@@ -253,7 +253,7 @@ export class VaccinesService {
   }
 
   public getStateNameFromId(id: number): string {
-    let temp = this.statesMap.find(item => item.id === id)?.name;
+    let temp = this.statesMap.find((item) => item.id === id)?.name;
     if (temp) {
       return temp;
     }

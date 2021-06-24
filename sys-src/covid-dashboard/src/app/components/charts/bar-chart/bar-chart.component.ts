@@ -18,12 +18,10 @@ export class BarChartComponent implements OnInit {
   // displayed array
   public displayedValues = [] as ScaleData[];
 
-  constructor(
-    private infections: InfectionsService
-  ) {
+  constructor(private infections: InfectionsService) {
     this.infections.newDataLoaded().subscribe(() => {
       this.changedInput(this.type, this.daynumber);
-    })
+    });
   }
 
   ngOnInit(): void {}
