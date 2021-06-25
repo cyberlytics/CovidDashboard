@@ -405,10 +405,10 @@ export class MapComponent implements AfterViewInit {
             const props =  e.target.feature.properties.propsNetwork;
             content = '<h1>' + props.County + '</h1>' +
             '<p>7 Tage-Inzidenz: ' + props.Incidence7.toFixed(2).replace('.', ',') + '</p>' +
-            '<p>Bestätige Fälle: ' + props.TotalCases + '</p>' +
-            '<p>Aktive Fälle: ' + props.ActiveCases + '</p>' +
-            '<p>Genesene: ' + props.Recovered + '</p>' +
-            '<p>Verstorbene: ' + props.Deaths + '</p>';
+            '<p>Bestätige Fälle: ' + props.TotalCases.toLocaleString('de-DE') + '</p>' +
+            '<p>Aktive Fälle: ' + props.ActiveCases.toLocaleString('de-DE') + '</p>' +
+            '<p>Genesene: ' + props.Recovered.toLocaleString('de-DE') + '</p>' +
+            '<p>Verstorbene: ' + props.Deaths.toLocaleString('de-DE') + '</p>';
           } else {
             const props =  e.target.feature.properties.propsNetwork;
             content = '<h1>' + e.target.feature.properties.name + '</h1>' +
