@@ -1,30 +1,38 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { InfectionChartType, ScaleData } from '../../../services/alltypes';
 import { NetworkService } from '../../../services/network/network.service';
 import { InfectionsService } from '../../../services/infections/infections.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-bar-chart',
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.scss'],
 })
-export class BarChartComponent implements OnInit {
+export class BarChartComponent implements OnInit, OnDestroy {
   // inputs for type, daynumber, colorscheme and loaded
   @Input() type: InfectionChartType = InfectionChartType.incidence7;
   @Input() daynumber: number = 7;
   @Input() loaded: boolean = false;
   @Input() colorScheme = {};
+  private notifer = new Subject();
 
   // displayed array
   public displayedValues = [] as ScaleData[];
 
   constructor(private infections: InfectionsService) {
-    this.infections.newDataLoaded().subscribe(() => {
+    this.infections.newDataLoaded().pipe(takeUntil(this.notifer)).subscribe(() => {
       this.changedInput(this.type, this.daynumber);
     });
   }
 
   ngOnInit(): void {}
+
+  ngOnDestroy() {
+    this.notifer.next();
+    this.notifer.complete();
+  }
 
   /**
    * is called every time the data form the parent component changes
