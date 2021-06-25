@@ -2,49 +2,23 @@ import express from "express";
 import bodyParser from "body-parser";
 import {
   dataPerCounty,
+  dataPerCountyDiff,
   getNames,
   RKIData,
   vaccinationPerState,
+  vaccinationPerStateDiff,
 } from "./typescript/rkiFetcher";
 import {
-  last2ElementsPerMap,
   lastElementPerMap,
   mapToObject,
   parse,
   stringify,
 } from "./typescript/util";
-import { testIfBothAreEquivalent } from "./typescript/test";
 
 const compression = require("compression");
 const cors = require("cors");
 
 const app = express();
-
-// Types
-type IncidencesDiff = {
-  DeltaDeaths: number;
-  DeltaIncidence7: number;
-  DeltaRecovered: number;
-  DeltaTotalCases: number;
-};
-
-type VaccinesDiff = {
-  DeltaSumVaccinations: number;
-  DeltaSumFirstVaccinations: number;
-  DeltaSumSecondVaccinations: number;
-  DeltaProportionFirstVaccinations: number;
-  DeltaProportionSecondVaccinations: number;
-  DeltaSumFirstBioNTech: number;
-  DeltaSumSecondBioNTech: number;
-  DeltaSumFirstAstraZeneca: number;
-  DeltaSumSecondAstraZeneca: number;
-  DeltaSumFirstModerna: number;
-  DeltaSumSecondModerna: number;
-  DeltaSumBioNTech: number;
-  DeltaSumAstraZeneca: number;
-  DeltaSumModerna: number;
-  DeltaSumJohnsonAndJohnson: number;
-};
 
 // CORS
 app.use(cors());
@@ -85,22 +59,10 @@ app.get("/api/incidences", (req, res, next) => {
 });
 
 app.get("/api/incidences/diff", (req, res, next) => {
-  dataPerCounty()
-    .then((d) => {
-      getNames().then((n) => {
-        const incidences = last2ElementsPerMap(d);
-        const data = new Map<number, IncidencesDiff>();
-        incidences.forEach(([penultimate, last], countyId) => {
-          data.set(countyId, {
-            DeltaDeaths: last.Deaths - penultimate.Deaths,
-            DeltaIncidence7: last.Incidence7 - penultimate.Incidence7,
-            DeltaRecovered: last.Recovered - penultimate.Recovered,
-            DeltaTotalCases: last.TotalCases - penultimate.TotalCases,
-          });
-        });
-        res.send(mapToObject(data));
-        next();
-      });
+  dataPerCountyDiff()
+    .then(diff => {
+      res.send(mapToObject(diff));
+      next();
     })
     .catch((err) => console.log("error:", err));
 });
@@ -134,44 +96,9 @@ app.get("/api/vaccines", (req, res, next) => {
 });
 
 app.get("/api/vaccines/diff", (req, res, next) => {
-  vaccinationPerState()
-    .then((v) => {
-      const vaccines = last2ElementsPerMap(v);
-      const data = new Map<number, VaccinesDiff>();
-      vaccines.forEach(([penultimate, last], stateId) => {
-        data.set(stateId, {
-          DeltaSumVaccinations:
-            last.SumVaccinations - penultimate.SumVaccinations,
-          DeltaSumFirstVaccinations:
-            last.SumFirstVaccinations - penultimate.SumFirstVaccinations,
-          DeltaSumSecondVaccinations:
-            last.SumSecondVaccinations - penultimate.SumSecondVaccinations,
-          DeltaProportionFirstVaccinations:
-            last.ProportionFirstVaccinations -
-            penultimate.ProportionFirstVaccinations,
-          DeltaProportionSecondVaccinations:
-            last.ProportionSecondVaccinations -
-            penultimate.ProportionSecondVaccinations,
-          DeltaSumFirstBioNTech:
-            last.SumFirstBioNTech - penultimate.SumFirstBioNTech,
-          DeltaSumSecondBioNTech:
-            last.SumSecondBioNTech - penultimate.SumSecondBioNTech,
-          DeltaSumFirstAstraZeneca:
-            last.SumFirstAstraZeneca - penultimate.SumFirstAstraZeneca,
-          DeltaSumSecondAstraZeneca:
-            last.SumSecondAstraZeneca - penultimate.SumSecondAstraZeneca,
-          DeltaSumFirstModerna:
-            last.SumFirstModerna - penultimate.SumFirstModerna,
-          DeltaSumSecondModerna:
-            last.SumSecondModerna - penultimate.SumSecondModerna,
-          DeltaSumBioNTech: last.SumBioNTech - penultimate.SumBioNTech,
-          DeltaSumAstraZeneca: last.SumAstraZeneca - penultimate.SumAstraZeneca,
-          DeltaSumModerna: last.SumModerna - penultimate.SumModerna,
-          DeltaSumJohnsonAndJohnson:
-            last.SumJohnsonAndJohnson - penultimate.SumJohnsonAndJohnson,
-        });
-      });
-      res.send(mapToObject(data));
+  vaccinationPerStateDiff()
+    .then(diff => {
+      res.send(mapToObject(diff));
       next();
     })
     .catch((err) => console.log("error:", err));
@@ -185,6 +112,22 @@ app.get("/api/summary", (req, res, next) => {
           res.send({
             incidence: d.get(0)!.get(Math.max(...d.get(0)!.keys())),
             vaccines: v.get(0)!.get(Math.max(...v.get(0)!.keys())),
+          });
+          next();
+        })
+        .catch((err) => console.log("error:", err));
+    })
+    .catch((err) => console.log("error:", err));
+});
+
+app.get("/api/summary/diff", (req, res, next) => {
+  dataPerCountyDiff()
+    .then(iDiff => {
+      vaccinationPerStateDiff()
+        .then(vDiff => {
+          res.send({
+            incidence: iDiff.get(0)!,
+            vaccines: vDiff.get(0)!,
           });
           next();
         })
