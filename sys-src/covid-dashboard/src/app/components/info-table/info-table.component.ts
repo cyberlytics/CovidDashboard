@@ -107,6 +107,10 @@ export class InfoTableComponent implements OnInit {
     }
   }
 
+  /**
+   * is called for searching the counties
+   * @param toggleFavorites search favourite states or all
+   */
   public change(toggleFavorites: boolean = false): void {
     if (toggleFavorites) {
       this.selectedFavorites = !this.selectedFavorites;
@@ -132,6 +136,9 @@ export class InfoTableComponent implements OnInit {
     });
   }
 
+  /**
+   * is called for searching all states
+   */
   public changeStates(): void {
     this.searchStates = this.allStates.filter((s) => {
       // @ts-ignore
@@ -146,20 +153,36 @@ export class InfoTableComponent implements OnInit {
     });
   }
 
+  /**
+   * sorts the data by the key
+   * @param key for sorting
+   */
   public sort(key: string) {
     this.key = key;
     this.reverse = !this.reverse;
   }
 
+  /**
+   * sorts all states
+   * @param key for sorting
+   */
   public sortStates(key: string) {
     this.key = key;
     this.reverse = !this.reverse;
   }
 
+  /**
+   * sets selected county for the other components
+   * @param county selected county
+   */
   public selectCounty(county: CountyCombined) {
     this.infections.setSelectedCountyId(county.CountyId);
   }
 
+  /**
+   * sets selected state for the other components
+   * @param state selected state
+   */
   public selectState(state: VaccineCombined) {
     this.vaccines.setSelectedStateId(state.StateId);
   }

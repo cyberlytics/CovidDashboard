@@ -22,33 +22,23 @@ export class VaccineProgressBarComponent implements OnInit {
     private network: NetworkService,
     private vaccines: VaccinesService
     ) {
-    this.vaccines.getSelectedStateInfo().pipe(takeUntil(this.notifer)).subscribe((id) => {
-      this.loadData(id);
-      console.log('hier mit id', id)
-    });
 
+    // get notifed when new data has loaded
     this.vaccines.newDataLoaded().subscribe(() => {
-      console.log('laoasdf')
-      console.log(this.vaccines.selectedStateId);
+      // get the state name and the two values for the bar
       this.selectedState = this.vaccines.getStateNameFromId(this.vaccines.selectedStateId);
       this.progressFirstVaccinated = this.vaccines.proportionFirstVaccinations[this.vaccines.proportionFirstVaccinations.length - 1].value;
       this.progressFullyVaccinated = this.vaccines.proportionSecondVaccinations[this.vaccines.proportionSecondVaccinations.length - 1].value;
-
-
     })
   }
 
   ngOnInit(): void {
-    this.loadData(0);
+    // load summary data from the backend
+    this.network.getSummaryGermany().subscribe((res) => {
+      this.progressFirstVaccinated = res.vaccines.ProportionFirstVaccinations;
+      this.progressFullyVaccinated = res.vaccines.ProportionSecondVaccinations;
+      this.lastUpdated = res.vaccines.Date;
+    });
   }
 
-  private loadData(id: number) {
-    if (id === 0) {
-      this.network.getSummaryGermany().subscribe((res) => {
-        this.progressFirstVaccinated = res.vaccines.ProportionFirstVaccinations;
-        this.progressFullyVaccinated = res.vaccines.ProportionSecondVaccinations;
-        this.lastUpdated = res.vaccines.Date;
-      });
-    }
-  }
 }
