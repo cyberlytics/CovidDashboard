@@ -28,6 +28,7 @@ export class MapComponent implements AfterViewInit {
   private layer = {} as L.Layer;
   public showInfections: boolean = true;
   public showFirstVaccine: boolean = true;
+  public tolltippopup: any;
 
   constructor(
     private network: NetworkService,
@@ -398,6 +399,35 @@ export class MapComponent implements AfterViewInit {
             );
           }
         });
+        layer.on('mouseover', (e: any) => {
+          let content = '';
+          if (this.showInfections) {
+            const props =  e.target.feature.properties.propsNetwork;
+            content = '<h1>' + props.County + '</h1>' +
+            '<p>7 Tage-Inzidenz: ' + props.Incidence7.toFixed(2).replace('.', ',') + '</p>' +
+            '<p>Bestätige Fälle: ' + props.TotalCases.toLocaleString('de-DE') + '</p>' +
+            '<p>Aktive Fälle: ' + props.ActiveCases.toLocaleString('de-DE') + '</p>' +
+            '<p>Genesene: ' + props.Recovered.toLocaleString('de-DE') + '</p>' +
+            '<p>Verstorbene: ' + props.Deaths.toLocaleString('de-DE') + '</p>';
+          } else {
+            const props =  e.target.feature.properties.propsNetwork;
+            content = '<h1>' + e.target.feature.properties.name + '</h1>' +
+            '<p>erste Impfung: ' + props.ProportionFirstVaccinations.toString().replace('.', ',')+ '%</p>' +
+            '<p>zweite Impfung: ' + props.ProportionSecondVaccinations.toString().replace('.', ',')+ '%</p>' +
+            '<p>Impfdosen AstraZeneca: ' + props.SumAstraZeneca.toLocaleString('de-DE') + '</p>' +
+            '<p>Impfdosen BioNTech/Pfizer: ' + props.SumBioNTech.toLocaleString('de-DE') + '</p>' +
+            '<p>Impfdosen Johnson & Johnson: ' + props.SumJohnsonAndJohnson.toLocaleString('de-DE') + '</p>' +
+            '<p>Impfdosen Moderna: ' + props.SumModerna.toLocaleString('de-DE') + '</p>' +
+            '<p>Anzahl Impfdosen : ' + props.SumVaccinations.toLocaleString('de-DE') + '</p>';
+          }
+          const temp = L.latLng(e.latlng.lat, e.latlng.lng)
+          this.tolltippopup = L.popup({offset: L.point(0, 0), className: 'poppup'})
+          .setContent(content)
+          .setLatLng(temp).openOn(this.map);
+        });
+        layer.on('mouseout', (e) => {
+          this.map.closePopup(this.tolltippopup)
+        })
       },
     });
     this.layer.addTo(this.map);

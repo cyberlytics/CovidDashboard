@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { AreaData, InfectionChartType } from '../../services/alltypes';
 import { InfectionsService } from '../../services/infections/infections.service';
 
@@ -7,7 +9,7 @@ import { InfectionsService } from '../../services/infections/infections.service'
   templateUrl: './chart-overview-infections.component.html',
   styleUrls: ['./chart-overview-infections.component.scss'],
 })
-export class ChartOverviewInfectionsComponent implements OnInit {
+export class ChartOverviewInfectionsComponent implements OnInit, OnDestroy {
   public type: InfectionChartType = InfectionChartType.incidence7;
   public timeSpan: [string, number][] = [
     ['1 Woche', 7],
@@ -25,6 +27,7 @@ export class ChartOverviewInfectionsComponent implements OnInit {
   public showRecDeadTotal: boolean = false;
   public colorScheme = {};
   public countyName: string = 'Deutschland';
+  private notifer = new Subject();
 
   readonly chartType = InfectionChartType;
   readonly incidence7ColorScheme = {
@@ -56,15 +59,19 @@ export class ChartOverviewInfectionsComponent implements OnInit {
     diff = Math.round(diff / (1000 * 3600 * 24));
     this.timeSpan[this.timeSpan.length - 1][1] = diff;
 
-    this.infections.getSelectedCountyInfo().subscribe((id) => {
+    this.infections.getSelectedCountyInfo().pipe(takeUntil(this.notifer)).subscribe((id) => {
       this.loadData(id);
     });
   }
 
   ngOnInit(): void {
     this.loadData(0);
-
     this.colorScheme = this.incidence7ColorScheme;
+  }
+
+  ngOnDestroy() {
+    this.notifer.next();
+    this.notifer.complete();
   }
 
   /**
