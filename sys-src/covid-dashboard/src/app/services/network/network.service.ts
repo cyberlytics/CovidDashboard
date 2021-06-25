@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   County,
+  CountyDiff,
   CountyIDandName,
   GermanyData,
+  GermanyDataDiff,
   Vaccine,
   VaccineDiff,
 } from '../alltypes';
@@ -14,7 +16,7 @@ import { Counties, Vaccines } from '../counties';
   providedIn: 'root',
 })
 export class NetworkService {
-  private url: string = 'http://localhost:3000/api';
+  private url: string = 'https://covidash.de/api';
 
   constructor(private http: HttpClient) {}
 
@@ -77,6 +79,10 @@ export class NetworkService {
   }
 
   public getCountyDiff() {
-    return this.http.get<Array<any>>(this.url + '/incidences/diff');
+    return this.http.get<CountyDiff[]>(this.url + '/incidences/diff');
+  }
+
+  public getSummaryDiff() {
+    return this.http.get<GermanyDataDiff>(this.url + '/summary/diff');
   }
 }
