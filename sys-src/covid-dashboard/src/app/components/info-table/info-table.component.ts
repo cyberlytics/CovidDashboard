@@ -59,6 +59,7 @@ export class InfoTableComponent implements OnInit {
               // save the data to both arrays
               this.allCountys = tempData;
               this.searchCountys = tempData;
+              console.log('allcounty', this.allCountys)
             },
             (err) => {
               console.log('error get County Diff', err);

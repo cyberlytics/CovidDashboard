@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { AreaData, ScaleData, VaccineChartType } from '../../services/alltypes';
 import { VaccinesService } from '../../services/vaccines/vaccines.service';
 
@@ -7,7 +9,7 @@ import { VaccinesService } from '../../services/vaccines/vaccines.service';
   templateUrl: './chart-overview-vaccination.component.html',
   styleUrls: ['./chart-overview-vaccination.component.scss'],
 })
-export class ChartOverviewVaccinationComponent implements OnInit {
+export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
   public type: VaccineChartType = VaccineChartType.percentVaccines;
   public timeSpan: [string, number][] = [
     ['1 Woche', 7],
@@ -24,6 +26,7 @@ export class ChartOverviewVaccinationComponent implements OnInit {
   public showPercentVaccines: boolean = true;
   public colorScheme = {};
   public stateName: string = 'Deutschland';
+  private notifer = new Subject();
 
   readonly chartType = VaccineChartType;
   readonly percentVaccinesColorScheme = {
@@ -48,13 +51,19 @@ export class ChartOverviewVaccinationComponent implements OnInit {
     diff = Math.round(diff / (1000 * 3600 * 24));
     this.timeSpan[this.timeSpan.length - 1][1] = diff;
 
-    this.vaccine.getSelectedStateInfo().subscribe((id) => {
+    this.vaccine.getSelectedStateInfo().pipe(takeUntil(this.notifer)) .subscribe((id) => {
       this.loadData(id);
     });
+
   }
 
   ngOnInit(): void {
     this.colorScheme = this.percentVaccinesColorScheme;
+  }
+
+  ngOnDestroy() {
+    this.notifer.next();
+    this.notifer.complete();
   }
 
   /**
