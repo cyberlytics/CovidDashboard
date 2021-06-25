@@ -140,3 +140,13 @@ export interface CountyIDandName {
   0: number;
   1: string;
 }
+
+export interface GermanyDataDiff {
+  incidence: CountyDiffDetails;
+  vaccines: VaccineDiffDetails;
+}
+
+export type CountyDiff = {
+  0: number;
+  1: CountyDiffDetails;
+};

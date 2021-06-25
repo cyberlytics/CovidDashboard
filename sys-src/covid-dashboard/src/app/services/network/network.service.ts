@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   County,
+  CountyDiff,
   CountyIDandName,
   GermanyData,
+  GermanyDataDiff,
   Vaccine,
   VaccineDiff,
 } from '../alltypes';
@@ -77,6 +79,10 @@ export class NetworkService {
   }
 
   public getCountyDiff() {
-    return this.http.get<Array<any>>(this.url + '/incidences/diff');
+    return this.http.get<CountyDiff[]>(this.url + '/incidences/diff');
+  }
+
+  public getSummaryDiff() {
+    return this.http.get<GermanyDataDiff>(this.url + '/summary/diff');
   }
 }
