@@ -5,6 +5,7 @@ import {
   addDays,
   daysSince,
   getMidnightUTC,
+  last2ElementsPerMap,
   lastDays,
   parse,
   parseRKIDate,
@@ -75,6 +76,31 @@ export type RKIVaccinationData = {
   SumAstraZeneca: number;
   SumModerna: number;
   SumJohnsonAndJohnson: number;
+};
+
+export type IncidencesDiff = {
+  DeltaDeaths: number;
+  DeltaIncidence7: number;
+  DeltaRecovered: number;
+  DeltaTotalCases: number;
+};
+
+export type VaccinesDiff = {
+  DeltaSumVaccinations: number;
+  DeltaSumFirstVaccinations: number;
+  DeltaSumSecondVaccinations: number;
+  DeltaProportionFirstVaccinations: number;
+  DeltaProportionSecondVaccinations: number;
+  DeltaSumFirstBioNTech: number;
+  DeltaSumSecondBioNTech: number;
+  DeltaSumFirstAstraZeneca: number;
+  DeltaSumSecondAstraZeneca: number;
+  DeltaSumFirstModerna: number;
+  DeltaSumSecondModerna: number;
+  DeltaSumBioNTech: number;
+  DeltaSumAstraZeneca: number;
+  DeltaSumModerna: number;
+  DeltaSumJohnsonAndJohnson: number;
 };
 
 function convertAgegroup(rkiAgeGroup: string): RKIRawData["Agegroup"] {
@@ -651,6 +677,99 @@ export function vaccinationPerState(): Promise<
                                             });*/
             return map;
           }
+        });
+      },
+      (t) => {
+        return new Promise((resolve, reject) => {
+          resolve(parse(t));
+        });
+      }
+    )
+      .then(resolve)
+      .catch(reject);
+  });
+}
+
+export function dataPerCountyDiff(): Promise<Map<number, IncidencesDiff>> {
+  return new Promise((resolve, reject) => {
+    getFromCache<Map<number, IncidencesDiff>>(
+      "perCounty.diff.json",
+      () => {
+        return new Promise((resolve, reject) => {
+          dataPerCounty()
+            .then((d) => {
+              const incidences = last2ElementsPerMap(d);
+              const data = new Map<number, IncidencesDiff>();
+              incidences.forEach(([penultimate, last], countyId) => {
+                data.set(countyId, {
+                  DeltaDeaths: last.Deaths - penultimate.Deaths,
+                  DeltaIncidence7: last.Incidence7 - penultimate.Incidence7,
+                  DeltaRecovered: last.Recovered - penultimate.Recovered,
+                  DeltaTotalCases: last.TotalCases - penultimate.TotalCases,
+                });
+              });
+              resolve(stringify(data));
+            })
+            .catch(reject);
+        });
+      },
+      (t) => {
+        return new Promise((resolve, reject) => {
+          resolve(parse(t));
+        });
+      }
+    )
+      .then(resolve)
+      .catch(reject);
+  });
+}
+
+export function vaccinationPerStateDiff(): Promise<Map<number, VaccinesDiff>> {
+  return new Promise((resolve, reject) => {
+    getFromCache<Map<number, VaccinesDiff>>(
+      "vaccination.diff.json",
+      () => {
+        return new Promise((resolve, reject) => {
+          vaccinationPerState()
+            .then((v) => {
+              const vaccines = last2ElementsPerMap(v);
+              const data = new Map<number, VaccinesDiff>();
+              vaccines.forEach(([penultimate, last], stateId) => {
+                data.set(stateId, {
+                  DeltaSumVaccinations:
+                    last.SumVaccinations - penultimate.SumVaccinations,
+                  DeltaSumFirstVaccinations:
+                    last.SumFirstVaccinations - penultimate.SumFirstVaccinations,
+                  DeltaSumSecondVaccinations:
+                    last.SumSecondVaccinations - penultimate.SumSecondVaccinations,
+                  DeltaProportionFirstVaccinations:
+                    last.ProportionFirstVaccinations -
+                    penultimate.ProportionFirstVaccinations,
+                  DeltaProportionSecondVaccinations:
+                    last.ProportionSecondVaccinations -
+                    penultimate.ProportionSecondVaccinations,
+                  DeltaSumFirstBioNTech:
+                    last.SumFirstBioNTech - penultimate.SumFirstBioNTech,
+                  DeltaSumSecondBioNTech:
+                    last.SumSecondBioNTech - penultimate.SumSecondBioNTech,
+                  DeltaSumFirstAstraZeneca:
+                    last.SumFirstAstraZeneca - penultimate.SumFirstAstraZeneca,
+                  DeltaSumSecondAstraZeneca:
+                    last.SumSecondAstraZeneca - penultimate.SumSecondAstraZeneca,
+                  DeltaSumFirstModerna:
+                    last.SumFirstModerna - penultimate.SumFirstModerna,
+                  DeltaSumSecondModerna:
+                    last.SumSecondModerna - penultimate.SumSecondModerna,
+                  DeltaSumBioNTech: last.SumBioNTech - penultimate.SumBioNTech,
+                  DeltaSumAstraZeneca: last.SumAstraZeneca - penultimate.SumAstraZeneca,
+                  DeltaSumModerna: last.SumModerna - penultimate.SumModerna,
+                  DeltaSumJohnsonAndJohnson:
+                    last.SumJohnsonAndJohnson - penultimate.SumJohnsonAndJohnson,
+                });
+              });
+              resolve(stringify(data));
+            })
+            .catch(reject);
         });
       },
       (t) => {
