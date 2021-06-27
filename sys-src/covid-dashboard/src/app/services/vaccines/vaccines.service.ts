@@ -113,6 +113,18 @@ export class VaccinesService {
    */
   public loadData(id: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
+      this.sumAstraZeneca = []
+      this.sumBioNTech = []
+      this.sumJohnsonAndJohnson = []
+      this.sumModerna = []
+      this.sumFirstAstraZeneca = []
+      this.sumFirstBioNTech = []
+      this.sumFirstModerna = []
+
+      this.sumFirstVaccinations = []
+      this.sumSecondVaccinations = []
+      this.proportionFirstVaccinations = []
+      this.proportionSecondVaccinations = []
       this.network.getVaccineSingleState(id).subscribe(
         (res) => {
           for (const element of res) {
