@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AreaData } from '../../../services/alltypes';
 
 @Component({
@@ -6,7 +6,7 @@ import { AreaData } from '../../../services/alltypes';
   templateUrl: './area-chart.component.html',
   styleUrls: ['./area-chart.component.scss'],
 })
-export class AreaChartComponent implements OnInit {
+export class AreaChartComponent implements OnInit, OnChanges {
   // inputs for data, daynumber and colorscheme
   @Input() data: AreaData[] = [];
   @Input() dayNumber: number = 7;

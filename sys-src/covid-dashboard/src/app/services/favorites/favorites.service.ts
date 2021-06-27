@@ -16,29 +16,29 @@ export class FavoritesService {
     }
   }
 
-  public toggleFavorite(id: number) {
+  public toggleFavorite(id: number): void {
     this.isFavorite(id) ? this.removeFavorite(id) : this.addFavorite(id);
   }
 
-  public replaceFavorites(ids: Array<number>) {
+  public replaceFavorites(ids: Array<number>): void {
     this.cleanUpArray(ids).forEach((id) => this.addFavorite(id));
     this.syncLocalStorage();
   }
 
-  public generateShareLink() {
+  public generateShareLink(): void {
     let shareLink = 'https://covidash.de/share/';
     this.favorites.forEach((id, index) => {
-      shareLink += id + (index == this.favorites.length - 1 ? '' : ',');
+      shareLink += id + (index === this.favorites.length - 1 ? '' : ',');
     });
     this.clipboardService.copy(shareLink);
   }
 
-  private addFavorite(id: number) {
+  private addFavorite(id: number): void {
     this.favorites.push(id);
     this.syncLocalStorage();
   }
 
-  private removeFavorite(id: number) {
+  private removeFavorite(id: number): void {
     const index: number = this.favorites.indexOf(id);
     this.favorites.splice(index, 1);
     this.syncLocalStorage();
@@ -48,7 +48,7 @@ export class FavoritesService {
     return this.favorites.includes(id);
   }
 
-  private syncLocalStorage() {
+  private syncLocalStorage(): void {
     localStorage.setItem(this.key, JSON.stringify(this.cleanUpArray()));
   }
 

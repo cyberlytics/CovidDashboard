@@ -61,7 +61,7 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
     this.colorScheme = this.percentVaccinesColorScheme;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.notifer.next();
     this.notifer.complete();
   }
@@ -91,7 +91,11 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
     }
   }
 
-  private loadData(id: number) {
+  /**
+   * loads the data for a specific state
+   * @param id of the state
+   */
+  private loadData(id: number): void {
     console.log(this.type)
     this.vaccine.loadData(id).then(() => {
       if (this.type === VaccineChartType.firstAndSecond) {
