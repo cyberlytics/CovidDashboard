@@ -91,6 +91,7 @@ export class ChartOverviewInfectionsComponent implements OnInit, OnDestroy {
     if (typ === 'incidence7') {
       this.type = InfectionChartType.incidence7;
       this.colorScheme = this.incidence7ColorScheme;
+      this.dayNumber = this.timeSpan[0][1];
     } else if (typ === 'activeCases') {
       this.type = InfectionChartType.activeCases;
       this.colorScheme = this.activeCasesColorScheme;
@@ -106,6 +107,7 @@ export class ChartOverviewInfectionsComponent implements OnInit, OnDestroy {
     } else if (typ === 'recDeadTotal') {
       this.showRecDeadTotal = true;
       this.colorScheme = this.recDeaTotalCasesColorScheme;
+      this.dayNumber = this.timeSpan[this.timeSpan.length - 1][1];
     }
   }
 
