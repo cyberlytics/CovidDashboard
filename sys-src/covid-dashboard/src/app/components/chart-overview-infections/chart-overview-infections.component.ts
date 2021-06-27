@@ -69,7 +69,7 @@ export class ChartOverviewInfectionsComponent implements OnInit, OnDestroy {
     this.colorScheme = this.incidence7ColorScheme;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.notifer.next();
     this.notifer.complete();
   }
@@ -111,7 +111,11 @@ export class ChartOverviewInfectionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private loadData(id: number) {
+  /**
+   * loads the data for a specific county
+   * @param id of the county
+   */
+  private loadData(id: number): void {
     this.infections.loadData(id).then(
       (bool) => {
         this.loaded = bool;

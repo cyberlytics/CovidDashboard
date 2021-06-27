@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import {
   County,
@@ -18,7 +18,7 @@ import { VaccinesService } from 'src/app/services/vaccines/vaccines.service';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements OnInit, AfterViewInit {
   // data
   private countyJson = {} as GeoData;
   private vaccineJson = {} as GeoDataVaccine;
@@ -412,22 +412,22 @@ export class MapComponent implements AfterViewInit {
           } else {
             const props =  e.target.feature.properties.propsNetwork;
             content = '<h1>' + e.target.feature.properties.name + '</h1>' +
-            '<p>erste Impfung: ' + props.ProportionFirstVaccinations.toString().replace('.', ',')+ '%</p>' +
-            '<p>zweite Impfung: ' + props.ProportionSecondVaccinations.toString().replace('.', ',')+ '%</p>' +
+            '<p>erste Impfung: ' + props.ProportionFirstVaccinations.toString().replace('.', ',') + '%</p>' +
+            '<p>zweite Impfung: ' + props.ProportionSecondVaccinations.toString().replace('.', ',') + '%</p>' +
             '<p>Impfdosen AstraZeneca: ' + props.SumAstraZeneca.toLocaleString('de-DE') + '</p>' +
             '<p>Impfdosen BioNTech/Pfizer: ' + props.SumBioNTech.toLocaleString('de-DE') + '</p>' +
             '<p>Impfdosen Johnson & Johnson: ' + props.SumJohnsonAndJohnson.toLocaleString('de-DE') + '</p>' +
             '<p>Impfdosen Moderna: ' + props.SumModerna.toLocaleString('de-DE') + '</p>' +
             '<p>Anzahl Impfdosen : ' + props.SumVaccinations.toLocaleString('de-DE') + '</p>';
           }
-          const temp = L.latLng(e.latlng.lat, e.latlng.lng)
+          const temp = L.latLng(e.latlng.lat, e.latlng.lng);
           this.tolltippopup = L.popup({offset: L.point(0, 0), className: 'poppup'})
           .setContent(content)
           .setLatLng(temp).openOn(this.map);
         });
         layer.on('mouseout', (e) => {
-          this.map.closePopup(this.tolltippopup)
-        })
+          this.map.closePopup(this.tolltippopup);
+        });
       },
     });
     this.layer.addTo(this.map);
