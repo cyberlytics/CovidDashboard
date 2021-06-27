@@ -78,6 +78,7 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
       this.displayedAreaData = this.vaccine.firstSecondVaccinationSum;
       this.type = VaccineChartType.firstAndSecond;
       this.colorScheme = this.firstAndSecondColorScheme;
+      this.dayNumber = this.timeSpan[this.timeSpan.length -1][1];
     } else if (typ === 'percentVaccines') {
       this.showPercentVaccines = true;
       this.type = VaccineChartType.percentVaccines;
@@ -86,6 +87,7 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
       this.displayedAreaData = this.vaccine.allVaccinesByManTime;
       this.type = VaccineChartType.timeVaccines;
       this.colorScheme = this.timeVaccinesColorScheme;
+      this.dayNumber = this.timeSpan[4][1];
     }
   }
 
