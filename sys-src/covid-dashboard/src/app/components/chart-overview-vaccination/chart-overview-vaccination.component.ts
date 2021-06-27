@@ -90,8 +90,13 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
   }
 
   private loadData(id: number) {
+    console.log(this.type)
     this.vaccine.loadData(id).then(() => {
-      this.displayedAreaData = this.vaccine.firstSecondVaccinationSum;
+      if (this.type === VaccineChartType.firstAndSecond) {
+        this.displayedAreaData = this.vaccine.firstSecondVaccinationSum;
+      } else if (this.type === VaccineChartType.timeVaccines) {
+        this.displayedAreaData = this.vaccine.allVaccinesByManTime;
+      }
       this.allVaccinesByManufacturer = this.vaccine.allVaccinesByManufacturer;
       this.stateName = this.vaccine.getStateNameFromId(
         this.vaccine.selectedStateId
