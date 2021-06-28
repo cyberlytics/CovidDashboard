@@ -11,6 +11,7 @@ import {
 } from '../alltypes';
 import { map } from 'rxjs/operators';
 import { Counties, Vaccines } from '../counties';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class NetworkService {
    * gets the latest infection data for all countyíes
    * @returns county array
    */
-  public getAllCountyIncidences() {
+  public getAllCountyIncidences(): Observable<County[]> {
     return this.http.get<County[]>(this.url + '/incidences/');
   }
 
@@ -43,7 +44,7 @@ export class NetworkService {
    * get infection overview over the counties
    * @returns county array
    */
-  public getCountyOverview() {
+  public getCountyOverview(): Observable<CountyIDandName[]> {
     return this.http.get<CountyIDandName[]>(this.url + '/counties');
   }
 
@@ -60,29 +61,41 @@ export class NetworkService {
 
   /**
    * get the latest vaccine data for all states
-   * @returns
+   * @returns vaccine array
    */
-  public getVaccineAllStates() {
+  public getVaccineAllStates(): Observable<Vaccine[]> {
     return this.http.get<Vaccine[]>(this.url + '/vaccines');
   }
 
   /**
    * gets a summary of germany with the latest vaccine and infection data
-   * @returns
+   * @returns germanydata
    */
-  public getSummaryGermany() {
+  public getSummaryGermany(): Observable<GermanyData> {
     return this.http.get<GermanyData>(this.url + '/summary');
   }
 
-  public getStatesWithDiff() {
+  /**
+   * get alle state diffs to day before
+   * @returns vacinediff array
+   */
+  public getStatesWithDiff(): Observable<VaccineDiff[]> {
     return this.http.get<VaccineDiff[]>(this.url + '/vaccines/diff');
   }
 
-  public getCountyDiff() {
+  /**
+   * get all county diffs to day before
+   * @returns countydiff array
+   */
+  public getCountyDiff(): Observable<CountyDiff[]> {
     return this.http.get<CountyDiff[]>(this.url + '/incidences/diff');
   }
 
-  public getSummaryDiff() {
+  /**
+   * get germany diff to day before
+   * @returns germanydatadiff
+   */
+  public getSummaryDiff(): Observable<GermanyDataDiff> {
     return this.http.get<GermanyDataDiff>(this.url + '/summary/diff');
   }
 }

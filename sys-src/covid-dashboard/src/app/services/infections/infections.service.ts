@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AreaData, CountyIDandName, ScaleData } from '../alltypes';
 import { NetworkService } from '../network/network.service';
 
@@ -94,25 +94,45 @@ export class InfectionsService {
     });
   }
 
-  public setSelectedCountyId(id: number) {
+  /**
+   * sets the selected county id
+   * @param id id of the county
+   */
+  public setSelectedCountyId(id: number): void {
     this.selectedCountyId = id;
     this.selectedCountyChanged.next(id);
   }
 
-  public getSelectedCountyInfo() {
+  /**
+   * notifies if the selected county has changed
+   * @returns id of the county
+   */
+  public getSelectedCountyInfo(): Observable<number> {
     return this.selectedCountyChanged.asObservable();
   }
 
-  public newDataLoaded() {
+  /**
+   * notifies when new data loaded
+   * @returns void
+   */
+  public newDataLoaded(): Observable<void> {
     return this.newDataLoadedSubject.asObservable();
   }
 
-  private saveCountyIDandName() {
+  /**
+   * saves all state ids and names in list
+   */
+  private saveCountyIDandName(): void {
     this.network.getCountyOverview().subscribe((res) => {
       this.countyIDandNameList = res;
     });
   }
 
+  /**
+   * get the name for a specific state
+   * @param id id of the state
+   * @returns name of the state
+   */
   public getCountyNameFromId(id: number): string {
     let temp;
     if (id === 0) {

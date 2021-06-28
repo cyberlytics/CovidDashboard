@@ -25,7 +25,7 @@ export class NavBarComponent implements OnInit {
     }
   }
 
-  generateShareLink() {
+  generateShareLink(): void {
     this.favoriteService.generateShareLink();
     this.shareButtonText = 'Kopiert';
     setTimeout(() => {

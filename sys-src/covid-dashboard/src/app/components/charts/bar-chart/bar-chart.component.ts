@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { InfectionChartType, ScaleData } from '../../../services/alltypes';
 import { NetworkService } from '../../../services/network/network.service';
 import { InfectionsService } from '../../../services/infections/infections.service';
@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.scss'],
 })
-export class BarChartComponent implements OnInit, OnDestroy {
+export class BarChartComponent implements OnInit, OnDestroy, OnChanges {
   // inputs for type, daynumber, colorscheme and loaded
   @Input() type: InfectionChartType = InfectionChartType.incidence7;
   @Input() daynumber: number = 7;
@@ -29,7 +29,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.notifer.next();
     this.notifer.complete();
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AreaData, ScaleData } from '../alltypes';
 import { NetworkService } from '../network/network.service';
 
@@ -113,6 +113,18 @@ export class VaccinesService {
    */
   public loadData(id: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
+      this.sumAstraZeneca = [];
+      this.sumBioNTech = [];
+      this.sumJohnsonAndJohnson = [];
+      this.sumModerna = [];
+      this.sumFirstAstraZeneca = [];
+      this.sumFirstBioNTech = [];
+      this.sumFirstModerna = [];
+
+      this.sumFirstVaccinations = [];
+      this.sumSecondVaccinations = [];
+      this.proportionFirstVaccinations = [];
+      this.proportionSecondVaccinations = [];
       this.network.getVaccineSingleState(id).subscribe(
         (res) => {
           for (const element of res) {
@@ -180,7 +192,7 @@ export class VaccinesService {
   /**
    * bundles the first and second vaccination array
    */
-  private bundleFirstSecondVaccinationSum() {
+  private bundleFirstSecondVaccinationSum(): void {
     this.firstSecondVaccinationSum = [];
     this.firstSecondVaccinationSum.push({
       name: 'Erstimpfung',
@@ -195,7 +207,7 @@ export class VaccinesService {
   /**
    * bundles the vaccines from the different manufactors for the last day
    */
-  private bundleAllVaccinesPercent() {
+  private bundleAllVaccinesPercent(): void {
     this.allVaccinesByManufacturer = [];
     this.allVaccinesByManufacturer.push({
       name: 'AstraZeneca',
@@ -219,7 +231,7 @@ export class VaccinesService {
   /**
    * bundles all manufactors by time
    */
-  private bundleAllVaccinesTime() {
+  private bundleAllVaccinesTime(): void {
     this.allVaccinesByManTime = [];
     this.allVaccinesByManTime.push({
       name: 'AstraZeneca',
@@ -239,21 +251,38 @@ export class VaccinesService {
     });
   }
 
-  public setSelectedStateId(id: number) {
+  /**
+   * set selected state id
+   * @param id of the state
+   */
+  public setSelectedStateId(id: number): void {
     this.selectedStateId = id;
     this.selectedStateChanged.next(id);
   }
 
-  public getSelectedStateInfo() {
+  /**
+   * get notified if selected state changed
+   * @returns id of the state
+   */
+  public getSelectedStateInfo(): Observable<number> {
     return this.selectedStateChanged.asObservable();
   }
 
-  public newDataLoaded() {
+  /**
+   * get notified when new data loaded
+   * @returns void
+   */
+  public newDataLoaded(): Observable<void> {
     return this.newDataLoadedSubject.asObservable();
   }
 
+  /**
+   * get the name of a specific state
+   * @param id of the state
+   * @returns name of the state
+   */
   public getStateNameFromId(id: number): string {
-    let temp = this.statesMap.find((item) => item.id === id)?.name;
+    const temp = this.statesMap.find((item) => item.id === id)?.name;
     if (temp) {
       return temp;
     }

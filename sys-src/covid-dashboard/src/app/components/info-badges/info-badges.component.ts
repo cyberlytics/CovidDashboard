@@ -21,7 +21,7 @@ export class InfoBadgesComponent implements OnInit {
       this.network.getSummaryDiff().subscribe((anwser) => {
         console.log(anwser);
         this.germanyDataDiff = anwser;
-      })
+      });
     });
 
     this.showInfectionData = this.router.url.includes('infections');

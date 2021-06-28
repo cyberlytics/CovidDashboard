@@ -28,8 +28,9 @@ export class VaccineProgressBarComponent implements OnInit {
       // get the state name and the two values for the bar
       this.selectedState = this.vaccines.getStateNameFromId(this.vaccines.selectedStateId);
       this.progressFirstVaccinated = this.vaccines.proportionFirstVaccinations[this.vaccines.proportionFirstVaccinations.length - 1].value;
-      this.progressFullyVaccinated = this.vaccines.proportionSecondVaccinations[this.vaccines.proportionSecondVaccinations.length - 1].value;
-    })
+      this.progressFullyVaccinated = this.vaccines.proportionSecondVaccinations
+        [this.vaccines.proportionSecondVaccinations.length - 1].value;
+    });
   }
 
   ngOnInit(): void {
