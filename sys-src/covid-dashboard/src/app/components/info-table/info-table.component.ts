@@ -21,9 +21,11 @@ export class InfoTableComponent implements OnInit {
 
   public allCountys = [] as CountyCombined[];
   public searchCountys = [] as CountyCombined[];
+  public germanyCounty = {} as CountyCombined;
 
   public allStates = [] as VaccineCombined[];
   public searchStates = [] as VaccineCombined[];
+  public germanyVaccine = {} as VaccineCombined;
 
   public searchTerm = '';
 
@@ -42,7 +44,7 @@ export class InfoTableComponent implements OnInit {
     if (this.showInfection) {
       this.network.getAllCountyIncidences().subscribe(
         (res) => {
-          let tempData: Array<any> = res;
+          const tempData: Array<any> = res;
           // combine the data in one array
           for (let i = 0; i < tempData.length; i++) {
             tempData[i] = tempData[i][1];
@@ -59,6 +61,7 @@ export class InfoTableComponent implements OnInit {
               // save the data to both arrays
               this.allCountys = tempData;
               this.searchCountys = tempData;
+              this.findGermanyInCounties();
             },
             (err) => {
               console.log('error get County Diff', err);
@@ -72,7 +75,7 @@ export class InfoTableComponent implements OnInit {
     } else {
       this.network.getVaccineAllStates().subscribe(
         (res) => {
-          let tempData: Array<any> = res;
+          const tempData: Array<any> = res;
           // combine the data in one array and map the name
           for (let i = 0; i < tempData.length; i++) {
             tempData[i] = tempData[i][1];
@@ -94,6 +97,7 @@ export class InfoTableComponent implements OnInit {
               // save the data to both arrays
               this.allStates = tempData;
               this.searchStates = tempData;
+              this.findGermanyInStates();
             },
             (err) => {
               console.log('error get states Diff', err);
@@ -117,10 +121,8 @@ export class InfoTableComponent implements OnInit {
     }
 
     this.searchCountys = this.allCountys.filter((s) => {
-      // @ts-ignore
-      let countyId = s.CountyId;
-      // @ts-ignore
-      let currentCounty = s.County;
+      const countyId = s.CountyId;
+      const currentCounty = s.County;
       if (currentCounty !== undefined && countyId !== undefined) {
         if (this.selectedFavorites) {
           return (
@@ -132,7 +134,7 @@ export class InfoTableComponent implements OnInit {
             .toLowerCase()
             .includes(this.searchTerm.toLowerCase());
         }
-      } else return false;
+      } else { return false; }
     });
   }
 
@@ -141,15 +143,13 @@ export class InfoTableComponent implements OnInit {
    */
   public changeStates(): void {
     this.searchStates = this.allStates.filter((s) => {
-      // @ts-ignore
-      let stateId = s.StateId;
-      // @ts-ignore
-      let currentCounty = s.StateName;
+      const stateId = s.StateId;
+      const currentCounty = s.StateName;
       if (currentCounty !== undefined && stateId !== undefined) {
         return currentCounty
           .toLowerCase()
           .includes(this.searchTerm.toLowerCase());
-      } else return false;
+      } else { return false; }
     });
   }
 
@@ -157,7 +157,7 @@ export class InfoTableComponent implements OnInit {
    * sorts the data by the key
    * @param key for sorting
    */
-  public sort(key: string) {
+  public sort(key: string): void {
     this.key = key;
     this.reverse = !this.reverse;
   }
@@ -166,7 +166,7 @@ export class InfoTableComponent implements OnInit {
    * sorts all states
    * @param key for sorting
    */
-  public sortStates(key: string) {
+  public sortStates(key: string): void {
     this.key = key;
     this.reverse = !this.reverse;
   }
@@ -175,7 +175,7 @@ export class InfoTableComponent implements OnInit {
    * sets selected county for the other components
    * @param county selected county
    */
-  public selectCounty(county: CountyCombined) {
+  public selectCounty(county: CountyCombined): void {
     this.infections.setSelectedCountyId(county.CountyId);
   }
 
@@ -183,7 +183,29 @@ export class InfoTableComponent implements OnInit {
    * sets selected state for the other components
    * @param state selected state
    */
-  public selectState(state: VaccineCombined) {
+  public selectState(state: VaccineCombined): void {
     this.vaccines.setSelectedStateId(state.StateId);
+  }
+
+  /**
+   * finds germany saves it and removes it from the list
+   */
+  private findGermanyInStates(): void {
+    const temp = this.allStates.findIndex(item => item.StateId === 0);
+    if (temp) {
+      this.germanyVaccine = this.allStates[temp];
+      this.allStates.splice(temp, 1);
+    }
+  }
+
+  /**
+   * finds germany saves it and removes it from the list
+   */
+  private findGermanyInCounties(): void {
+    const temp = this.allCountys.findIndex(item => item.StateId === 0);
+    if (temp) {
+      this.germanyCounty = this.allCountys[temp];
+      this.allCountys.splice(temp, 1);
+    }
   }
 }

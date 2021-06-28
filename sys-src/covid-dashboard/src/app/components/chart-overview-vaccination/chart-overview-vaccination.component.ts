@@ -61,7 +61,7 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
     this.colorScheme = this.percentVaccinesColorScheme;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.notifer.next();
     this.notifer.complete();
   }
@@ -78,6 +78,7 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
       this.displayedAreaData = this.vaccine.firstSecondVaccinationSum;
       this.type = VaccineChartType.firstAndSecond;
       this.colorScheme = this.firstAndSecondColorScheme;
+      this.dayNumber = this.timeSpan[this.timeSpan.length -1][1];
     } else if (typ === 'percentVaccines') {
       this.showPercentVaccines = true;
       this.type = VaccineChartType.percentVaccines;
@@ -86,12 +87,22 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
       this.displayedAreaData = this.vaccine.allVaccinesByManTime;
       this.type = VaccineChartType.timeVaccines;
       this.colorScheme = this.timeVaccinesColorScheme;
+      this.dayNumber = this.timeSpan[4][1];
     }
   }
 
-  private loadData(id: number) {
+  /**
+   * loads the data for a specific state
+   * @param id of the state
+   */
+  private loadData(id: number): void {
+    console.log(this.type)
     this.vaccine.loadData(id).then(() => {
-      this.displayedAreaData = this.vaccine.firstSecondVaccinationSum;
+      if (this.type === VaccineChartType.firstAndSecond) {
+        this.displayedAreaData = this.vaccine.firstSecondVaccinationSum;
+      } else if (this.type === VaccineChartType.timeVaccines) {
+        this.displayedAreaData = this.vaccine.allVaccinesByManTime;
+      }
       this.allVaccinesByManufacturer = this.vaccine.allVaccinesByManufacturer;
       this.stateName = this.vaccine.getStateNameFromId(
         this.vaccine.selectedStateId
