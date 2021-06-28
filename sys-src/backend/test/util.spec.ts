@@ -1,5 +1,4 @@
 import assert from "assert";
-import { describe } from "mocha";
 import { addDays, dateToString, getMidnightUTC, last2ElementsPerMap, lastElementPerMap, mapToObject, MS_PER_DAY, parse, parseRKIDate, stringify } from "../typescript/util";
 
 
