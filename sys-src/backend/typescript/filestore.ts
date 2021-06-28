@@ -2,6 +2,7 @@ import fs from "fs";
 import sevenZip from "7zip-min";
 import { dateToString } from "./util";
 import rimraf from "rimraf";
+import createLock from "./lock";
 
 const filesFolder = "./data";
 const archiveFolder = "./archive";
@@ -9,20 +10,7 @@ const filesTempFolder = "./data_temp";
 const lastUpdateFileName = filesFolder + "/last_update.txt";
 const cache = new Map<string, any>();
 
-let lock: boolean = false;
-
-function waitForLock(func: (finished: () => void) => void): void {
-  if (lock) {
-    setTimeout(() => waitForLock(func), 100);
-  } else {
-    lock = true;
-    //console.log('lock aquired');
-    func(() => {
-      //console.log('lock removed');
-      lock = false;
-    });
-  }
-}
+const waitForLock = createLock();
 
 export default function getFromCache<T>(
   path: string,
@@ -103,7 +91,7 @@ function getFromCacheInternal<T>(
                 }
                 fs.rename(filesFolder, filesTempFolder, (err) => {
                   if (err) {
-                    console.log(err);
+                    console.log('cannot rename', err);
                   }
                   ensureFolder(filesFolder, reject, () => {
                     sevenZip.pack(
@@ -168,14 +156,18 @@ function handleLoading<T>(
         fetchDataCallback()
           .then((data) => {
             fs.writeFile(filePath, data, (err) => {
-              reject(err);
+              if (err) {
+                reject(err);
+              }
+              else {
+                transformData(data)
+                  .then((transformed) => {
+                    cache.set(path, transformed);
+                    resolve(transformed);
+                  })
+                  .catch(reject);
+              }
             });
-            transformData(data)
-              .then((transformed) => {
-                cache.set(path, transformed);
-                resolve(transformed);
-              })
-              .catch(reject);
           })
           .catch(reject);
       } else {
