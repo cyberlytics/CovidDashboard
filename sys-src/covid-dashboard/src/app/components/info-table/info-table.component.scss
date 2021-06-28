@@ -23,6 +23,7 @@
 
 .row {
   display: contents;
+  border-radius: 5px;
 
   .heading {
     flex-direction: row !important;
@@ -88,8 +89,4 @@
       }
     }
   }
-}
-
-.germanyVaccine{
-  margin-top: 10px;
 }
