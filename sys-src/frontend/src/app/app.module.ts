@@ -20,7 +20,6 @@ import {ShareComponent} from './pages/share/share.component';
 import {VaccinationsComponent} from './pages/vaccinations/vaccinations.component';
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import {OrderModule} from "ngx-order-pipe";
-import {ClipboardModule} from "ngx-clipboard";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -49,12 +48,11 @@ registerLocaleData(localeDe);
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgxChartsModule,
-    OrderModule,
-    ClipboardModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    FormsModule
+    NgxChartsModule,
+    FormsModule,
+    OrderModule
   ],
   providers: [{provide: LOCALE_ID, useValue: 'de'}],
   bootstrap: [AppComponent]
