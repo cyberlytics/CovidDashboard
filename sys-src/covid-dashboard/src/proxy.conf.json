@@ -1,7 +1,0 @@
-{
-  "/api/*": {
-    "target": "https://covidash.de/api",
-    "secure": true,
-    "logLevel": "debug"
-  }
-}

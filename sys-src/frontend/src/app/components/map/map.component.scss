@@ -1,0 +1,10 @@
+@import "../../../assets/css/colors/colors.scss";
+
+.switch-map {
+  #map {
+    width: 100%;
+    height: 100vh;
+    background: $color-accent-gray-background;
+    border-radius: 10px;
+  }
+}
