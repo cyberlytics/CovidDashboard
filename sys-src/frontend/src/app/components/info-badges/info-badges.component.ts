@@ -1,6 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {GermanyData, GermanyDataDiff} from 'src/app/services/alltypes';
+import type { OnInit} from '@angular/core';
+import {Component} from '@angular/core';
+import type {GermanyData, GermanyDataDiff} from 'src/app/services/alltypes';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {NetworkService} from 'src/app/services/network/network.service';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {Router} from '@angular/router';
 
 @Component({

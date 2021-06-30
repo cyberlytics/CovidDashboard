@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FavoritesService} from '../../services/favorites/favorites.service';
@@ -18,7 +19,7 @@ export class ShareComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       const idsString = params.getAll('id').toString().split(',');
       for (let i = 0; i < idsString.length; i++) {
-        let tempValue = parseInt(idsString[i], 10);
+        const tempValue = parseInt(idsString[i], 10);
         if (!Number.isNaN(tempValue)) {
           this.sharedIds.push(tempValue);
         }
@@ -30,6 +31,7 @@ export class ShareComponent implements OnInit {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   ngOnInit(): void {
   }
 }

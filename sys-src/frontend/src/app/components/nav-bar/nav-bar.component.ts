@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {FavoritesService} from '../../services/favorites/favorites.service';
@@ -8,7 +10,7 @@ import {FavoritesService} from '../../services/favorites/favorites.service';
   styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent implements OnInit {
-  public shareButtonText: string = 'Favoriten teilen';
+  public shareButtonText = 'Favoriten teilen';
 
   constructor(
     private router: Router,
@@ -16,6 +18,7 @@ export class NavBarComponent implements OnInit {
   ) {
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   ngOnInit(): void {
   }
 

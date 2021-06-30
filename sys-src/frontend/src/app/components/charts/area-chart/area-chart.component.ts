@@ -1,24 +1,23 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {AreaData} from '../../../services/alltypes';
+import type { OnChanges } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import type {AreaData} from '../../../services/alltypes';
 
 @Component({
   selector: 'app-area-chart',
   templateUrl: './area-chart.component.html',
   styleUrls: ['./area-chart.component.scss'],
 })
-export class AreaChartComponent implements OnInit, OnChanges {
+export class AreaChartComponent implements  OnChanges {
   // inputs for data, daynumber and colorscheme
   @Input() data: AreaData[] = [];
-  @Input() dayNumber: number = 7;
+  @Input() dayNumber = 7;
   @Input() colorScheme = {};
 
   // array which displays the data
   public displayedData: AreaData[] = [];
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
   /**

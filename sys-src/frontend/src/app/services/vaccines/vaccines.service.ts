@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {NetworkService} from '../network/network.service';
@@ -26,7 +27,7 @@ export class VaccinesService {
   public allVaccinesByManufacturer = [] as ScaleData[];
   public allVaccinesByManTime = [] as AreaData[];
 
-  public selectedStateId: number = 0;
+  public selectedStateId = 0;
   public statesMap = [
     {
       id: 0,
@@ -111,7 +112,7 @@ export class VaccinesService {
    * @returns if data was saved correctly
    */
   public loadData(id: number): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>((resolve) => {
       this.sumAstraZeneca = [];
       this.sumBioNTech = [];
       this.sumJohnsonAndJohnson = [];

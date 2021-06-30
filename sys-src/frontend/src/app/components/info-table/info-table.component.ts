@@ -1,7 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+/* eslint-disable @typescript-eslint/consistent-type-imports */
+import type { OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {NetworkService} from 'src/app/services/network/network.service';
 import {FavoritesService} from '../../services/favorites/favorites.service';
-import {County, CountyCombined, VaccineCombined,} from '../../services/alltypes';
+import type {CountyCombined, VaccineCombined,} from '../../services/alltypes';
 import {VaccinesService} from 'src/app/services/vaccines/vaccines.service';
 import {InfectionsService} from 'src/app/services/infections/infections.service';
 
@@ -11,8 +13,8 @@ import {InfectionsService} from 'src/app/services/infections/infections.service'
   styleUrls: ['./info-table.component.scss'],
 })
 export class InfoTableComponent implements OnInit {
-  @Input() showInfection: boolean = false;
-  public selectedFavorites: boolean = false;
+  @Input() showInfection = false;
+  public selectedFavorites = false;
 
   public allCountys = [] as CountyCombined[];
   public searchCountys = [] as CountyCombined[];
@@ -24,8 +26,8 @@ export class InfoTableComponent implements OnInit {
 
   public searchTerm = '';
 
-  public key: string = 'County';
-  public reverse: boolean = false;
+  public key = 'County';
+  public reverse = false;
 
   constructor(
     private network: NetworkService,
@@ -40,7 +42,7 @@ export class InfoTableComponent implements OnInit {
     if (this.showInfection) {
       this.network.getAllCountyIncidences().subscribe(
         (res) => {
-          const tempData: Array<any> = res;
+          const tempData: any[] = res;
           // combine the data in one array
           for (let i = 0; i < tempData.length; i++) {
             tempData[i] = tempData[i][1];
@@ -71,7 +73,7 @@ export class InfoTableComponent implements OnInit {
     } else {
       this.network.getVaccineAllStates().subscribe(
         (res) => {
-          const tempData: Array<any> = res;
+          const tempData: any[] = res;
           // combine the data in one array and map the name
           for (let i = 0; i < tempData.length; i++) {
             tempData[i] = tempData[i][1];
@@ -111,7 +113,7 @@ export class InfoTableComponent implements OnInit {
    * is called for searching the counties
    * @param toggleFavorites search favourite states or all
    */
-  public change(toggleFavorites: boolean = false): void {
+  public change(toggleFavorites = false): void {
     if (toggleFavorites) {
       this.selectedFavorites = !this.selectedFavorites;
     }

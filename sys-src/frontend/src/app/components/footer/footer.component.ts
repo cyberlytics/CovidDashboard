@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import type { OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -7,9 +8,11 @@ import {Component, OnInit} from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   ngOnInit(): void {
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import {Injectable} from '@angular/core';
 import {AreaData, CountyIDandName, ScaleData} from "../alltypes";
 import {Observable, Subject} from "rxjs";
@@ -17,8 +18,8 @@ export class InfectionsService {
   // comibend array with multiple data types
   public recoveredDeathsTotalCases = [] as AreaData[];
 
-  public selectedCountyId: number = 0;
-  public selectedCountyName: string = 'Deutschland';
+  public selectedCountyId = 0;
+  public selectedCountyName = 'Deutschland';
   public countyIDandNameList: CountyIDandName[] = [];
   private selectedCountyChanged: Subject<number>;
   private newDataLoadedSubject: Subject<void>;
@@ -35,7 +36,7 @@ export class InfectionsService {
    * @returns if data was saved correctly
    */
   public loadData(id: number): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>((resolve) => {
       this.incidences = [];
       this.activeCases = [];
       this.recovered = [];

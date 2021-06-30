@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import {County, CountyData, Vaccine, VaccineData,} from 'src/app/services/alltypes';
@@ -12,8 +13,8 @@ import {VaccinesService} from 'src/app/services/vaccines/vaccines.service';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, AfterViewInit {
-  public showInfections: boolean = true;
-  public showFirstVaccine: boolean = true;
+  public showInfections = true;
+  public showFirstVaccine = true;
   public tolltippopup: any;
   // data
   private countyJson = {} as GeoData;
@@ -452,7 +453,7 @@ export class MapComponent implements OnInit, AfterViewInit {
             .setLatLng(temp)
             .openOn(this.map);
         });
-        layer.on('mouseout', (e) => {
+        layer.on('mouseout', () => {
           this.map.closePopup(this.tolltippopup);
         });
       },
