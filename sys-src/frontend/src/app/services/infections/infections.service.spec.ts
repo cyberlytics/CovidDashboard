@@ -16,4 +16,15 @@ describe('InfectionsService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('shopuld get name from id', () => {
+    const name = service.getCountyNameFromId(0);
+    expect(name).toBe('Deutschland');
+  });
+
+  it('should set selected id', () => {
+    service.setSelectedCountyId(0);
+    expect(service.selectedCountyId).toBe(0);
+  });
+
 });

@@ -24,4 +24,10 @@ describe('ChartOverviewVaccinationComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should change type', () => {
+    component.changeType('percentVaccines');
+    fixture.detectChanges();
+    expect(component.showPercentVaccines).toBeTruthy();
+  });
 });

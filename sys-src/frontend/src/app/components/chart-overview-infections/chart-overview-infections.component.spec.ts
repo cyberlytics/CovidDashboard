@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ChartOverviewInfectionsComponent} from './chart-overview-infections.component';
@@ -23,5 +24,11 @@ describe('ChartOverviewInfectionsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should change type', () => {
+    component.changeType('recDeadTotal');
+    fixture.detectChanges();
+    expect(component.recDeaTotalCases).toBeTruthy();
   });
 });

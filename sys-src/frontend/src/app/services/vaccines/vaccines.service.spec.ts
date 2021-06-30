@@ -16,4 +16,14 @@ describe('VaccinesService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should set state id', () => {
+    service.setSelectedStateId(1);
+    expect(service.selectedStateId).toBe(1);
+  });
+
+  it('should set state id', () => {
+    const name = service.getStateNameFromId(0);
+    expect(name).toBe('Deutschland');
+  });
 });
