@@ -25,4 +25,11 @@ describe('MapComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should show first vaccine data', () => {
+    component.showVaccineData('first');
+    fixture.detectChanges();
+    expect(component.showFirstVaccine).toBeTruthy;
+  })
+
 });
