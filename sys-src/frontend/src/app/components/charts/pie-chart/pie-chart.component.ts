@@ -1,5 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ScaleData} from '../../../services/alltypes';
+import type { OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
+import type {ScaleData} from '../../../services/alltypes';
 
 @Component({
   selector: 'app-pie-chart',
@@ -14,9 +15,11 @@ export class PieChartComponent implements OnInit {
   // displayed data
   public displayedValues = [] as ScaleData[];
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   ngOnInit(): void {
   }
 }

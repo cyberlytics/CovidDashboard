@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import {Injectable} from '@angular/core';
 import {ClipboardService} from "ngx-clipboard";
 
@@ -20,7 +21,7 @@ export class FavoritesService {
     this.isFavorite(id) ? this.removeFavorite(id) : this.addFavorite(id);
   }
 
-  public replaceFavorites(ids: Array<number>): void {
+  public replaceFavorites(ids: number[]): void {
     this.cleanUpArray(ids).forEach((id) => this.addFavorite(id));
     this.syncLocalStorage();
   }
@@ -52,7 +53,7 @@ export class FavoritesService {
     localStorage.setItem(this.key, JSON.stringify(this.cleanUpArray()));
   }
 
-  private cleanUpArray(array: Array<number> = this.favorites): Array<number> {
+  private cleanUpArray(array: number[] = this.favorites): number[] {
     return Array.from(new Set(array)).sort((a, b) => a - b);
   }
 }

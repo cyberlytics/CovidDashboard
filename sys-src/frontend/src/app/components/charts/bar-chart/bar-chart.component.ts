@@ -1,5 +1,8 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {InfectionChartType, ScaleData} from '../../../services/alltypes';
+import type { OnChanges, OnDestroy } from '@angular/core';
+import {Component, Input } from '@angular/core';
+import type { ScaleData} from '../../../services/alltypes';
+import {InfectionChartType} from '../../../services/alltypes';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {InfectionsService} from '../../../services/infections/infections.service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
@@ -9,11 +12,11 @@ import {Subject} from 'rxjs';
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.scss'],
 })
-export class BarChartComponent implements OnInit, OnDestroy, OnChanges {
+export class BarChartComponent implements OnDestroy, OnChanges {
   // inputs for type, daynumber, colorscheme and loaded
   @Input() type: InfectionChartType = InfectionChartType.incidence7;
-  @Input() daynumber: number = 7;
-  @Input() loaded: boolean = false;
+  @Input() daynumber = 7;
+  @Input() loaded = false;
   @Input() colorScheme = {};
   // displayed array
   public displayedValues = [] as ScaleData[];
@@ -25,8 +28,6 @@ export class BarChartComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  ngOnInit(): void {
-  }
 
   ngOnDestroy(): void {
     this.notifer.next();

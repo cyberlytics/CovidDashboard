@@ -1,7 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import type { OnDestroy, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {AreaData, ScaleData, VaccineChartType} from '../../services/alltypes';
+import type {AreaData, ScaleData} from '../../services/alltypes';
+import { VaccineChartType} from '../../services/alltypes';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {VaccinesService} from '../../services/vaccines/vaccines.service';
 
 @Component({
@@ -22,10 +25,10 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
   ];
   public displayedAreaData: AreaData[] = [];
   public allVaccinesByManufacturer: ScaleData[] = [];
-  public dayNumber: number = 7;
-  public showPercentVaccines: boolean = true;
+  public dayNumber = 7;
+  public showPercentVaccines = true;
   public colorScheme = {};
-  public stateName: string = 'Deutschland';
+  public stateName = 'Deutschland';
   readonly chartType = VaccineChartType;
   readonly percentVaccinesColorScheme = {
     domain: ['#62d87b', '#a81dff', '#ffc71d', '#cbd5de'],

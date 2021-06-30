@@ -1,7 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import type { OnDestroy, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {AreaData, InfectionChartType} from '../../services/alltypes';
+import type {AreaData} from '../../services/alltypes';
+import { InfectionChartType} from '../../services/alltypes';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {InfectionsService} from '../../services/infections/infections.service';
 
 @Component({
@@ -21,12 +24,12 @@ export class ChartOverviewInfectionsComponent implements OnInit, OnDestroy {
     ['1 Jahr', 365],
     ['Gesamter Zeitraum', 400],
   ];
-  public dayNumber: number = 7;
-  public loaded: boolean = false;
+  public dayNumber = 7;
+  public loaded = false;
   public recDeaTotalCases: AreaData[] = [];
-  public showRecDeadTotal: boolean = false;
+  public showRecDeadTotal = false;
   public colorScheme = {};
-  public countyName: string = 'Deutschland';
+  public countyName = 'Deutschland';
   readonly chartType = InfectionChartType;
   readonly incidence7ColorScheme = {
     domain: ['#a81dff'],
