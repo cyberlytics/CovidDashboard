@@ -84,9 +84,8 @@ export class FavoritesService {
 
   /**
    * Clean up favorite array, stringify and update LocalStorage
-   * @private
    */
-  private syncLocalStorage(): void {
+  public syncLocalStorage(): void {
     localStorage.setItem(this.key, JSON.stringify(this.cleanUpArray()));
   }
 }
