@@ -22,6 +22,9 @@ export class NavBarComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Navigate to other dashboard
+   */
   navigate(): void {
     if (this.router.url.includes('infections')) {
       this.router.navigate(['/vaccinations']).then(() => {
@@ -32,6 +35,9 @@ export class NavBarComponent implements OnInit {
     }
   }
 
+  /**
+   * Generate and copy share link
+   */
   generateShareLink(): void {
     this.favoriteService.generateShareLink();
     this.shareButtonText = 'Kopiert';
