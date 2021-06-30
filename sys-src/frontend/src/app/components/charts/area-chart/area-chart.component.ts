@@ -12,6 +12,7 @@ export class AreaChartComponent implements  OnChanges {
   @Input() data: AreaData[] = [];
   @Input() dayNumber = 7;
   @Input() colorScheme = {};
+  @Input() stacked = false;
 
   // array which displays the data
   public displayedData: AreaData[] = [];
