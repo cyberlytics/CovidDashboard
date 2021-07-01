@@ -1,8 +1,4 @@
 {
   "verbose": false,
-  "ignore": [
-    "data/*",
-    "archive/*",
-    "data_temp/*"
-  ]
+  "ignore": ["data/*", "archive/*", "data_temp/*"]
 }

@@ -1,0 +1,64 @@
+@media (max-width: 1700px) {
+  .infections,
+  .vaccinations {
+    flex-direction: column !important;
+
+    &__left {
+      width: 100% !important;
+    }
+
+    &__right {
+      width: 100% !important;
+      margin-top: 50px;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .infections,
+  .vaccinations {
+    margin-top: 175px !important;
+  }
+
+  .info-bar {
+    flex-direction: column !important;
+    margin-bottom: 10px !important;
+
+    &__toggle-button,
+    &__search {
+      margin-bottom: 5px;
+    }
+  }
+
+  .nav-bar {
+    flex-direction: column !important;
+    text-align: center !important;
+
+    &__logo {
+      flex-direction: column !important;
+
+      i {
+        display: none !important;
+      }
+    }
+
+    &__buttons {
+      flex-direction: column !important;
+      justify-content: center;
+      align-items: center;
+
+      a {
+        margin-left: 0 !important;
+      }
+    }
+
+    &__item {
+      margin-top: 15px !important;
+    }
+  }
+
+  .three-in-a-row,
+  .five-in-a-row {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}

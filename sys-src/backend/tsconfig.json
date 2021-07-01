@@ -14,8 +14,6 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": false,
     "importHelpers": true,
-    "lib": [
-      "ES2015"
-    ]
+    "lib": ["ES2015"]
   }
 }
