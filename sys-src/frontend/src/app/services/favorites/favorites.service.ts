@@ -6,8 +6,8 @@ import {ClipboardService} from "ngx-clipboard";
   providedIn: 'root'
 })
 export class FavoritesService {
-  private readonly key: string = 'favorites';
   public favorites = [] as number[];
+  private readonly key: string = 'favorites';
 
   constructor(private clipboardService: ClipboardService) {
     const rawData = localStorage.getItem(this.key);

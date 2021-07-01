@@ -2,8 +2,7 @@ import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing'
 
 import {NavBarComponent} from './nav-bar.component';
 import {RouterTestingModule} from "@angular/router/testing";
-import { routes } from 'src/app/app-routing.module';
-import { Router } from '@angular/router';
+import {routes} from 'src/app/app-routing.module';
 
 const defaultShareButtonText: string = "Favoriten teilen"
 

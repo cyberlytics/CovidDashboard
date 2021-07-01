@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import type { OnInit} from '@angular/core';
+import type {OnInit} from '@angular/core';
 import {Component, Input} from '@angular/core';
 import {NetworkService} from 'src/app/services/network/network.service';
 import {FavoritesService} from '../../services/favorites/favorites.service';
