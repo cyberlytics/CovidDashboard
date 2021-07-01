@@ -1,9 +1,9 @@
-import type { OnDestroy, OnInit} from '@angular/core';
+import type {OnDestroy, OnInit} from '@angular/core';
 import {Component} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import type {AreaData, ScaleData} from '../../services/alltypes';
-import { VaccineChartType} from '../../services/alltypes';
+import {VaccineChartType} from '../../services/alltypes';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {VaccinesService} from '../../services/vaccines/vaccines.service';
 

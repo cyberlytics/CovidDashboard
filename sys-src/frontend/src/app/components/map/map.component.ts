@@ -447,7 +447,7 @@ export class MapComponent implements OnInit, AfterViewInit {
           const temp = L.latLng(e.latlng.lat, e.latlng.lng);
           this.tolltippopup = L.popup({
             offset: L.point(0, 0),
-            className: 'poppup',
+            className: 'popup',
           })
             .setContent(content)
             .setLatLng(temp)

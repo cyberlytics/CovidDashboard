@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import type { OnInit} from '@angular/core';
+import type {OnInit} from '@angular/core';
 import {Component} from '@angular/core';
 
 @Component({
