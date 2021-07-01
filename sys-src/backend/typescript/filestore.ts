@@ -12,6 +12,15 @@ const cache = new Map<string, any>();
 
 const waitForLock = createLock();
 
+/**
+ * Gets the desired data from either cache or a file.
+ * If the data is not present in these formats it will be regenerated
+ * using the functions provided.
+ * @param path A file name to identify the desired data.
+ * @param fetchDataCallback Gets called if the data needs to be regenerated.
+ * @param transformData Gets called to transform a string (read from file) to the desired object structure.
+ * @returns The data in the desired object structure.
+ */
 export default function getFromCache<T>(
   path: string,
   fetchDataCallback: () => Promise<string>,
@@ -200,4 +209,14 @@ function ensureFolder(
       }
     }
   );
+}
+
+
+/**
+ * Use for unit tests only!
+ */
+export const testables = {
+  forceClearCache: function() {
+    cache.clear();
+  }
 }
