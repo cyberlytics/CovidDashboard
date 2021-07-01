@@ -3,10 +3,9 @@ import getFromCache from "./filestore";
 import fetch from "node-fetch";
 import {
   addDays,
-  daysSince,
   getMidnightUTC,
   last2ElementsPerMap,
-  lastDays,
+  MS_PER_DAY,
   parse,
   parseRKIDate,
   stringify,
@@ -288,7 +287,6 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                     oldDay: number,
                     newDay: number
                   ): void {
-                    const MS_PER_DAY = 1000 * 60 * 60 * 24;
                     let oldData = map.get(oldDay);
                     if (typeof oldData === "undefined")
                       throw "oldDay does not exist in map";
