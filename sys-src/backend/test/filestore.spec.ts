@@ -1,7 +1,7 @@
 import assert from "assert";
 import fs from "fs";
-import getFromCache, { testables } from "../typescript/filestore";
-import { parse, stringify } from "../typescript/util";
+import getFromCache, {testables} from "../typescript/filestore";
+import {parse, stringify} from "../typescript/util";
 
 type TestType = {
     text: string;
@@ -163,7 +163,9 @@ describe("Filestore", () => {
                     lastUpdateFilePath,
                     '2020-01-01',
                     (err) => {
-                        if (err) assert.fail(err);
+                        if (err) {
+                            assert.fail(err);
+                        }
                         getFromCache<TestType>(
                             'test.txt',
                             () => {

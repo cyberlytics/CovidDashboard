@@ -1,4 +1,4 @@
-import type { OnInit} from '@angular/core';
+import type {OnInit} from '@angular/core';
 import {Component} from '@angular/core';
 import type {GermanyData, GermanyDataDiff} from 'src/app/services/alltypes';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
