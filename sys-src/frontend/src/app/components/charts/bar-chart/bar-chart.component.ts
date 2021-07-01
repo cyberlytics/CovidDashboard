@@ -1,6 +1,6 @@
-import type { OnChanges, OnDestroy } from '@angular/core';
-import {Component, Input } from '@angular/core';
-import type { ScaleData} from '../../../services/alltypes';
+import type {OnChanges, OnDestroy} from '@angular/core';
+import {Component, Input} from '@angular/core';
+import type {ScaleData} from '../../../services/alltypes';
 import {InfectionChartType} from '../../../services/alltypes';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {InfectionsService} from '../../../services/infections/infections.service';
