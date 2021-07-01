@@ -1,5 +1,5 @@
 import assert from "assert";
-import { addDays, dateToString, getMidnightUTC, last2ElementsPerMap, lastElementPerMap, mapToObject, MS_PER_DAY, parse, parseRKIDate, stringify } from "../typescript/util";
+import {addDays, dateToString, getMidnightUTC, last2ElementsPerMap, lastElementPerMap, mapToObject, MS_PER_DAY, parse, parseRKIDate, stringify} from "../typescript/util";
 
 
 describe("Util", () => {

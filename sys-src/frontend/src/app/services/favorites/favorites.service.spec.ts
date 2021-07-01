@@ -1,15 +1,12 @@
 import {fakeAsync, TestBed} from '@angular/core/testing';
 
 import {FavoritesService} from './favorites.service';
-import {ClipboardService} from "ngx-clipboard";
 
 describe('FavoritesService', () => {
   let service: FavoritesService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [ClipboardService]
-    });
+    TestBed.configureTestingModule({});
     service = TestBed.inject(FavoritesService);
   });
 

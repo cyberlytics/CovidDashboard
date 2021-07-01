@@ -17,55 +17,55 @@ describe('NetworkService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should get summary data', async() => {
+  it('should get summary data', async () => {
     service.getSummaryDiff().subscribe(x => {
       expect(x).toBeDefined();
     })
   });
 
-  it('should get all county incidneces data', async() => {
+  it('should get all county incidneces data', async () => {
     service.getAllCountyIncidences().subscribe(x => {
       expect(x).toBeDefined();
     })
   });
 
-  it('should get county diff data', async() => {
+  it('should get county diff data', async () => {
     service.getCountyDiff().subscribe(x => {
       expect(x).toBeDefined();
     })
   });
 
-  it('should get county overview data', async() => {
+  it('should get county overview data', async () => {
     service.getCountyOverview().subscribe(x => {
       expect(x).toBeDefined();
     })
   });
 
-  it('should get county incidences data', async() => {
+  it('should get county incidences data', async () => {
     service.getSingleCountyIncidences(9741).subscribe(x => {
       expect(x).toBeDefined();
     })
   });
 
-  it('should get states with diff data', async() => {
+  it('should get states with diff data', async () => {
     service.getStatesWithDiff().subscribe(x => {
       expect(x).toBeDefined();
     })
   });
 
-  it('should get summary germany data', async() => {
+  it('should get summary germany data', async () => {
     service.getSummaryGermany().subscribe(x => {
       expect(x).toBeDefined();
     })
   });
 
-  it('should get vaccine all states data', async() => {
+  it('should get vaccine all states data', async () => {
     service.getVaccineAllStates().subscribe(x => {
       expect(x).toBeDefined();
     })
   });
 
-  it('should get vaccine single states data', async() => {
+  it('should get vaccine single states data', async () => {
     service.getVaccineSingleState(1).subscribe(x => {
       expect(x).toBeDefined();
     })
