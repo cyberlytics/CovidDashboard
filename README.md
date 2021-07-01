@@ -35,6 +35,11 @@ _Sowohl eine ausführliche textuelle Ausformulierung als auch ein Technical Repo
 > 2. (**Für Entwicklungsumgebung**) Mithilfe des Befehls `npm run server` wird der Node.js Server im Hintergrund mithilfe von `nodemon` gestartet und bei Änderungen automatisch aktualisiert.
 > 3. (**Für Produktivumgebung**) Mithilfe des Befehls `npm run start` wird der Node.js Server über ts-node gestartet.
 
+### **Backend testen**
+
+> 1. In den Ordner `sys-src/backend` navigieren.
+> 2. Mithilfe des Befehls `npm run test` kann das Projekt getestet werden. Es wird im Anschluss eine "Code-Coverage"-Übersicht angezeigt. In der Datei `filestore.ts` kann keine höhere Code-Coverage erreicht werden, da es sich bei den nicht durchlaufenen Codezeilen um Fehlerbehandlungen von Dateisystemoperationen handelt. Die Datei `rkiFetcher.ts` wird nicht mit Unit-Tests getestet, da sie Daten der APIs transformiert und damit datenabhängig ist. Um sich von der Korrektheit der Implementierung zu überzeugen, ist es ratsam, mit dem Frontend zu testen.
+
 ### **Frontend einzeln ausführen**
 
 > 1. In den Ordner `sys-src/frontend` navigieren.
@@ -43,7 +48,7 @@ _Sowohl eine ausführliche textuelle Ausformulierung als auch ein Technical Repo
 ### **Frontend testen**
 
 > 1. In den Ordner `sys-src/frontend` navigieren.
-> 2. Mithilfe des Befehls `npm run test` kann das Projekt getestet werden. Es wird im Anschluss eine "Cove-Coverage"-Übersicht angezeigt. Detailliertere Informationen zur Code-Coverage können über die `index.html` des Ordners `sys-src/frontend/coverage` eingesehen werden.
+> 2. Mithilfe des Befehls `npm run test` kann das Projekt getestet werden. Es wird im Anschluss eine "Code-Coverage"-Übersicht angezeigt. Detailliertere Informationen zur Code-Coverage können über die `index.html` des Ordners `sys-src/frontend/coverage` eingesehen werden.
 
 ### **Frontend bauen**
 
