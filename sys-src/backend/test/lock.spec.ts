@@ -23,8 +23,7 @@ describe("Lock", () => {
         const checkEnd = () => {
             if (executed.length === iterations) {
                 done();
-            }
-            else {
+            } else {
                 setTimeout(checkEnd, waitFactor);
             }
         }
@@ -58,10 +57,9 @@ describe("Lock", () => {
         });
 
         setTimeout(() => {
-            if(executed.length === 2) {
+            if (executed.length === 2) {
                 done();
-            }
-            else {
+            } else {
                 assert.fail();
             }
         }, waitTimeOverall);

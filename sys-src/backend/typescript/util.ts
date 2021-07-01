@@ -4,16 +4,16 @@
  * @returns The JSON representation in form of a string.
  */
 export function stringify(value: any): string {
-  return JSON.stringify(value, (k, v) => {
-    if (v instanceof Map) {
-      return {
-        dataType: "Map",
-        value: Array.from(v.entries()),
-      };
-    } else {
-      return v;
-    }
-  });
+    return JSON.stringify(value, (k, v) => {
+        if (v instanceof Map) {
+            return {
+                dataType: "Map",
+                value: Array.from(v.entries()),
+            };
+        } else {
+            return v;
+        }
+    });
 }
 
 /**
@@ -22,14 +22,14 @@ export function stringify(value: any): string {
  * @returns A new object or array representing the deserialized content of `text`.
  */
 export function parse(text: string): any {
-  return JSON.parse(text, (k, v) => {
-    if (typeof v === "object" && v !== null) {
-      if (v.dataType === "Map") {
-        return new Map(v.value);
-      }
-    }
-    return v;
-  });
+    return JSON.parse(text, (k, v) => {
+        if (typeof v === "object" && v !== null) {
+            if (v.dataType === "Map") {
+                return new Map(v.value);
+            }
+        }
+        return v;
+    });
 }
 
 /**
@@ -40,8 +40,10 @@ export function parse(text: string): any {
  * @returns A new array that contains all data from the original map.
  */
 export function mapToObject(map: Map<any, any> | undefined): object {
-  if (typeof map === "undefined") return {};
-  return Array.from(map.entries());
+    if (typeof map === "undefined") {
+        return {};
+    }
+    return Array.from(map.entries());
 }
 
 /**
@@ -50,9 +52,9 @@ export function mapToObject(map: Map<any, any> | undefined): object {
  * @returns A new Date object that has no time component (0 o'clock UTC).
  */
 export function getMidnightUTC(date: Date): Date {
-  return new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-  );
+    return new Date(
+        Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    );
 }
 
 /**
@@ -62,9 +64,9 @@ export function getMidnightUTC(date: Date): Date {
  * @returns A new Date object that has no time component (0 o'clock UTC).
  */
 export function addDays(date: Date, days: number): Date {
-  return new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() + days)
-  );
+    return new Date(
+        Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() + days)
+    );
 }
 
 /**
@@ -74,14 +76,14 @@ export function addDays(date: Date, days: number): Date {
  * @returns A Date object.
  */
 export function parseRKIDate(date: string): Date {
-  const s = date
-    .split("/")
-    .join("-")
-    .split(" ")
-    .join("T")
-    .split("+00")
-    .join("Z");
-  return new Date(Date.parse(s));
+    const s = date
+        .split("/")
+        .join("-")
+        .split(" ")
+        .join("T")
+        .split("+00")
+        .join("Z");
+    return new Date(Date.parse(s));
 }
 
 /**
@@ -92,17 +94,17 @@ export function parseRKIDate(date: string): Date {
  * @returns A new map that contains the last element per inner map.
  */
 export function lastElementPerMap<T>(
-  map: Map<number, Map<number, T>>
+    map: Map<number, Map<number, T>>
 ): Map<number, T> {
-  const m = new Map<number, T>();
-  map.forEach((v, key) => {
-    let last: T | undefined = undefined;
-    v.forEach((e) => (last = e));
-    if (typeof last !== "undefined") {
-      m.set(key, last);
-    }
-  });
-  return m;
+    const m = new Map<number, T>();
+    map.forEach((v, key) => {
+        let last: T | undefined = undefined;
+        v.forEach((e) => (last = e));
+        if (typeof last !== "undefined") {
+            m.set(key, last);
+        }
+    });
+    return m;
 }
 
 /**
@@ -113,21 +115,21 @@ export function lastElementPerMap<T>(
  * @returns A new map that contains the penultimate and the last element per inner map.
  */
 export function last2ElementsPerMap<T>(
-  map: Map<number, Map<number, T>>
+    map: Map<number, Map<number, T>>
 ): Map<number, [T, T]> {
-  const m = new Map<number, [T, T]>();
-  map.forEach((v, key) => {
-    let last: T | undefined = undefined;
-    let penultimate: T | undefined = undefined;
-    v.forEach((e) => {
-      penultimate = last;
-      last = e;
+    const m = new Map<number, [T, T]>();
+    map.forEach((v, key) => {
+        let last: T | undefined = undefined;
+        let penultimate: T | undefined = undefined;
+        v.forEach((e) => {
+            penultimate = last;
+            last = e;
+        });
+        if (typeof penultimate !== "undefined") {
+            m.set(key, [penultimate, last!]);
+        }
     });
-    if (typeof penultimate !== "undefined") {
-      m.set(key, [penultimate, last!]);
-    }
-  });
-  return m;
+    return m;
 }
 
 /**
@@ -136,11 +138,11 @@ export function last2ElementsPerMap<T>(
  * @returns A string that represents the Date param without time.
  */
 export function dateToString(date: Date): string {
-  return `${date.getFullYear().toString().padStart(4, "0")}-${(
-    date.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+    return `${date.getFullYear().toString().padStart(4, "0")}-${(
+        date.getMonth() + 1
+    )
+        .toString()
+        .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 }
 
 /**
