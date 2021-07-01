@@ -31,6 +31,12 @@ describe("Util", () => {
             ]);
     });
 
+    it("should return an empty object if map is undefined", () => {
+        assert.deepStrictEqual(
+            mapToObject(undefined),
+            {});
+    });
+
     it("should return a new Date set to midnight", () => {
         assert.deepStrictEqual(
             getMidnightUTC(new Date(Date.parse("2021-03-17T15:35:14.662Z"))),
@@ -98,6 +104,46 @@ describe("Util", () => {
                 [0, ['two', 'three']],
                 [1, ['six', 'seven']],
                 [2, ['ten', 'eleven']],
+            ]));
+    });
+
+    it("should return an empty map if there are no last or penultimate elements", () => {
+
+        assert.deepStrictEqual(
+            lastElementPerMap(new Map<number, Map<number, string>>()),
+            new Map<number, string>());
+
+        assert.deepStrictEqual(
+            last2ElementsPerMap(new Map<number, Map<number, string>>()),
+            new Map<number, [string, string]>());
+    });
+
+    it("should return the last element and the last two elements in a map of maps and omit empty entries", () => {
+        const original = new Map<number, Map<number, string>>();
+        original.set(0, new Map<number, string>([
+            [0, 'zero'],
+            [1, 'one'],
+            [2, 'two'],
+            [3, 'three'],
+        ]));
+
+        original.set(1, new Map<number, string>([   // only a single entry
+            [4, 'four'],
+        ]));
+
+        original.set(2, new Map<number, string>()); // empty
+
+        assert.deepStrictEqual(
+            lastElementPerMap(original),
+            new Map<number, string>([
+                [0, 'three'],
+                [1, 'four'],
+            ]));
+
+        assert.deepStrictEqual(
+            last2ElementsPerMap(original),
+            new Map<number, [string, string]>([
+                [0, ['two', 'three']],
             ]));
     });
 

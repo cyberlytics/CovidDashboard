@@ -49,3 +49,6 @@ Thumbs.db
 /data
 /data_temp
 /archive
+
+# Backend test folder
+/.nyc_output
