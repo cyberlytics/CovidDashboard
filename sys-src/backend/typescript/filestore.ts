@@ -85,8 +85,9 @@ function getFromCacheInternal<T>(
                         );
                     } else {
                         const lastArchiveDate = new Date(Date.parse(data.toString()));
-                        if (lastArchiveDate < archiveDate && new Date().getHours() >= 4) {
-                            // Make sure RKI has enough time to publish new data
+                        if (lastArchiveDate < archiveDate && new Date().getHours() >= 5) {
+                            // Make sure RKI has enough time to publish new data (4 hours were not enough)
+
                             cache.clear();
                             // Now force garbage collection because having twice the data will crash the server
                             try {
