@@ -6,6 +6,7 @@
   "scripts": {
     "start": "ts-node server.ts",
     "start-gc": "node --expose-gc -- node_modules/ts-node/dist/bin server.ts",
+    "start-prod": "pm2 start node -- --expose-gc --max-old-space-size=4096 node_modules/ts-node/dist/bin server.ts",
     "server": "nodemon server.ts",
     "test": "nyc mocha"
   },
@@ -21,11 +22,11 @@
     "@types/papaparse": "^5.2.5",
     "@types/rimraf": "^3.0.0",
     "assert": "^2.0.0",
-    "concurrently": "^6.1.0",
     "mocha": "^9.0.1",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0",
     "ts-node": "^10.0.0",
+    "tslib": "^2.2.0",
     "typescript": "^4.2.4"
   },
   "dependencies": {
