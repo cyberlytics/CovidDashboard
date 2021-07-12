@@ -24,6 +24,7 @@ import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {registerLocaleData} from "@angular/common";
+import {ImprintComponent} from './pages/imprint/imprint.component';
 
 registerLocaleData(localeDe);
 
@@ -43,7 +44,8 @@ registerLocaleData(localeDe);
     VaccineProgressBarComponent,
     InfectionsComponent,
     ShareComponent,
-    VaccinationsComponent
+    VaccinationsComponent,
+    ImprintComponent
   ],
   imports: [
     BrowserModule,

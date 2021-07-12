@@ -4,7 +4,7 @@
   "scripts": {
     "client-install": "npm install && cd ../backend && npm install",
     "start": "ng serve -o",
-    "dev": "concurrently \"cd ../backend && npm run start\" \"npm run start\"",
+    "dev": "concurrently \"cd ../backend && npm run server\" \"npm run start\"",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "lint": "eslint \"**/*.{ts,tsx}\" ",
@@ -46,6 +46,7 @@
     "karma-firefox-launcher": "^2.1.1",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "typescript": "~4.3.2"
+    "typescript": "~4.3.2",
+    "concurrently": "^6.1.0"
   }
 }
