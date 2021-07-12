@@ -85,15 +85,15 @@ function getFromCacheInternal<T>(
                         );
                     } else {
                         const lastArchiveDate = new Date(Date.parse(data.toString()));
-                        if (lastArchiveDate < archiveDate && new Date().getHours() >= 5) {
-                            // Make sure RKI has enough time to publish new data (4 hours were not enough)
+                        if (lastArchiveDate < archiveDate && new Date().getHours() >= 6) {
+                            // Make sure RKI has enough time to process and publish new data (4 and 5 hours were not enough)
 
                             cache.clear();
                             // Now force garbage collection because having twice the data will crash the server
                             try {
                                 if (global.gc) {
                                     global.gc();
-                                    console.log("garbage collection forced");
+                                    console.log("garbage collection forced at", new Date());
                                 } else {
                                     console.log("please start node with flag --expose-gc");
                                 }
