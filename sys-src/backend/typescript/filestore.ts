@@ -1,14 +1,15 @@
 import fs from "fs";
 import sevenZip from "7zip-min";
-import {dateToString} from "./util";
+import { dateToString } from "./util";
 import rimraf from "rimraf";
-import createLock from "./lock";
+import createLock, { lockFunction } from "./lock";
 
 const filesFolder = "./data";
 const archiveFolder = "./archive";
 const filesTempFolder = "./data_temp";
 const lastUpdateFileName = filesFolder + "/last_update.txt";
 const cache = new Map<string, any>();
+const locks = new Map<string, lockFunction>();
 
 const waitForLock = createLock();
 
@@ -161,40 +162,74 @@ function handleLoading<T>(
     fetchDataCallback: () => Promise<string>,
     transformData: (text: string) => Promise<T>,
     resolve: (value: T | PromiseLike<T>) => void,
-    reject: (reason?: any) => void
+    reject: (reason?: any) => void,
+    finished: (() => void) | undefined = undefined
 ): void {
     if (cache && cache.has(path)) {
         resolve(cache.get(path));
-    } else {
-        const filePath = `${filesFolder}/${path}`;
-        fs.readFile(filePath, (err, data) => {
-            if (err) {
-                fetchDataCallback()
-                    .then((data) => {
-                        fs.writeFile(filePath, data, (err) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                transformData(data)
-                                    .then((transformed) => {
-                                        cache.set(path, transformed);
-                                        resolve(transformed);
-                                    })
-                                    .catch(reject);
-                            }
-                        });
-                    })
-                    .catch(reject);
-            } else {
-                transformData(data.toString())
-                    .then((transformed) => {
-                        cache.set(path, transformed);
-                        resolve(transformed);
-                    })
-                    .catch(reject);
-            }
+        if (typeof finished !== 'undefined') {
+            finished();
+        }
+    }
+    else if (typeof finished === 'undefined') {
+        getLock(path)((finished) => {
+            handleLoading(
+                path,
+                fetchDataCallback,
+                transformData,
+                resolve,
+                reject,
+                finished
+            );
         });
     }
+    else {
+        loadFile(
+            path,
+            fetchDataCallback,
+            transformData,
+            (value) => { finished(); resolve(value); },
+            (reason) => { finished(); reject(reason); }
+        );
+    }
+}
+
+function loadFile<T>(
+    path: string,
+    fetchDataCallback: () => Promise<string>,
+    transformData: (text: string) => Promise<T>,
+    resolve: (value: T | PromiseLike<T>) => void,
+    reject: (reason?: any) => void
+): void {
+    const filePath = `${filesFolder}/${path}`;
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            fetchDataCallback()
+                .then((data) => {
+                    fs.writeFile(filePath, data, (err) => {
+                        //console.log('file written', path, 'at', new Date());
+                        if (err) {
+                            reject(err);
+                        } else {
+                            transformData(data)
+                                .then((transformed) => {
+                                    cache.set(path, transformed);
+                                    resolve(transformed);
+                                })
+                                .catch(reject);
+                        }
+                    });
+                })
+                .catch(reject);
+        } else {
+            transformData(data.toString())
+                .then((transformed) => {
+                    cache.set(path, transformed);
+                    resolve(transformed);
+                })
+                .catch(reject);
+        }
+    });
 }
 
 function ensureFolder(
@@ -217,12 +252,23 @@ function ensureFolder(
     );
 }
 
+function getLock(path: string): lockFunction {
+    if (locks && locks.has(path)) {
+        return locks.get(path)!;
+    }
+    else {
+        const lock = createLock();
+        locks.set(path, lock);
+        return lock;
+    }
+}
+
 
 /**
  * Use for unit tests only!
  */
 export const testables = {
-    forceClearCache: function() {
+    forceClearCache: function () {
         cache.clear();
     }
 }
