@@ -493,7 +493,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     countyGeo: GeoDataVaccine
   ): GeoDataVaccine {
     for (let i = 0; i < countyGeo.features.length; i++) {
-      const element = res.find((a) => a[1].StateId === i);
+      const element = res.find((a) => a[1].StateId === countyGeo.features[i].properties.StateId);
       if (element) {
         countyGeo.features[i].properties.propsNetwork = element[1];
       }
