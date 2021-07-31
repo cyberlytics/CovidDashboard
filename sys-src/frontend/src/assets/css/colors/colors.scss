@@ -1,0 +1,110 @@
+$color-primary: #d8d4cf;
+
+$color-accent-red: #ff1f4d;
+$color-accent-orange-red: #e5433c;
+$color-accent-purple: #a81dff;
+$color-accent-yellow: #ffc71d;
+$color-accent-green: #62d87b;
+$color-accent-blue: #529bf2;
+$color-accent-gray: #9e9688;
+$color-accent-light-gray: #b0b5b9;
+
+$color-background: #12131f;
+$color-secondary-background: #181926;
+
+$color-accent-red-background: rgba(255, 7, 58, 0.125);
+$color-accent-orange-red-background: rgba(229, 67, 60, 0.125);
+$color-accent-purple-background: rgba(168, 29, 255, 0.125);
+$color-accent-yellow-background: rgba(255, 199, 29, 0.125);
+$color-accent-green-background: rgba(40, 167, 69, 0.125);
+$color-accent-blue-background: rgba(0, 123, 255, 0.125);
+$color-accent-gray-background: rgba(108, 117, 125, 0.125);
+$color-accent-light-gray-background: rgba(203, 213, 222, 0.125);
+
+.accent-red {
+  color: $color-accent-red !important;
+}
+
+.accent-red-background {
+  background-color: $color-accent-red-background !important;
+}
+
+.accent-orange-red {
+  color: $color-accent-orange-red !important;
+}
+
+.accent-orange-red-background {
+  background-color: $color-accent-orange-red-background !important;
+}
+
+.accent-purple {
+  color: $color-accent-purple !important;
+}
+
+.accent-purple-background {
+  background-color: $color-accent-purple-background;
+}
+
+.accent-yellow {
+  color: $color-accent-yellow !important;
+}
+
+.accent-yellow-background {
+  background-color: $color-accent-yellow-background !important;
+}
+
+.accent-green {
+  color: $color-accent-green !important;
+}
+
+.accent-green-background {
+  background-color: $color-accent-green-background !important;
+}
+
+.accent-blue {
+  color: $color-accent-blue !important;
+}
+
+.accent-blue-background {
+  background-color: $color-accent-blue-background !important;
+}
+
+.accent-gray {
+  color: $color-accent-gray !important;
+}
+
+.accent-gray-background {
+  background-color: $color-accent-gray-background !important;
+}
+
+.accent-light-gray {
+  color: $color-accent-light-gray !important;
+}
+
+.accent-light-gray-background {
+  background-color: $color-accent-light-gray-background !important;
+}
+
+.hover-accent-gray-red {
+  color: $color-accent-gray !important;
+
+  &:hover {
+    color: $color-accent-red !important;
+  }
+}
+
+.hover-accent-gray-blue {
+  color: $color-accent-gray !important;
+
+  &:hover {
+    color: $color-accent-blue !important;
+  }
+}
+
+.hover-accent-gray-yellow {
+  color: $color-accent-gray !important;
+
+  &:hover {
+    color: $color-accent-yellow !important;
+  }
+}

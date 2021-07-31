@@ -1,0 +1,40 @@
+@import "../../../assets/css/colors/colors.scss";
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 40px;
+  background: $color-accent-gray-background;
+
+  &__title {
+    display: flex;
+    flex-direction: row;
+
+    padding: 1.5px 4px;
+    border-radius: 2px;
+
+    font-weight: 700;
+  }
+
+  &__links {
+    display: grid;
+    overflow: hidden;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+    grid-gap: 25px;
+
+    text-align: center;
+
+    i {
+      font-size: 20rem;
+    }
+
+    p {
+      margin-top: 3px;
+      font-size: 10rem;
+    }
+  }
+}
