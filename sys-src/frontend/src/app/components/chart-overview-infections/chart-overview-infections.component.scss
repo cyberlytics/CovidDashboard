@@ -1,0 +1,14 @@
+@import "../../../assets/css/colors/colors.scss";
+
+.chart-overview {
+  margin-top: 50px;
+  overflow: auto;
+
+  .content {
+    width: 100%;
+
+    button {
+      padding: 10px;
+    }
+  }
+}
