@@ -20,6 +20,9 @@
         "argsIgnorePattern": "_"
       }
     ],
-    "@typescript-eslint/array-type": "error"
+    "@typescript-eslint/array-type": "error",
+    "no-unused-vars": "warn",
+    "no-const-assign": "warn",
+    "no-this-before-super": "warn"
   }
 }

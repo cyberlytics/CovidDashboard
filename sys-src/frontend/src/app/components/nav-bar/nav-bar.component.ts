@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import { ResizeService } from 'src/app/services/resize/resize.service';
 import {FavoritesService} from '../../services/favorites/favorites.service';
 
 @Component({
@@ -11,10 +12,12 @@ import {FavoritesService} from '../../services/favorites/favorites.service';
 })
 export class NavBarComponent implements OnInit {
   public shareButtonText = 'Favoriten teilen';
+  public showNavbar = true;
 
   constructor(
     private router: Router,
-    public favoriteService: FavoritesService
+    public favoriteService: FavoritesService,
+    public resize: ResizeService
   ) {
   }
 

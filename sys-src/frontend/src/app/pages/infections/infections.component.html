@@ -1,4 +1,4 @@
-<div class="infections">
+<div class="infections" [ngClass]="{'noNavbar': !this.resize.navBarIsShown, '': this.resize.isMobile}" >
   <div class="infections__left">
     <app-info-badges></app-info-badges>
     <app-info-table [showInfection]="true"></app-info-table>
@@ -9,3 +9,8 @@
     <app-map></app-map>
   </div>
 </div>
+
+
+<!-- [ngStyle]="{'margin-top': this.resize.navBarIsShown ? '20px' : '50px'}" -->
+
+<!-- [ngClass]="this.resize.navBarIsShown ? '': 'test'" -->
