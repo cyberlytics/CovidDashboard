@@ -2,6 +2,8 @@ import type {OnDestroy, OnInit} from '@angular/core';
 import {Component} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { ResizeService } from 'src/app/services/resize/resize.service';
 import type {AreaData} from '../../services/alltypes';
 import {InfectionChartType} from '../../services/alltypes';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
@@ -23,6 +25,16 @@ export class ChartOverviewInfectionsComponent implements OnInit, OnDestroy {
     ['6 Monate', 180],
     ['1 Jahr', 365],
     ['Gesamter Zeitraum', 400],
+  ];
+  public timeSpanMobile: [string, number][] = [
+    ['1W', 7],
+    ['2W', 14],
+    ['3W', 21],
+    ['1M', 30],
+    ['3M', 90],
+    ['6M', 180],
+    ['1J', 365],
+    ['GZ', 400],
   ];
   public dayNumber = 7;
   public loaded = false;
@@ -51,7 +63,10 @@ export class ChartOverviewInfectionsComponent implements OnInit, OnDestroy {
   };
   private notifer = new Subject();
 
-  constructor(private infections: InfectionsService) {
+  constructor(
+    private infections: InfectionsService,
+    public resize: ResizeService
+    ) {
     // calculate days for all time span
     const date = new Date();
     date.setHours(1, 0, 0);
@@ -60,6 +75,7 @@ export class ChartOverviewInfectionsComponent implements OnInit, OnDestroy {
     let diff = date.getTime() - startDate.getTime();
     diff = Math.round(diff / (1000 * 3600 * 24));
     this.timeSpan[this.timeSpan.length - 1][1] = diff;
+    this.timeSpanMobile[this.timeSpan.length - 1][1] = diff;
 
     this.infections.getSelectedCountyInfo().pipe(takeUntil(this.notifer)).subscribe((id) => {
       this.loadData(id);
