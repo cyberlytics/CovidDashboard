@@ -10,6 +10,9 @@
     grid-gap: 5px;
     max-height: 300px;
     margin-bottom: 5px;
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, minmax(130px, 1fr));
+    }
   }
 
   .vaccines {
@@ -89,4 +92,31 @@
       }
     }
   }
+}
+
+.mobileDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #181926;
+
+  .moblieheading {
+    width: 100%;
+  }
+
+  .buttonsSwitch {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 100%;
+    padding: 6px;
+    padding-left: 0px;
+    margin: 0px 10px;
+  }
+
+  .disabledDiv {
+    pointer-events: none;
+    opacity: 50%;
+  }
+
 }
