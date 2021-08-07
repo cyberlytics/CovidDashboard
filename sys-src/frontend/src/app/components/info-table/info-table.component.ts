@@ -6,6 +6,7 @@ import {FavoritesService} from '../../services/favorites/favorites.service';
 import type {CountyCombined, VaccineCombined,} from '../../services/alltypes';
 import {VaccinesService} from 'src/app/services/vaccines/vaccines.service';
 import {InfectionsService} from 'src/app/services/infections/infections.service';
+import { ResizeService } from 'src/app/services/resize/resize.service';
 
 @Component({
   selector: 'app-info-table',
@@ -25,6 +26,8 @@ export class InfoTableComponent implements OnInit {
   public germanyVaccine = {} as VaccineCombined;
 
   public searchTerm = '';
+  public pageIndex = 0;
+  public tableLength = 4;
 
   public key = 'County';
   public reverse = false;
@@ -33,7 +36,8 @@ export class InfoTableComponent implements OnInit {
     private network: NetworkService,
     public favoriteService: FavoritesService,
     private vaccines: VaccinesService,
-    private infections: InfectionsService
+    private infections: InfectionsService,
+    public resize: ResizeService
   ) {
   }
 
@@ -209,5 +213,19 @@ export class InfoTableComponent implements OnInit {
       this.germanyCounty = this.allCountys[temp];
       this.allCountys.splice(temp, 1);
     }
+  }
+
+  public previousPage(): void {
+    if (this.pageIndex > 0) {
+      this.pageIndex--;
+    }
+    console.log('page index previous', this.pageIndex);
+  }
+
+  public nextPage(): void {
+    if (this.pageIndex < this.tableLength) {
+      this.pageIndex++;
+    }
+    console.log('page index next', this.pageIndex);
   }
 }
