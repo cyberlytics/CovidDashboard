@@ -228,4 +228,12 @@ export class InfoTableComponent implements OnInit {
     }
     console.log('page index next', this.pageIndex);
   }
+
+  onSwipe(evt: any) {
+    // const x = Math.abs(evt.deltaX) > 40 ? (evt.deltaX > 0 ? 'right' : 'left'):'';
+    // const y = Math.abs(evt.deltaY) > 40 ? (evt.deltaY > 0 ? 'down' : 'up') : '';
+
+    // this.eventText += `${x} ${y}<br/>`;
+    console.log('evt', evt);
+}
 }
