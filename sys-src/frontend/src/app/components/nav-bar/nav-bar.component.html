@@ -25,7 +25,7 @@
     </a>
   </div>
   <div  class="accent-light-gray accent-blue accent-blue-background nav-bar__item changeButton"
-    (click)="this.showNavbar = !this.showNavbar; this.resize.navBarIsShown = !this.resize.navBarIsShown"  [ngClass]="this.showNavbar ? '' : 'changBtnFull'"
+    (click)="this.changeNavBarDisplay()"  [ngClass]="this.showNavbar ? '' : 'changBtnFull'"
     *ngIf="this.resize.isMobile"
   >
     <i  *ngIf="this.showNavbar"

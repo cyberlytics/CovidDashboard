@@ -19,6 +19,7 @@ export class NavBarComponent implements OnInit {
     public favoriteService: FavoritesService,
     public resize: ResizeService
   ) {
+    this.showNavbar = this.resize.navBarIsShown;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -47,5 +48,11 @@ export class NavBarComponent implements OnInit {
     setTimeout(() => {
       this.shareButtonText = 'Favoriten teilen';
     }, 1500);
+  }
+
+  public changeNavBarDisplay(): void {
+    this.showNavbar = !this.showNavbar;
+    this.resize.navBarIsShown = !this.resize.navBarIsShown;
+    localStorage.setItem('navBar', this.showNavbar.toString());
   }
 }

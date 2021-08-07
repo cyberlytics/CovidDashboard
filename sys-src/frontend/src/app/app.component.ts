@@ -12,6 +12,14 @@ export class AppComponent implements OnInit {
 
   constructor(private resize: ResizeService) {
     console.log(window.innerWidth);
+    const navBar = localStorage.getItem('navBar');
+    if (navBar === 'true') {
+      this.resize.navBarIsShown = true;
+    } else if (navBar === null || navBar === undefined) {
+      this.resize.navBarIsShown = true;
+    } else {
+      this.resize.navBarIsShown = false;
+    }
   }
 
   ngOnInit() {
