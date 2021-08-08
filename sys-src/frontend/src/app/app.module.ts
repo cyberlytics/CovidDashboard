@@ -27,6 +27,7 @@ import {registerLocaleData} from "@angular/common";
 import {ImprintComponent} from './pages/imprint/imprint.component';
 import * as Hammer from 'hammerjs';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { LineChartComponent } from './components/charts/line-chart/line-chart.component';
 
 registerLocaleData(localeDe);
 
@@ -54,7 +55,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     InfectionsComponent,
     ShareComponent,
     VaccinationsComponent,
-    ImprintComponent
+    ImprintComponent,
+    LineChartComponent
   ],
   imports: [
     BrowserModule,
