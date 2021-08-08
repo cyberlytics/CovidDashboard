@@ -55,12 +55,20 @@
     </div>
 
     <app-bar-chart
-      *ngIf="!this.showRecDeadTotal"
+      *ngIf="!this.showRecDeadTotal && !this.resize.isMobile"
       [colorScheme]="this.colorScheme"
       [daynumber]="this.dayNumber"
       [loaded]="this.loaded"
       [type]="this.type"
     ></app-bar-chart>
+
+    <app-line-chart
+      *ngIf="!this.showRecDeadTotal && this.resize.isMobile"
+      [colorScheme]="this.colorScheme"
+      [daynumber]="this.dayNumber"
+      [loaded]="this.loaded"
+      [type]="this.type"
+    ></app-line-chart>
 
     <app-area-chart
       *ngIf="this.showRecDeadTotal"
