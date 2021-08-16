@@ -407,7 +407,7 @@ export class MapComponent implements OnInit, AfterViewInit {
           createPopUP(e);
         });
         layer.on('mouseout', () => {
-          // this.map.closePopup(this.tolltippopup);
+          this.map.closePopup(this.tolltippopup);
         });
       },
     });
