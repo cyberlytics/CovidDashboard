@@ -6,6 +6,7 @@ import {NetworkService} from 'src/app/services/network/network.service';
 import {Router} from '@angular/router';
 import {InfectionsService} from 'src/app/services/infections/infections.service';
 import {VaccinesService} from 'src/app/services/vaccines/vaccines.service';
+import { ResizeService } from 'src/app/services/resize/resize.service';
 
 @Component({
   selector: 'app-map',
@@ -27,7 +28,8 @@ export class MapComponent implements OnInit, AfterViewInit {
     private network: NetworkService,
     private router: Router,
     private infection: InfectionsService,
-    private vaccines: VaccinesService
+    private vaccines: VaccinesService,
+    private resize: ResizeService
   ) {
   }
 
@@ -377,87 +379,104 @@ export class MapComponent implements OnInit, AfterViewInit {
       },
       onEachFeature: (feature, layer) => {
         layer.on('click', (e) => {
-          // e = event
-          // console.log(e);
-          console.log(e.target.feature.properties);
-          console.log(e.target.feature.properties.AdmUnitId);
-          // this.infection.selectedCountyId = e.target.feature.properties.AdmUnitId;
-          if (this.showInfections) {
-            this.infection.setSelectedCountyId(
-              e.target.feature.properties.AdmUnitId
-            );
+          if (this.resize.isMobile) {
+            createPopUP(e);
           } else {
-            console.log(e.target.feature.properties.StateId);
-            this.vaccines.setSelectedStateId(
-              e.target.feature.properties.StateId
-            );
+            // e = event
+            // console.log(e);
+            console.log(e.target.feature.properties);
+            console.log(e.target.feature.properties.AdmUnitId);
+            // this.infection.selectedCountyId = e.target.feature.properties.AdmUnitId;
+            if (this.showInfections) {
+              this.infection.setSelectedCountyId(
+                e.target.feature.properties.AdmUnitId
+                );
+            } else {
+              console.log(e.target.feature.properties.StateId);
+              this.vaccines.setSelectedStateId(
+                e.target.feature.properties.StateId
+              );
+            }
           }
         });
         layer.on('mouseover', (e: any) => {
-          let content = '';
-          if (this.showInfections) {
-            const props = e.target.feature.properties.propsNetwork;
-            content =
-              '<h1>' +
-              props.County +
-              '</h1>' +
-              '<p>Bestätigt: ' +
-              props.TotalCases.toLocaleString('de-DE') +
-              '</p>' +
-              '<p>Aktiv: ' +
-              props.ActiveCases.toLocaleString('de-DE') +
-              '</p>' +
-              '<p>Genesen: ' +
-              props.Recovered.toLocaleString('de-DE') +
-              '</p>' +
-              '<p>7 Tage-Inzidenz: ' +
-              props.Incidence7.toFixed(2).replace('.', ',') +
-              '</p>' +
-              '<p>Verstorben: ' +
-              props.Deaths.toLocaleString('de-DE') +
-              '</p>';
+          createPopUP(e);
+        });
+        layer.on('mouseout', () => {
+          // this.map.closePopup(this.tolltippopup);
+        });
+      },
+    });
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const scope = this;
+    function createPopUP(e: any) {
+      let content = '';
+          if (scope.showInfections) {
+            content = createPopUpTextInfections(e.target.feature.properties.propsNetwork);
           } else {
-            const props = e.target.feature.properties.propsNetwork;
-            content =
-              '<h1>' +
-              e.target.feature.properties.name +
-              '</h1>' +
-              '<p>Mindestens eine Impfdosis erhalten: ' +
-              props.ProportionFirstVaccinations.toString().replace('.', ',') +
-              '%</p>' +
-              '<p>Zwei Impfdosen erhalten: ' +
-              props.ProportionSecondVaccinations.toString().replace('.', ',') +
-              '%</p>' +
-              '<p>Verabreichte Impfdosen : ' +
-              props.SumVaccinations.toLocaleString('de-DE') +
-              '</p>' +
-              '<p>Impfdosen AstraZeneca: ' +
-              props.SumAstraZeneca.toLocaleString('de-DE') +
-              '</p>' +
-              '<p>Impfdosen BioNTech/Pfizer: ' +
-              props.SumBioNTech.toLocaleString('de-DE') +
-              '</p>' +
-              '<p>Impfdosen Johnson & Johnson: ' +
-              props.SumJohnsonAndJohnson.toLocaleString('de-DE') +
-              '</p>' +
-              '<p>Impfdosen Moderna: ' +
-              props.SumModerna.toLocaleString('de-DE') +
-              '</p>';
+            content = createPopUpTextVaccines(e.target.feature.properties.propsNetwork, e.target.feature.properties.name);
           }
           const temp = L.latLng(e.latlng.lat, e.latlng.lng);
-          this.tolltippopup = L.popup({
+          scope.tolltippopup = L.popup({
             offset: L.point(0, 0),
             className: 'popup',
           })
             .setContent(content)
             .setLatLng(temp)
-            .openOn(this.map);
-        });
-        layer.on('mouseout', () => {
-          this.map.closePopup(this.tolltippopup);
-        });
-      },
-    });
+            .openOn(scope.map);
+    }
+
+    function createPopUpTextInfections(props: any) {
+      const content =
+        '<h1>' +
+        props.County +
+        '</h1>' +
+        '<p>Bestätigt: ' +
+        props.TotalCases.toLocaleString('de-DE') +
+        '</p>' +
+        '<p>Aktiv: ' +
+        props.ActiveCases.toLocaleString('de-DE') +
+        '</p>' +
+        '<p>Genesen: ' +
+        props.Recovered.toLocaleString('de-DE') +
+        '</p>' +
+        '<p>7 Tage-Inzidenz: ' +
+        props.Incidence7.toFixed(2).replace('.', ',') +
+        '</p>' +
+        '<p>Verstorben: ' +
+        props.Deaths.toLocaleString('de-DE') +
+        '</p>';
+        return content;
+    }
+
+    function createPopUpTextVaccines(props: any, name: any) {
+      const content =
+      '<h1>' +
+      name +
+      '</h1>' +
+      '<p>Mindestens eine Impfdosis erhalten: ' +
+      props.ProportionFirstVaccinations.toString().replace('.', ',') +
+      '%</p>' +
+      '<p>Zwei Impfdosen erhalten: ' +
+      props.ProportionSecondVaccinations.toString().replace('.', ',') +
+      '%</p>' +
+      '<p>Verabreichte Impfdosen : ' +
+      props.SumVaccinations.toLocaleString('de-DE') +
+      '</p>' +
+      '<p>Impfdosen AstraZeneca: ' +
+      props.SumAstraZeneca.toLocaleString('de-DE') +
+      '</p>' +
+      '<p>Impfdosen BioNTech/Pfizer: ' +
+      props.SumBioNTech.toLocaleString('de-DE') +
+      '</p>' +
+      '<p>Impfdosen Johnson & Johnson: ' +
+      props.SumJohnsonAndJohnson.toLocaleString('de-DE') +
+      '</p>' +
+      '<p>Impfdosen Moderna: ' +
+      props.SumModerna.toLocaleString('de-DE') +
+      '</p>';
+      return content;
+    }
     this.layer.addTo(this.map);
   }
 

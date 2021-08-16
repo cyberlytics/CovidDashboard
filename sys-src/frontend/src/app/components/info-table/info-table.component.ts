@@ -120,6 +120,7 @@ export class InfoTableComponent implements OnInit {
   public change(toggleFavorites = false): void {
     if (toggleFavorites) {
       this.selectedFavorites = !this.selectedFavorites;
+      this.searchTerm = '';
     }
 
     this.searchCountys = this.allCountys.filter((s) => {
