@@ -57,9 +57,13 @@ export class MapComponent implements OnInit, AfterViewInit {
    * creates the map and shows the infection data
    */
   private initMap(): void {
+    let zoom = 7;
+    if(this.resize.isMobile) {
+      zoom = 6;
+    }
     this.map = L.map('map', {
       center: [51.1642292, 10.4541194],
-      zoom: 7,
+      zoom: zoom,
       minZoom: 6,
       maxZoom: 10,
       attributionControl: false,

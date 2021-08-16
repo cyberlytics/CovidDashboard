@@ -83,11 +83,27 @@ body {
 }
 
 .popup {
+  font-family: 'Archia';
   h1 {
     font-size: 20px;
   }
 
   p {
     margin: 11px 0;
+  }
+  .leaflet-popup-content-wrapper {
+    background-color: $color-background;
+    color: $color-accent-light-gray;
+  }
+  .leaflet-popup-tip-container {
+    // background-color: black;
+  }
+  .leaflet-popup-tip{
+    background-color: $color-background;
+  }
+  .leaflet-popup-close-button{
+    color: $color-accent-light-gray !important;
+    top: 3px !important;
+    right: 3px !important;
   }
 }
