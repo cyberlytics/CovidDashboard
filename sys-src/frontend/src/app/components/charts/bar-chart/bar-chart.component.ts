@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import type { DoCheck, OnChanges, OnDestroy} from '@angular/core';
+import type { OnChanges, OnDestroy} from '@angular/core';
 import {Component, Input, ChangeDetectorRef} from '@angular/core';
 import type {ScaleData, SelectedBarElement} from '../../../services/alltypes';
 import {InfectionChartType} from '../../../services/alltypes';
@@ -14,7 +14,7 @@ import { ResizeService } from 'src/app/services/resize/resize.service';
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.scss'],
 })
-export class BarChartComponent implements OnDestroy, OnChanges, DoCheck {
+export class BarChartComponent implements OnDestroy, OnChanges {
   // inputs for type, daynumber, colorscheme and loaded
   @Input() type: InfectionChartType = InfectionChartType.incidence7;
   @Input() daynumber = 7;
@@ -51,11 +51,6 @@ export class BarChartComponent implements OnDestroy, OnChanges, DoCheck {
    */
   ngOnChanges(): void {
     this.changedInput(this.type, this.daynumber);
-  }
-
-  ngDoCheck() {
-    console.log('do check');
-    // console.log(this.xCoordinate)
   }
 
   /**
