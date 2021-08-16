@@ -74,6 +74,8 @@ export class InfoTableComponent implements OnInit {
           console.log('error get all county incidences', err);
         }
       );
+      this.tableLength = 4;
+      this.pageIndex = 0;
     } else {
       this.network.getVaccineAllStates().subscribe(
         (res) => {
@@ -110,6 +112,8 @@ export class InfoTableComponent implements OnInit {
           console.log('error get vaccine all states', err);
         }
       );
+      this.tableLength = 5;
+      this.pageIndex = 0;
     }
   }
 

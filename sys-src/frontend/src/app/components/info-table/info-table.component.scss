@@ -17,6 +17,9 @@
 
   .vaccines {
     grid-template-columns: repeat(7, minmax(115px, 1fr));
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, minmax(130px, 1fr));
+    }
   }
 }
 
