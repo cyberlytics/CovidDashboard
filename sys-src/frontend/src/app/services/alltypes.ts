@@ -150,3 +150,9 @@ export type CountyDiff = {
   0: number;
   1: CountyDiffDetails;
 };
+
+export type SelectedBarElement = {
+  name: string;
+  value: number;
+  label: string;
+}

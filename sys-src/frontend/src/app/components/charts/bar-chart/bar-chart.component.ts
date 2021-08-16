@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import type {OnChanges, OnDestroy} from '@angular/core';
 import {Component, Input} from '@angular/core';
-import type {ScaleData} from '../../../services/alltypes';
+import type {ScaleData, SelectedBarElement} from '../../../services/alltypes';
 import {InfectionChartType} from '../../../services/alltypes';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {InfectionsService} from '../../../services/infections/infections.service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import { ResizeService } from 'src/app/services/resize/resize.service';
 
 @Component({
   selector: 'app-bar-chart',
@@ -21,8 +23,12 @@ export class BarChartComponent implements OnDestroy, OnChanges {
   // displayed array
   public displayedValues = [] as ScaleData[];
   private notifer = new Subject();
+  public selectedBarElement: SelectedBarElement = {} as SelectedBarElement;
 
-  constructor(private infections: InfectionsService) {
+  constructor(
+    private infections: InfectionsService,
+    public resize: ResizeService
+    ) {
     this.infections.newDataLoaded().pipe(takeUntil(this.notifer)).subscribe(() => {
       this.changedInput(this.type, this.daynumber);
     });
@@ -65,5 +71,10 @@ export class BarChartComponent implements OnDestroy, OnChanges {
         this.displayedValues.length
       );
     }
+  }
+
+  public selectedElement(event: any) {
+    console.log(event);
+    this.selectedBarElement = event;
   }
 }

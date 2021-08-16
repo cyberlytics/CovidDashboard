@@ -1,5 +1,5 @@
-<div class="bar-chart">
-  <ngx-charts-bar-vertical
+<div class="bar-chart" [ngClass]="{'bar-chart-mobile': this.resize.isMobile}">
+  <ngx-charts-bar-vertical *ngIf="!this.resize.isMobile"
     [animations]="true"
     [legend]="false"
     [results]="displayedValues"
@@ -10,4 +10,25 @@
     [yAxis]="true"
   >
   </ngx-charts-bar-vertical>
+  <div *ngIf="this.selectedBarElement.name">
+    <p id="date">
+      {{this.selectedBarElement.name}}
+    </p>
+    <p id="value">
+      {{this.selectedBarElement.value.toFixed(2).toString().replace('.', ',')}}
+    </p>
+  </div>
+  <ngx-charts-bar-vertical *ngIf="this.resize.isMobile"
+  [animations]="true"
+  [legend]="false"
+  [results]="displayedValues"
+  [roundEdges]="false"
+  [scheme]="colorScheme"
+  [showGridLines]="true"
+  [xAxis]="true"
+  [yAxis]="true"
+  [tooltipDisabled]="true"
+  (select)="this.selectedElement($event)"
+>
+</ngx-charts-bar-vertical>
 </div>
