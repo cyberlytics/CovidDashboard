@@ -1,4 +1,4 @@
-<div class="bar-chart" [ngClass]="{'bar-chart-mobile': this.resize.isMobile}">
+<div class="bar-chart" [ngClass]="{'bar-chart-mobile': this.resize.isMobile}" (click)="this.getCoordinates($event)">
   <ngx-charts-bar-vertical *ngIf="!this.resize.isMobile"
     [animations]="true"
     [legend]="false"
@@ -10,14 +10,16 @@
     [yAxis]="true"
   >
   </ngx-charts-bar-vertical>
-  <div *ngIf="this.selectedBarElement.name">
-    <p id="date">
+
+  <div *ngIf="this.selectedBarElement.name && this.showDiv" class="infodiv" [ngStyle]="{'top': this.yCoordinate.toString() + 'px', left: this.xCoordinate.toString() + 'px'}" >
+    <p id="date" >
       {{this.selectedBarElement.name}}
     </p>
     <p id="value">
       {{this.selectedBarElement.value.toFixed(2).toString().replace('.', ',')}}
     </p>
   </div>
+
   <ngx-charts-bar-vertical *ngIf="this.resize.isMobile"
   [animations]="true"
   [legend]="false"
