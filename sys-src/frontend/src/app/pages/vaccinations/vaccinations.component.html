@@ -1,4 +1,4 @@
-<div class="vaccinations">
+<div class="vaccinations" [ngClass]="{'noNavbar': !this.resize.navBarIsShown}">
   <div class="vaccinations__left">
     <app-info-badges></app-info-badges>
     <app-vaccine-progress-bar></app-vaccine-progress-bar>
