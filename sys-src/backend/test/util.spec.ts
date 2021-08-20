@@ -67,6 +67,16 @@ describe("Util", () => {
             new Date(Date.parse("2020-04-13T00:00:00Z")));
     });
 
+    it("should parse a Date string formatted by RKI (new format)", () => {
+        assert.deepStrictEqual(
+            parseRKIDate("2021/06/28 00:12:34"),
+            new Date(Date.parse("2021-06-28T00:12:34Z")));
+
+        assert.deepStrictEqual(
+            parseRKIDate("2020/04/13 00:00:00"),
+            new Date(Date.parse("2020-04-13T00:00:00Z")));
+    });
+
     it("should return the last element and the last two elements in a map of maps", () => {
         const original = new Map<number, Map<number, string>>();
         original.set(0, new Map<number, string>([
