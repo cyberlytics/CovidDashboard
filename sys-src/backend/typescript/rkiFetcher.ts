@@ -1,10 +1,11 @@
 import Papa from "papaparse";
 import getFromCache from "./filestore";
 import fetch from "node-fetch";
-import {addDays, getMidnightUTC, last2ElementsPerMap, MS_PER_DAY, parse, parseRKIDate, stringify,} from "./util";
+import { addDays, getMidnightUTC, last2ElementsPerMap, MS_PER_DAY, parse, parseRKIDate, stringify, } from "./util";
 
-const RKIDataPath =
-    "https://opendata.arcgis.com/api/v3/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/downloads/data?format=csv&spatialRefId=4326";
+const RKIDataPath = "https://www.arcgis.com/sharing/rest/content/items/f10774f1c63e40168479a1feb6c7ca74/data";
+//    "https://opendata.arcgis.com/api/v3/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/downloads/data?format=csv&spatialRefId=4326";
+
 const RKIPopulationDataPath =
     "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=EWZ,last_update,cases7_per_100k,AdmUnitId,cases7_lk,death7_lk&returnGeometry=false&outSR=4326&f=json";
 const RKIVaccinationDataPath =
@@ -122,7 +123,7 @@ function convertSex(rkiSex: string): RKIRawData["Sex"] {
     return "u";
 }
 
-const headerTranslation = (function() {
+const headerTranslation = (function () {
     const map = new Map<string, string>();
     map.set("ObjectId", "ObjectId");
     map.set("IdBundesland", "StateId");
@@ -163,12 +164,12 @@ function fullData(): Promise<RKIRawData[]> {
                     const result = new Array<RKIRawData>();
                     Papa.parse(t, {
                         header: true,
-                        transformHeader: function(s: string) {
+                        transformHeader: function (s: string) {
                             return headerTranslation.get(s)!;
                         },
                         dynamicTyping: true,
                         skipEmptyLines: "greedy",
-                        step: function(results, parser) {
+                        step: function (results, parser) {
                             if (typeof results.data === "object") {
                                 transformToRKIRawData(results.data);
                             } else {
@@ -283,11 +284,14 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                         if (typeof oldData === "undefined") {
                                             throw "oldDay does not exist in map";
                                         }
+                                        //console.log("Expansion called for", oldDay, "to", newDay);
                                         for (
                                             let date = oldDay + MS_PER_DAY;
                                             date <= newDay;
                                             date += MS_PER_DAY
                                         ) {
+                                            //console.log("    Expanding from", oldDay, "to", date);
+
                                             map.set(date, {
                                                 ActiveCases: oldData.ActiveCases,
                                                 CountyId: oldData.CountyId,
@@ -307,10 +311,16 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                         data: RKIRawData
                                     ): void {
                                         const dateNumber = data.Date.valueOf();
-                                        map.get(dateNumber)!.TotalCases +=
-                                            data.NewCases + data.NewDeaths + data.NewRecovered;
-                                        map.get(dateNumber)!.Deaths += data.NewDeaths;
-                                        map.get(dateNumber)!.Recovered += data.NewRecovered;
+                                        try {
+                                            map.get(dateNumber)!.TotalCases +=
+                                                data.NewCases + data.NewDeaths + data.NewRecovered;
+                                            map.get(dateNumber)!.Deaths += data.NewDeaths;
+                                            map.get(dateNumber)!.Recovered += data.NewRecovered;
+                                        }
+                                        catch (ex) {
+                                            console.log("Error occured while summing for date:", data.Date, dateNumber, data);
+                                            throw ex;
+                                        }
                                     }
 
                                     groupPerCounty.forEach((values, countyId) => {
@@ -341,7 +351,7 @@ export function dataPerCounty(): Promise<Map<number, Map<number, RKIData>>> {
                                         let currentDate = beginDate;
                                         for (; i < values.length; i++) {
                                             const e = values[i];
-                                            if (e.Date > currentDate) {
+                                            if (e.Date.valueOf() > currentDate.valueOf()) {
                                                 // We reached a new day
                                                 // -> copy everything from yesterday and continue with aggregation
                                                 expandData(
@@ -450,7 +460,7 @@ export function getNames(): Promise<Names> {
                                 }
                             });
 
-                            resolve(stringify({Counties: counties, States: states}));
+                            resolve(stringify({ Counties: counties, States: states }));
                         })
                         .catch(reject);
                 });
@@ -484,7 +494,7 @@ export function vaccinationPerState(): Promise<Map<number, Map<number, RKIVaccin
                         obj: any
                     ): Map<number, Map<number, RKIVaccinationData>> {
                         const map = new Map<number, Map<number, RKIVaccinationData>>();
-                        obj.features.forEach(({attributes}: any) => {
+                        obj.features.forEach(({ attributes }: any) => {
                             const stateIdentifier = attributes.RS;
                             if (stateIdentifier === "DE") {
                                 return;

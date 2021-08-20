@@ -1,7 +1,7 @@
 import assert from "assert";
 import fs from "fs";
-import getFromCache, {testables} from "../typescript/filestore";
-import {parse, stringify} from "../typescript/util";
+import getFromCache, { testables } from "../typescript/filestore";
+import { parse, stringify } from "../typescript/util";
 
 type TestType = {
     text: string;
@@ -56,7 +56,7 @@ describe("Filestore", () => {
 
     it("should generate a file if it does not exist", (done) => {
         getFromCache<TestType>(
-            'test.txt',
+            testFileName,
             () => {
                 return new Promise((resolve, reject) => {
                     resolve(
@@ -84,7 +84,7 @@ describe("Filestore", () => {
 
     it("should fail if fetchData promise gets rejected", (done) => {
         getFromCache<TestType>(
-            'test.txt',
+            testFileName,
             () => {
                 return new Promise((resolve, reject) => {
                     reject('intentional');
@@ -109,7 +109,7 @@ describe("Filestore", () => {
 
     it("should fail if transformData promise gets rejected", (done) => {
         getFromCache<TestType>(
-            'test.txt',
+            testFileName,
             () => {
                 return new Promise((resolve, reject) => {
                     resolve(
@@ -135,7 +135,7 @@ describe("Filestore", () => {
 
     it("should regenerate the data if last update was more than a day ago", (done) => {
         getFromCache<TestType>(
-            'test.txt',
+            testFileName,
             () => {
                 return new Promise((resolve, reject) => {
                     resolve(
@@ -167,7 +167,7 @@ describe("Filestore", () => {
                             assert.fail(err);
                         }
                         getFromCache<TestType>(
-                            'test.txt',
+                            testFileName,
                             () => {
                                 return new Promise((resolve, reject) => {
                                     reject('intentional');
@@ -194,7 +194,7 @@ describe("Filestore", () => {
 
     it("should load the data from file if cache got cleared and last update was today", (done) => {
         getFromCache<TestType>(
-            'test.txt',
+            testFileName,
             () => {
                 return new Promise((resolve, reject) => {
                     resolve(
@@ -221,7 +221,7 @@ describe("Filestore", () => {
                 testables.forceClearCache();
 
                 getFromCache<TestType>(
-                    'test.txt',
+                    testFileName,
                     () => {
                         return new Promise((resolve, reject) => {
                             // this line must not be called
@@ -249,7 +249,7 @@ describe("Filestore", () => {
 
     it("should return the data from cache if available and last update was today", (done) => {
         getFromCache<TestType>(
-            'test.txt',
+            testFileName,
             () => {
                 return new Promise((resolve, reject) => {
                     resolve(
@@ -262,7 +262,7 @@ describe("Filestore", () => {
                     resolve(
                         parse(t)
                     );
-                })
+                });
             }
         )
             .catch(assert.fail)
@@ -273,7 +273,7 @@ describe("Filestore", () => {
                 );
 
                 getFromCache<TestType>(
-                    'test.txt',
+                    testFileName,
                     () => {
                         return new Promise((resolve, reject) => {
                             // this line must not be called
@@ -296,5 +296,53 @@ describe("Filestore", () => {
                         done();
                     });
             });
+    });
+
+    it("should block data creation if two concurrent requests were made", (done) => {
+        const finishedArr = new Array<TestType>();
+        getFromCache<TestType>(
+            testFileName,
+            () => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(
+                            stringify(generateDefaultData())
+                        );
+                    }, 500); // wait some time to artificially construct a "concurrent" request
+                });
+            },
+            (t) => {
+                return new Promise((resolve, reject) => {
+                    resolve(
+                        parse(t)
+                    );
+                });
+            }
+        )
+            .catch(assert.fail)
+            .then(data => {
+                finishedArr.push(data);
+            });
+
+        getFromCache<TestType>(
+            testFileName,
+            assert.fail,    // This function must not be called
+            assert.fail,    // This function must not be called
+        )
+            .catch(assert.fail)
+            .then(data => {
+                finishedArr.push(data);
+            });
+
+        const checkEnd = () => {
+            if (finishedArr.length === 2) {
+                assert.deepStrictEqual(finishedArr[0], finishedArr[1]);
+                done();
+            }
+            else {
+                setTimeout(checkEnd, 100);
+            }
+        };
+        setTimeout(checkEnd, 600);
     });
 });

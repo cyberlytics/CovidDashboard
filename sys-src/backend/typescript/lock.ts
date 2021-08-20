@@ -1,3 +1,5 @@
+export type lockFunction = (callback: (finished: () => void) => void) => void;
+
 /**
  * Creates a new lock to prevent multiple access to a resource.
  * @param retryTime The amount of milliseconds to wait until
@@ -6,7 +8,7 @@
  */
 export default function createLock(
     retryTime = 100,
-): (callback: (finished: () => void) => void) => void {
+): lockFunction {
     let lock: boolean = false;
     const waitForLock = (callback: (finished: () => void) => void) => {
         if (lock) {
