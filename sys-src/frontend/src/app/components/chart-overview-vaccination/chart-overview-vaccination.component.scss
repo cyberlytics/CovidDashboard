@@ -12,3 +12,8 @@
     }
   }
 }
+
+.mobileInfoBar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(10px, 1fr));
+}
