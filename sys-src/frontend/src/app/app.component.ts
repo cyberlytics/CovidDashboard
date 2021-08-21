@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
 
   private checkScreen() {
     this.resize.isMobile = (window.innerWidth < 900);
+    this.resize.currentWidth = window.innerWidth;
     // console.log(window.innerWidth);
   }
 }
