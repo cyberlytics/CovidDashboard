@@ -20,6 +20,10 @@ export class AppComponent implements OnInit {
     } else {
       this.resize.navBarIsShown = false;
     }
+
+    if (!this.resize.isMobile) {
+      this.resize.navBarIsShown = true;
+    }
   }
 
   ngOnInit() {
