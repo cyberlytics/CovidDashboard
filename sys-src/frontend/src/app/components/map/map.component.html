@@ -27,10 +27,10 @@
 
 
   <div>
-    <p style="padding: 4px 0px;">Legende - Fälle letzte 7 Tage/100.000 EW	</p>
+    <p style="padding: 4px 0px;">Legende - {{legendLabel}}	</p>
     <div class="gridLegend" *ngIf="this.resize.isMobile">
-      <div *ngFor="let element of this.incidenceslegende, let lastelement = last, let i = index"
-        [ngStyle]="{'grid-column': (i < this.incidenceslegende.length/2) ? 1 : 2, 'grid-row': (i < this.incidenceslegende.length/2) ? i+1 : (i- this.incidenceslegende.length/2 + 0.5) }">
+      <div *ngFor="let element of this.displayedLegned, let lastelement = last, let i = index"
+        [ngStyle]="{'grid-column': (i < this.displayedLegned.length/2) ? 1 : 2, 'grid-row': (i < this.displayedLegned.length/2) ? i+1 : (i- this.displayedLegned.length/2 + 0.5) }">
         <i class="fas fa-stop"
         [style.color]="element.color"
         [style.opacity]="element.fillOpacity"
@@ -41,8 +41,8 @@
     </div>
 
     <div class="gridLegend" *ngIf="!this.resize.isMobile">
-      <div *ngFor="let element of this.incidenceslegende, let lastelement = last, let i = index"
-        [ngStyle]="{'grid-column': checkColumn(i), 'grid-row': i % 4 + 1 }">
+      <div *ngFor="let element of this.displayedLegned, let lastelement = last, let i = index"
+        [ngStyle]="{'grid-column': checkColumn(i), 'grid-row': i % this.legendRowNumber + 1 }">
         <i class="fas fa-stop"
         [style.color]="element.color"
         [style.opacity]="element.fillOpacity"
