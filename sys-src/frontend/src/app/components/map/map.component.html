@@ -3,11 +3,11 @@
     {{ showInfections ? "Infektionsgeschehen" : "Impffortschritt" }}
   </p>
 
-  <div *ngIf="!this.showInfections" class="info-bar">
+  <div *ngIf="!this.showInfections" class="info-bar info-bar-vaccines">
     <div
       (click)="this.showVaccineData('first')"
       [ngClass]="{ 'accent-blue accent-blue-background': showFirstVaccine }"
-      class="info-bar__toggle-button"
+      class="info-bar__toggle-button toogle-button-vaccines"
     >
       <p>Erstimpfung</p>
     </div>
@@ -17,7 +17,7 @@
       [ngClass]="{
         'accent-yellow accent-yellow-background': !showFirstVaccine
       }"
-      class="info-bar__toggle-button"
+      class="info-bar__toggle-button toogle-button-vaccines"
     >
       <p>Zweitimpfung</p>
     </div>

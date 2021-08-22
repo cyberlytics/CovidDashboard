@@ -32,6 +32,19 @@
     }
   }
 
+  .info-bar-vaccines {
+    flex-direction: unset !important;
+    // margin-bottom: 10px !important;
+
+    .toogle-button-vaccines {
+      margin-bottom: 5px;
+      width: 50% !important;
+    }
+    &__search {
+      margin-bottom: 5px;
+    }
+  }
+
   .nav-bar {
     flex-direction: column !important;
     text-align: center !important;
