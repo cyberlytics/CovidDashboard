@@ -24,6 +24,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   private map = {} as L.Map;
   private layer = {} as L.Layer;
 
+
   constructor(
     private network: NetworkService,
     private router: Router,
@@ -167,7 +168,18 @@ export class MapComponent implements OnInit, AfterViewInit {
         if (type === 'firstVaccination') {
           // data gets sorted by first vaccination
           if (
-            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 60
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 95
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.1,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+            95 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 90
           ) {
             return {
               color: '#529bf2',
@@ -177,8 +189,19 @@ export class MapComponent implements OnInit, AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            60 &&
-            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 55
+            90 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 85
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.3,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations <
+            85 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 80
           ) {
             return {
               color: '#529bf2',
@@ -188,8 +211,19 @@ export class MapComponent implements OnInit, AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionFirstVaccinations <
-            55 &&
-            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 50
+            80 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 75
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.5,
+              weight: 1,
+            };
+          }else if (
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations <
+            75 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 70
           ) {
             return {
               color: '#529bf2',
@@ -197,10 +231,21 @@ export class MapComponent implements OnInit, AfterViewInit {
               fillOpacity: 0.6,
               weight: 1,
             };
-          } else if (
+          }else if (
             feature?.properties.propsNetwork?.ProportionFirstVaccinations <
-            50 &&
-            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 0
+            70 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 65
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.7,
+              weight: 1,
+            };
+          }else if (
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations <
+            65 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 60
           ) {
             return {
               color: '#529bf2',
@@ -208,10 +253,93 @@ export class MapComponent implements OnInit, AfterViewInit {
               fillOpacity: 0.8,
               weight: 1,
             };
+          }else if (
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations <
+            60 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 55
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.9,
+              weight: 1,
+            };
+          }else if (
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations <
+            55 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 50
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.95,
+              weight: 1,
+            };
+          }else if (
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations <
+            50 &&
+            feature?.properties.propsNetwork?.ProportionFirstVaccinations >= 0
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 1,
+              weight: 1,
+            };
           }
         } else if (type === 'incidences') {
           // data gets sorted by incidences
-          if (feature?.properties.propsNetwork.Incidence7 >= 90) {
+          if (feature?.properties.propsNetwork.Incidence7 >= 280) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.05,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 280 &&
+            feature?.properties.propsNetwork.Incidence7 >= 260
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.1,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 260 &&
+            feature?.properties.propsNetwork.Incidence7 >= 240
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.15,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 240 &&
+            feature?.properties.propsNetwork.Incidence7 >= 220
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.2,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 220 &&
+            feature?.properties.propsNetwork.Incidence7 >= 200
+          ) {
+            return {
+              color: '#529bf2',
+              fillColor: '#529bf2',
+              fillOpacity: 0.25,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork.Incidence7 < 200 &&
+            feature?.properties.propsNetwork.Incidence7 >= 180
+          ) {
             return {
               color: '#529bf2',
               fillColor: '#529bf2',
@@ -219,8 +347,8 @@ export class MapComponent implements OnInit, AfterViewInit {
               weight: 1,
             };
           } else if (
-            feature?.properties.propsNetwork.Incidence7 < 90 &&
-            feature?.properties.propsNetwork.Incidence7 >= 80
+            feature?.properties.propsNetwork.Incidence7 < 180 &&
+            feature?.properties.propsNetwork.Incidence7 >= 160
           ) {
             return {
               color: '#529bf2',
@@ -229,8 +357,8 @@ export class MapComponent implements OnInit, AfterViewInit {
               weight: 1,
             };
           } else if (
-            feature?.properties.propsNetwork.Incidence7 < 80 &&
-            feature?.properties.propsNetwork.Incidence7 >= 70
+            feature?.properties.propsNetwork.Incidence7 < 160 &&
+            feature?.properties.propsNetwork.Incidence7 >= 140
           ) {
             return {
               color: '#529bf2',
@@ -239,8 +367,8 @@ export class MapComponent implements OnInit, AfterViewInit {
               weight: 1,
             };
           } else if (
-            feature?.properties.propsNetwork.Incidence7 < 70 &&
-            feature?.properties.propsNetwork.Incidence7 >= 60
+            feature?.properties.propsNetwork.Incidence7 < 140 &&
+            feature?.properties.propsNetwork.Incidence7 >= 120
           ) {
             return {
               color: '#529bf2',
@@ -249,8 +377,8 @@ export class MapComponent implements OnInit, AfterViewInit {
               weight: 1,
             };
           } else if (
-            feature?.properties.propsNetwork.Incidence7 < 60 &&
-            feature?.properties.propsNetwork.Incidence7 >= 50
+            feature?.properties.propsNetwork.Incidence7 < 120 &&
+            feature?.properties.propsNetwork.Incidence7 >= 100
           ) {
             return {
               color: '#529bf2',
@@ -259,8 +387,8 @@ export class MapComponent implements OnInit, AfterViewInit {
               weight: 1,
             };
           } else if (
-            feature?.properties.propsNetwork.Incidence7 < 50 &&
-            feature?.properties.propsNetwork.Incidence7 >= 40
+            feature?.properties.propsNetwork.Incidence7 < 100 &&
+            feature?.properties.propsNetwork.Incidence7 >= 80
           ) {
             return {
               color: '#529bf2',
@@ -269,8 +397,8 @@ export class MapComponent implements OnInit, AfterViewInit {
               weight: 1,
             };
           } else if (
-            feature?.properties.propsNetwork.Incidence7 < 40 &&
-            feature?.properties.propsNetwork.Incidence7 >= 30
+            feature?.properties.propsNetwork.Incidence7 < 80 &&
+            feature?.properties.propsNetwork.Incidence7 >= 60
           ) {
             return {
               color: '#529bf2',
@@ -279,8 +407,8 @@ export class MapComponent implements OnInit, AfterViewInit {
               weight: 1,
             };
           } else if (
-            feature?.properties.propsNetwork.Incidence7 < 30 &&
-            feature?.properties.propsNetwork.Incidence7 >= 20
+            feature?.properties.propsNetwork.Incidence7 < 60 &&
+            feature?.properties.propsNetwork.Incidence7 >= 40
           ) {
             return {
               color: '#529bf2',
@@ -289,8 +417,8 @@ export class MapComponent implements OnInit, AfterViewInit {
               weight: 1,
             };
           } else if (
-            feature?.properties.propsNetwork.Incidence7 < 20 &&
-            feature?.properties.propsNetwork.Incidence7 >= 10
+            feature?.properties.propsNetwork.Incidence7 < 40 &&
+            feature?.properties.propsNetwork.Incidence7 >= 20
           ) {
             return {
               color: '#529bf2',
@@ -299,7 +427,7 @@ export class MapComponent implements OnInit, AfterViewInit {
               weight: 1,
             };
           } else if (
-            feature?.properties.propsNetwork.Incidence7 < 10 &&
+            feature?.properties.propsNetwork.Incidence7 < 20 &&
             feature?.properties.propsNetwork.Incidence7 >= 0
           ) {
             return {
@@ -312,7 +440,30 @@ export class MapComponent implements OnInit, AfterViewInit {
         } else if (type === 'secondVaccination') {
           // data gets sorted second vaccination
           if (
-            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 31
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 95
+          ) {
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 0.1,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+            95 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
+            90
+          ) {
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 0.2,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+            90 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 85
           ) {
             return {
               color: '#ffc71d',
@@ -322,9 +473,9 @@ export class MapComponent implements OnInit, AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            31 &&
+            85 &&
             feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
-            29.5
+            80
           ) {
             return {
               color: '#ffc71d',
@@ -334,8 +485,8 @@ export class MapComponent implements OnInit, AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            29.5 &&
-            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 28
+            80 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 75
           ) {
             return {
               color: '#ffc71d',
@@ -345,9 +496,8 @@ export class MapComponent implements OnInit, AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            28 &&
-            feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
-            26.5
+            75 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 70
           ) {
             return {
               color: '#ffc71d',
@@ -357,8 +507,9 @@ export class MapComponent implements OnInit, AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            26.5 &&
-            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 25
+            70 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
+            65
           ) {
             return {
               color: '#ffc71d',
@@ -368,13 +519,50 @@ export class MapComponent implements OnInit, AfterViewInit {
             };
           } else if (
             feature?.properties.propsNetwork?.ProportionSecondVaccinations <
-            25 &&
-            feature?.properties.propsNetwork?.ProportionSecondVaccinations >= 0
+            65 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
+            60
           ) {
             return {
               color: '#ffc71d',
               fillColor: '#ffc71d',
               fillOpacity: 0.8,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+            60 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
+            55
+          ) {
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 0.9,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+            55 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
+            50
+          ) {
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 0.95,
+              weight: 1,
+            };
+          } else if (
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations <
+            50 &&
+            feature?.properties.propsNetwork?.ProportionSecondVaccinations >=
+            0
+          ) {
+            return {
+              color: '#ffc71d',
+              fillColor: '#ffc71d',
+              fillOpacity: 1,
               weight: 1,
             };
           }
