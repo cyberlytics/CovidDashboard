@@ -980,7 +980,7 @@
         {{ this.germanyVaccine.StateName }}
       </p>
     </div>
-    <div class="cell" *ngIf="this.pageIndex === 0">
+    <div class="cell" *ngIf="this.pageIndex === 0"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
       <div class="cell__difference-to-previous-day accent-red">
         <i
           *ngIf="this.germanyVaccine.diff.DeltaProportionFirstVaccinations < 0"
@@ -998,7 +998,7 @@
       </div>
       <p>{{ this.germanyVaccine.ProportionFirstVaccinations }} %</p>
     </div>
-    <div class="cell" *ngIf="this.pageIndex === 1">
+    <div class="cell" *ngIf="this.pageIndex === 1"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
       <div class="cell__difference-to-previous-day accent-blue">
         <i
           *ngIf="this.germanyVaccine.diff.DeltaSumVaccinations < 0"
@@ -1016,7 +1016,7 @@
       </div>
       <p>{{ this.germanyVaccine.SumVaccinations | number: "":"de-DE" }}</p>
     </div>
-    <div class="cell" *ngIf="this.pageIndex === 2">
+    <div class="cell" *ngIf="this.pageIndex === 2"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
       <div class="cell__difference-to-previous-day accent-green">
         <i
           *ngIf="this.germanyVaccine.diff.DeltaSumAstraZeneca < 0"
@@ -1034,7 +1034,7 @@
       </div>
       <p>{{ this.germanyVaccine.SumAstraZeneca | number: "":"de-DE" }}</p>
     </div>
-    <div class="cell" *ngIf="this.pageIndex === 3">
+    <div class="cell" *ngIf="this.pageIndex === 3"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
       <div class="cell__difference-to-previous-day accent-purple">
         <i
           *ngIf="this.germanyVaccine.diff.DeltaSumBioNTech < 0"
@@ -1052,7 +1052,7 @@
       </div>
       <p>{{ this.germanyVaccine.SumBioNTech | number: "":"de-DE" }}</p>
     </div>
-    <div class="cell" *ngIf="this.pageIndex === 4">
+    <div class="cell" *ngIf="this.pageIndex === 4"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
       <div class="cell__difference-to-previous-day accent-yellow">
         <i
           *ngIf="this.germanyVaccine.diff.DeltaSumJohnsonAndJohnson < 0"
@@ -1070,7 +1070,7 @@
       </div>
       <p>{{ this.germanyVaccine.SumJohnsonAndJohnson | number: "":"de-DE" }}</p>
     </div>
-    <div class="cell" *ngIf="this.pageIndex === 5">
+    <div class="cell" *ngIf="this.pageIndex === 5"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
       <div class="cell__difference-to-previous-day accent-light-gray">
         <i
           *ngIf="this.germanyVaccine.diff.DeltaSumModerna < 0"
@@ -1106,7 +1106,7 @@
         <!-- <i class="fa{{ this.favoriteService.isFavorite(state.StateId) ? 's' : 'r' }} fa-bookmark"
            [style.color]="this.favoriteService.isFavorite(state.StateId) ? '#ffc71d': '#9e9688'" *ngIf="state.StateId != 0"></i> -->
       </div>
-      <div class="cell" *ngIf="this.pageIndex === 0">
+      <div class="cell" *ngIf="this.pageIndex === 0"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
         <div class="cell__difference-to-previous-day accent-red">
           <i
             *ngIf="this.state.diff.DeltaProportionFirstVaccinations < 0"
@@ -1124,7 +1124,7 @@
         </div>
         <p>{{ state.ProportionFirstVaccinations }} %</p>
       </div>
-      <div class="cell" *ngIf="this.pageIndex === 1">
+      <div class="cell" *ngIf="this.pageIndex === 1"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
         <div class="cell__difference-to-previous-day accent-blue">
           <i
             *ngIf="this.state.diff.DeltaSumVaccinations < 0"
@@ -1142,7 +1142,7 @@
         </div>
         <p>{{ state.SumVaccinations | number: "":"de-DE" }}</p>
       </div>
-      <div class="cell" *ngIf="this.pageIndex === 2">
+      <div class="cell" *ngIf="this.pageIndex === 2"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
         <div class="cell__difference-to-previous-day accent-green">
           <i
             *ngIf="this.state.diff.DeltaSumAstraZeneca < 0"
@@ -1160,7 +1160,7 @@
         </div>
         <p>{{ state.SumAstraZeneca | number: "":"de-DE" }}</p>
       </div>
-      <div class="cell" *ngIf="this.pageIndex === 3">
+      <div class="cell" *ngIf="this.pageIndex === 3"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
         <div class="cell__difference-to-previous-day accent-purple">
           <i
             *ngIf="this.state.diff.DeltaSumBioNTech < 0"
@@ -1178,7 +1178,7 @@
         </div>
         <p>{{ state.SumBioNTech | number: "":"de-DE" }}</p>
       </div>
-      <div class="cell" *ngIf="this.pageIndex === 4">
+      <div class="cell" *ngIf="this.pageIndex === 4"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
         <div class="cell__difference-to-previous-day accent-yellow">
           <i
             *ngIf="this.state.diff.DeltaSumJohnsonAndJohnson < 0"
@@ -1196,7 +1196,7 @@
         </div>
         <p>{{ state.SumJohnsonAndJohnson | number: "":"de-DE" }}</p>
       </div>
-      <div class="cell" *ngIf="this.pageIndex === 5">
+      <div class="cell" *ngIf="this.pageIndex === 5"  (swipeleft)="this.nextPage()" (swiperight)="this.previousPage()">
         <div class="cell__difference-to-previous-day accent-light-gray">
           <i
             *ngIf="this.state.diff.DeltaSumModerna < 0"

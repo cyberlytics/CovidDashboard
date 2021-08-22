@@ -20,10 +20,8 @@ export class AppComponent implements OnInit {
     } else {
       this.resize.navBarIsShown = false;
     }
+    console.log('nav', this.resize.isMobile)
 
-    if (!this.resize.isMobile) {
-      this.resize.navBarIsShown = true;
-    }
   }
 
   ngOnInit() {
@@ -40,5 +38,8 @@ export class AppComponent implements OnInit {
     this.resize.isMobile = (window.innerWidth < 900);
     this.resize.currentWidth = window.innerWidth;
     // console.log(window.innerWidth);
+    if (!this.resize.isMobile) {
+      this.resize.navBarIsShown = true;
+    }
   }
 }
