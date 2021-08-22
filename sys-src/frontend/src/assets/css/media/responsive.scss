@@ -32,9 +32,23 @@
     }
   }
 
+  .info-bar-vaccines {
+    flex-direction: unset !important;
+    // margin-bottom: 10px !important;
+
+    .toogle-button-vaccines {
+      margin-bottom: 5px;
+      width: 50% !important;
+    }
+    &__search {
+      margin-bottom: 5px;
+    }
+  }
+
   .nav-bar {
     flex-direction: column !important;
     text-align: center !important;
+    padding-bottom: 10px !important;
 
     &__logo {
       flex-direction: column !important;
@@ -63,5 +77,11 @@
   .three-in-a-row,
   .five-in-a-row {
     grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+
+@media (max-width: 450px) {
+  .badge{
+    padding: 12px 20px !important;
   }
 }

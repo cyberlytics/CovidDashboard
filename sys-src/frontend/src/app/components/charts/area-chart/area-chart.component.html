@@ -1,24 +1,56 @@
 <div class="area-chart">
-  <ngx-charts-area-chart-stacked *ngIf="this.stacked"
-                                 [animations]="true"
-                                 [legendTitle]="'Legende'"
-                                 [legend]="true"
-                                 [results]="displayedData"
-                                 [scheme]="colorScheme"
-                                 [showGridLines]="false"
-                                 [xAxis]="true"
-                                 [yAxis]="true"
-  >
-  </ngx-charts-area-chart-stacked>
-  <ngx-charts-area-chart *ngIf="!this.stacked"
-                         [animations]="true"
-                         [legendTitle]="'Legende'"
-                         [legend]="true"
-                         [results]="displayedData"
-                         [scheme]="colorScheme"
-                         [showGridLines]="false"
-                         [xAxis]="true"
-                         [yAxis]="true"
-  >
-  </ngx-charts-area-chart>
+  <ng-container *ngIf="this.stacked">
+    <ngx-charts-area-chart-stacked  *ngIf="!this.resize.isMobile"
+    [animations]="true"
+    [legendTitle]="'Legende'"
+    [legend]="true"
+    [results]="displayedData"
+    [scheme]="colorScheme"
+    [showGridLines]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legendPosition]="legendPos"
+    >
+    </ngx-charts-area-chart-stacked>
+    <ngx-charts-area-chart-stacked *ngIf="this.resize.isMobile"
+    [animations]="true"
+    [legendTitle]="'Legende'"
+    [legend]="true"
+    [results]="displayedData"
+    [scheme]="colorScheme"
+    [showGridLines]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legendPosition]="legendPos"
+    [view]="view"
+    >
+    </ngx-charts-area-chart-stacked>
+  </ng-container>
+  <ng-container *ngIf="!this.stacked">
+    <ngx-charts-area-chart *ngIf="this.resize.isMobile"
+    [animations]="true"
+    [legendTitle]="'Legende'"
+    [legend]="true"
+    [results]="displayedData"
+    [scheme]="colorScheme"
+    [showGridLines]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legendPosition]="legendPos"
+    [view]="view"
+    >
+    </ngx-charts-area-chart>
+    <ngx-charts-area-chart *ngIf="!this.resize.isMobile"
+    [animations]="true"
+    [legendTitle]="'Legende'"
+    [legend]="true"
+    [results]="displayedData"
+    [scheme]="colorScheme"
+    [showGridLines]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legendPosition]="legendPos"
+    >
+    </ngx-charts-area-chart>
+  </ng-container>
 </div>

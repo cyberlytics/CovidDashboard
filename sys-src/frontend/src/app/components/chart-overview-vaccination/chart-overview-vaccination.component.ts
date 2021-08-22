@@ -2,6 +2,8 @@ import type {OnDestroy, OnInit} from '@angular/core';
 import {Component} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { ResizeService } from 'src/app/services/resize/resize.service';
 import type {AreaData, ScaleData} from '../../services/alltypes';
 import {VaccineChartType} from '../../services/alltypes';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
@@ -23,6 +25,16 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
     ['6 Monate', 180],
     ['Gesamter Zeitraum', 200],
   ];
+  public timeSpanMobile: [string, number][] = [
+    ['1W', 7],
+    ['2W', 14],
+    ['3W', 21],
+    ['1M', 30],
+    ['3M', 90],
+    ['6M', 180],
+    ['1J', 365],
+    ['GZ', 400],
+  ];
   public displayedAreaData: AreaData[] = [];
   public allVaccinesByManufacturer: ScaleData[] = [];
   public dayNumber = 7;
@@ -41,7 +53,10 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
   };
   private notifer = new Subject();
 
-  constructor(private vaccine: VaccinesService) {
+  constructor(
+    private vaccine: VaccinesService,
+    public resize: ResizeService
+    ) {
     this.loadData(0);
 
     // calculate days for all time span
@@ -52,6 +67,7 @@ export class ChartOverviewVaccinationComponent implements OnInit, OnDestroy {
     let diff = date.getTime() - startDate.getTime();
     diff = Math.round(diff / (1000 * 3600 * 24));
     this.timeSpan[this.timeSpan.length - 1][1] = diff;
+    this.timeSpanMobile[this.timeSpan.length - 1][1] = diff;
 
     this.vaccine.getSelectedStateInfo().pipe(takeUntil(this.notifer)).subscribe((id) => {
       this.loadData(id);

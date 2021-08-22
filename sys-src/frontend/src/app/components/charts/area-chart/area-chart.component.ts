@@ -1,5 +1,9 @@
-import type {OnChanges} from '@angular/core';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import {ChangeDetectorRef, OnChanges} from '@angular/core';
 import {Component, Input} from '@angular/core';
+import { LegendPosition } from '@swimlane/ngx-charts';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { ResizeService } from 'src/app/services/resize/resize.service';
 import type {AreaData} from '../../../services/alltypes';
 
 @Component({
@@ -14,11 +18,28 @@ export class AreaChartComponent implements OnChanges {
   @Input() colorScheme = {};
   @Input() stacked = false;
 
+  public legendPos: LegendPosition = LegendPosition.Below;
+  // public view: any[] = [300,400];
+  view: [number, number] = [700, 300];
+
   // array which displays the data
   public displayedData: AreaData[] = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {
+  constructor(
+    public resize: ResizeService,
+    private changeDetection: ChangeDetectorRef
+  ) {
+    if (this.resize.isMobile) {
+      this.legendPos = LegendPosition.Below;
+    } else {
+      this.legendPos = LegendPosition.Right;
+    }
+
+    console.log(this.resize.currentWidth);
+    this.view[0] = this.resize.currentWidth - 40;
+    console.log('view', this.view);
+    console.log('moblie', this.resize.isMobile)
   }
 
   /**
@@ -26,6 +47,7 @@ export class AreaChartComponent implements OnChanges {
    */
   ngOnChanges(): void {
     this.changedInput();
+    this.changeDetection.detectChanges()
   }
 
   /**

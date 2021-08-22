@@ -26,26 +26,49 @@
       </div>
     </div>
 
-    <div class="info-bar">
-      <div
+    <div class="info-bar" [ngClass]="{'mobileInfoBar': this.resize.isMobile}">
+      <ng-container *ngIf="!this.resize.isMobile">
+        <div
         (click)="this.dayNumber = numb[1]"
         *ngFor="let numb of this.timeSpan"
         [ngClass]="{
           'accent-purple accent-purple-background': numb[1] === this.dayNumber
         }"
         class="info-bar__toggle-button"
-      >
-        <p>{{ numb[0] }}</p>
-      </div>
+        >
+          <p>{{ numb[0] }}</p>
+        </div>
+     </ng-container>
+      <ng-container *ngIf="this.resize.isMobile">
+        <div
+        (click)="this.dayNumber = numb[1]"
+        *ngFor="let numb of this.timeSpanMobile"
+        [ngClass]="{
+          'accent-purple accent-purple-background': numb[1] === this.dayNumber
+        }"
+        class="info-bar__toggle-button"
+        >
+          <p>{{ numb[0] }}</p>
+        </div>
+      </ng-container>
+
     </div>
 
     <app-bar-chart
-      *ngIf="!this.showRecDeadTotal"
+      *ngIf="!this.showRecDeadTotal "
       [colorScheme]="this.colorScheme"
       [daynumber]="this.dayNumber"
       [loaded]="this.loaded"
       [type]="this.type"
     ></app-bar-chart>
+
+    <!-- <app-line-chart
+      *ngIf="!this.showRecDeadTotal && this.resize.isMobile"
+      [colorScheme]="this.colorScheme"
+      [daynumber]="this.dayNumber"
+      [loaded]="this.loaded"
+      [type]="this.type"
+    ></app-line-chart> -->
 
     <app-area-chart
       *ngIf="this.showRecDeadTotal"

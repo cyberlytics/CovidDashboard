@@ -1,5 +1,3 @@
-@import '../../../../assets/css/colors/colors.scss';
-
 .bar-chart {
   display: flex;
   width: 100%;
@@ -19,23 +17,4 @@
       opacity: 0.5 !important;
     }
   }
-}
-
-.bar-chart-mobile{
-  display: block;
-}
-
-#date{
-  font-size: 12rem;
-}
-
-#value{
-  font-size: 18rem;
-}
-
-.infodiv{
-  position: absolute;
-  background-color: $color-background;
-  padding: 6px 10px;
-  text-align: center;
 }
