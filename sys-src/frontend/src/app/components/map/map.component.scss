@@ -8,3 +8,14 @@
     border-radius: 10px;
   }
 }
+
+.gridLegend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(10px, 1fr));
+}
+
+@media (min-width: 900px) {
+  .gridLegend {
+    grid-template-columns: repeat(4, minmax(10px, 1fr));
+  }
+}

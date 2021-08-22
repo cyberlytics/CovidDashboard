@@ -39,17 +39,31 @@
       </div>
     </div>
 
-    <div *ngIf="!this.showPercentVaccines" class="info-bar">
-      <div
+    <div *ngIf="!this.showPercentVaccines" class="info-bar" [ngClass]="{'mobileInfoBar': this.resize.isMobile}">
+      <ng-container *ngIf="!this.resize.isMobile">
+        <div
         (click)="this.dayNumber = numb[1]"
         *ngFor="let numb of this.timeSpan"
         [ngClass]="{
           'accent-purple accent-purple-background': numb[1] === this.dayNumber
         }"
         class="info-bar__toggle-button"
+        >
+        <p>{{ numb[0] }}</p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="this.resize.isMobile">
+      <div
+      (click)="this.dayNumber = numb[1]"
+      *ngFor="let numb of this.timeSpanMobile"
+      [ngClass]="{
+        'accent-purple accent-purple-background': numb[1] === this.dayNumber
+      }"
+      class="info-bar__toggle-button"
       >
         <p>{{ numb[0] }}</p>
       </div>
+    </ng-container>
     </div>
 
     <app-area-chart

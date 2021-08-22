@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type {OnInit} from '@angular/core';
 import {Component} from '@angular/core';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { ResizeService } from 'src/app/services/resize/resize.service';
 
 @Component({
   selector: 'app-infections',
@@ -8,7 +10,7 @@ import {Component} from '@angular/core';
   styleUrls: ['./infections.component.scss'],
 })
 export class InfectionsComponent implements OnInit {
-  constructor() {
+  constructor(public resize: ResizeService) {
   }
 
   ngOnInit(): void {
