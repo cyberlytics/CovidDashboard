@@ -33,7 +33,14 @@ registerLocaleData(localeDe);
 
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = <any> {
-    swipe: { direction: Hammer.DIRECTION_ALL },
+    swipe: { direction: Hammer.DIRECTION_HORIZONTAL },
+    pan: {direction: 6},
+    pinch: {
+      enable: false
+  },
+  rotate: {
+      enable: false
+  }
   };
 }
 
