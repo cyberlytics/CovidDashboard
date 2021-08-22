@@ -3,11 +3,11 @@
     {{ showInfections ? "Infektionsgeschehen" : "Impffortschritt" }}
   </p>
 
-  <div *ngIf="!this.showInfections" class="info-bar">
+  <div *ngIf="!this.showInfections" class="info-bar info-bar-vaccines">
     <div
       (click)="this.showVaccineData('first')"
       [ngClass]="{ 'accent-blue accent-blue-background': showFirstVaccine }"
-      class="info-bar__toggle-button"
+      class="info-bar__toggle-button toogle-button-vaccines"
     >
       <p>Erstimpfung</p>
     </div>
@@ -17,11 +17,39 @@
       [ngClass]="{
         'accent-yellow accent-yellow-background': !showFirstVaccine
       }"
-      class="info-bar__toggle-button"
+      class="info-bar__toggle-button toogle-button-vaccines"
     >
       <p>Zweitimpfung</p>
     </div>
   </div>
 
   <div id="map"></div>
+
+
+  <div>
+    <p style="padding: 4px 0px;">Legende - {{legendLabel}}	</p>
+    <div class="gridLegend" *ngIf="this.resize.isMobile">
+      <div *ngFor="let element of this.displayedLegned, let lastelement = last, let i = index"
+        [ngStyle]="{'grid-column': (i < this.displayedLegned.length/2) ? 1 : 2, 'grid-row': (i < this.displayedLegned.length/2) ? i+1 : (i- this.displayedLegned.length/2 + 0.5) }">
+        <i class="fas fa-stop"
+        [style.color]="element.color"
+        [style.opacity]="element.fillOpacity"
+        ></i>
+        <span *ngIf="!lastelement"> > {{element.min}} - {{element.max}} </span>
+        <span *ngIf="lastelement"> > {{element.min}}  </span>
+      </div>
+    </div>
+
+    <div class="gridLegend" *ngIf="!this.resize.isMobile">
+      <div *ngFor="let element of this.displayedLegned, let lastelement = last, let i = index"
+        [ngStyle]="{'grid-column': checkColumn(i), 'grid-row': i % this.legendRowNumber + 1 }">
+        <i class="fas fa-stop"
+        [style.color]="element.color"
+        [style.opacity]="element.fillOpacity"
+        ></i>
+        <span *ngIf="!lastelement"> > {{element.min}} - {{element.max}} </span>
+        <span *ngIf="lastelement"> > {{element.min}}  </span>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,6 +1,6 @@
 import {LOCALE_ID, NgModule} from '@angular/core';
 import localeDe from '@angular/common/locales/de';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, HammerModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -25,8 +25,25 @@ import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {registerLocaleData} from "@angular/common";
 import {ImprintComponent} from './pages/imprint/imprint.component';
+import * as Hammer from 'hammerjs';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { LineChartComponent } from './components/charts/line-chart/line-chart.component';
 
 registerLocaleData(localeDe);
+
+export class MyHammerConfig extends HammerGestureConfig {
+  overrides = <any> {
+    swipe: { direction: Hammer.DIRECTION_HORIZONTAL },
+    pan: {direction: 6},
+    pinch: {
+      enable: false
+  },
+  rotate: {
+      enable: false
+  }
+  };
+}
+
 
 @NgModule({
   declarations: [
@@ -45,7 +62,8 @@ registerLocaleData(localeDe);
     InfectionsComponent,
     ShareComponent,
     VaccinationsComponent,
-    ImprintComponent
+    ImprintComponent,
+    LineChartComponent
   ],
   imports: [
     BrowserModule,
@@ -54,9 +72,15 @@ registerLocaleData(localeDe);
     BrowserAnimationsModule,
     NgxChartsModule,
     FormsModule,
-    OrderModule
+    OrderModule,
+    HammerModule
   ],
-  providers: [{provide: LOCALE_ID, useValue: 'de'}],
+  providers: [
+    {provide: LOCALE_ID, useValue: 'de'},
+  {
+    provide: HAMMER_GESTURE_CONFIG,
+    useClass: MyHammerConfig,
+  },],
   bootstrap: [AppComponent]
 })
 export class AppModule {

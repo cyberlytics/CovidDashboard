@@ -14,3 +14,20 @@
     width: 48.5%;
   }
 }
+
+.mobileMargin {
+  margin-top: 30px !important;
+}
+
+div.noNavbar{
+  margin-top: 35px !important;
+  // @media (max-width: 420px) {
+  //     margin-top: 155px !important;
+  // }
+}
+
+@media (max-width: 420px) {
+  .infections {
+    margin-top: 155px !important;
+  }
+}

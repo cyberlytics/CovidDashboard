@@ -6,6 +6,7 @@ import {FavoritesService} from '../../services/favorites/favorites.service';
 import type {CountyCombined, VaccineCombined,} from '../../services/alltypes';
 import {VaccinesService} from 'src/app/services/vaccines/vaccines.service';
 import {InfectionsService} from 'src/app/services/infections/infections.service';
+import { ResizeService } from 'src/app/services/resize/resize.service';
 
 @Component({
   selector: 'app-info-table',
@@ -25,6 +26,8 @@ export class InfoTableComponent implements OnInit {
   public germanyVaccine = {} as VaccineCombined;
 
   public searchTerm = '';
+  public pageIndex = 0;
+  public tableLength = 4;
 
   public key = 'County';
   public reverse = false;
@@ -33,7 +36,8 @@ export class InfoTableComponent implements OnInit {
     private network: NetworkService,
     public favoriteService: FavoritesService,
     private vaccines: VaccinesService,
-    private infections: InfectionsService
+    private infections: InfectionsService,
+    public resize: ResizeService
   ) {
   }
 
@@ -70,6 +74,8 @@ export class InfoTableComponent implements OnInit {
           console.log('error get all county incidences', err);
         }
       );
+      this.tableLength = 4;
+      this.pageIndex = 0;
     } else {
       this.network.getVaccineAllStates().subscribe(
         (res) => {
@@ -106,6 +112,8 @@ export class InfoTableComponent implements OnInit {
           console.log('error get vaccine all states', err);
         }
       );
+      this.tableLength = 5;
+      this.pageIndex = 0;
     }
   }
 
@@ -116,6 +124,7 @@ export class InfoTableComponent implements OnInit {
   public change(toggleFavorites = false): void {
     if (toggleFavorites) {
       this.selectedFavorites = !this.selectedFavorites;
+      this.searchTerm = '';
     }
 
     this.searchCountys = this.allCountys.filter((s) => {
@@ -210,4 +219,26 @@ export class InfoTableComponent implements OnInit {
       this.allCountys.splice(temp, 1);
     }
   }
+
+  public previousPage(): void {
+    if (this.pageIndex > 0) {
+      this.pageIndex--;
+    }
+    console.log('page index previous', this.pageIndex);
+  }
+
+  public nextPage(): void {
+    if (this.pageIndex < this.tableLength) {
+      this.pageIndex++;
+    }
+    console.log('page index next', this.pageIndex);
+  }
+
+  onSwipe(evt: any) {
+    // const x = Math.abs(evt.deltaX) > 40 ? (evt.deltaX > 0 ? 'right' : 'left'):'';
+    // const y = Math.abs(evt.deltaY) > 40 ? (evt.deltaY > 0 ? 'down' : 'up') : '';
+
+    // this.eventText += `${x} ${y}<br/>`;
+    console.log('evt', evt);
+}
 }
