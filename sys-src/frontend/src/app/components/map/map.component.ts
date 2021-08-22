@@ -24,7 +24,12 @@ export class MapComponent implements OnInit, AfterViewInit {
   private map = {} as L.Map;
   private layer = {} as L.Layer;
 
-  public incidenceslegende = [
+  public legendLabel: 'Fälle letzte 7 Tage/100.000 EW' | 'Erstimpfung in Prozent' | 'Zweitimpfung in Prozent' = 'Fälle letzte 7 Tage/100.000 EW';
+
+  public displayedLegned: Legend[] = [];
+  public legendRowNumber: 3 | 4 = 4;
+
+  public incidenceslegend: Legend[] = [
     {
       min: 0,
       max: 20,
@@ -117,6 +122,144 @@ export class MapComponent implements OnInit, AfterViewInit {
     },
   ]
 
+  public firstVaccineslegend: Legend[] = [
+    {
+      min: 0,
+      max: 50,
+      color: '#529bf2',
+      fillOpacity: 1,
+    },
+    {
+      min: 50,
+      max: 55,
+      color: '#529bf2',
+      fillOpacity: 0.95,
+    },
+    {
+      min: 55,
+      max: 60,
+      color: '#529bf2',
+      fillOpacity: 0.9,
+    },
+    {
+      min: 60,
+      max: 65,
+      color: '#529bf2',
+      fillOpacity: 0.8,
+    },
+    {
+      min: 65,
+      max: 70,
+      color: '#529bf2',
+      fillOpacity: 0.7,
+    },
+    {
+      min: 70,
+      max: 75,
+      color: '#529bf2',
+      fillOpacity: 0.6,
+    },
+    {
+      min: 75,
+      max: 80,
+      color: '#529bf2',
+      fillOpacity: 0.5,
+    },
+    {
+      min: 80,
+      max: 85,
+      color: '#529bf2',
+      fillOpacity: 0.4,
+    },
+    {
+      min: 85,
+      max: 90,
+      color: '#529bf2',
+      fillOpacity: 0.3,
+    },
+    {
+      min: 90,
+      max: 95,
+      color: '#529bf2',
+      fillOpacity: 0.2,
+    },
+    {
+      min: 95,
+      max: 100,
+      color: '#529bf2',
+      fillOpacity: 0.1,
+    }
+  ]
+
+  public secondVaccineslegend: Legend[] = [
+    {
+      min: 0,
+      max: 50,
+      color: '#ffc71d',
+      fillOpacity: 1,
+    },
+    {
+      min: 50,
+      max: 55,
+      color: '#ffc71d',
+      fillOpacity: 0.95,
+    },
+    {
+      min: 55,
+      max: 60,
+      color: '#ffc71d',
+      fillOpacity: 0.9,
+    },
+    {
+      min: 60,
+      max: 65,
+      color: '#ffc71d',
+      fillOpacity: 0.8,
+    },
+    {
+      min: 65,
+      max: 70,
+      color: '#ffc71d',
+      fillOpacity: 0.7,
+    },
+    {
+      min: 70,
+      max: 75,
+      color: '#ffc71d',
+      fillOpacity: 0.6,
+    },
+    {
+      min: 75,
+      max: 80,
+      color: '#ffc71d',
+      fillOpacity: 0.5,
+    },
+    {
+      min: 80,
+      max: 85,
+      color: '#ffc71d',
+      fillOpacity: 0.4,
+    },
+    {
+      min: 85,
+      max: 90,
+      color: '#ffc71d',
+      fillOpacity: 0.3,
+    },
+    {
+      min: 90,
+      max: 95,
+      color: '#ffc71d',
+      fillOpacity: 0.2,
+    },
+    {
+      min: 95,
+      max: 100,
+      color: '#ffc71d',
+      fillOpacity: 0.1,
+    }
+  ]
+
   constructor(
     private network: NetworkService,
     private router: Router,
@@ -124,12 +267,11 @@ export class MapComponent implements OnInit, AfterViewInit {
     private vaccines: VaccinesService,
     public resize: ResizeService
   ) {
-    console.log(this.incidenceslegende.length);
-    console.log(this.incidenceslegende.length/2)
   }
 
   ngOnInit(): void {
     this.showInfections = this.router.url.includes('infections');
+    this.displayedLegned = this.incidenceslegend;
   }
 
   ngAfterViewInit(): void {
@@ -146,6 +288,15 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.loadVaccineData(type);
 
     this.showFirstVaccine = type === 'first';
+    if (this.showFirstVaccine) {
+      this.legendLabel = 'Erstimpfung in Prozent';
+      this.displayedLegned = this.firstVaccineslegend;
+      this.legendRowNumber = 3;
+    } else {
+      this.legendLabel = 'Zweitimpfung in Prozent';
+      this.displayedLegned = this.secondVaccineslegend;
+      this.legendRowNumber = 3;
+    }
   }
 
   /**
@@ -216,6 +367,15 @@ export class MapComponent implements OnInit, AfterViewInit {
    * loads infection data and adds it to the map
    */
   private loadVaccineData(type: 'first' | 'second'): void {
+    if (type === 'first') {
+      this.legendLabel = 'Erstimpfung in Prozent';
+      this.displayedLegned = this.firstVaccineslegend;
+      this.legendRowNumber = 3;
+    } else {
+      this.legendLabel = 'Zweitimpfung in Prozent';
+      this.displayedLegned = this.firstVaccineslegend;
+      this.legendRowNumber = 3;
+    }
     this.network.getVaccineAllStates().subscribe(
       (res) => {
         this.map.removeLayer(this.layer);
@@ -819,16 +979,16 @@ export class MapComponent implements OnInit, AfterViewInit {
     //     return 2;
     //   }
     // }
-    if (index >= 0 && index < 4) {
+    if (index >= 0 && index < this.legendRowNumber) {
       // console.log('1', index)
       return 1;
-    } else if (index >= 4 && index < 8) {
+    } else if (index >= this.legendRowNumber && index < this.legendRowNumber*2) {
       // console.log('2', index)
       return 2;
-    } else if (index >= 8 && index < 12) {
+    } else if (index >= this.legendRowNumber*2 && index < this.legendRowNumber*3) {
       // console.log('3', index)
       return 3;
-    } else if (index >= 12 && index < 16) {
+    } else if (index >= this.legendRowNumber*3 && index < this.legendRowNumber*4) {
       // console.log('4', index)
       return 4;
     }
@@ -923,4 +1083,11 @@ type GeoElementVaccine = {
     type: string;
     coordinates: any;
   };
+};
+
+type Legend = {
+  min: number
+  max: number | undefined
+  color: string
+  fillOpacity: number
 };
