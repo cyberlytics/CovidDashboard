@@ -1,5 +1,5 @@
-<div class="nav-bar">
-  <div class="nav-bar__logo">
+<div class="nav-bar" [ngClass]="this.showNavbar ? '' : 'smallMenu'">
+  <div class="nav-bar__logo" *ngIf="this.showNavbar">
     <i class="fas fa-virus nav-bar__icon accent-red"></i>
     <a routerLink="/infections">
       <p>Covidash</p>
@@ -7,7 +7,7 @@
     </a>
   </div>
 
-  <div class="nav-bar__buttons">
+  <div class="nav-bar__buttons" *ngIf="this.showNavbar" >
     <a
       (click)="generateShareLink()"
       class="accent-light-gray accent-light-gray-background nav-bar__item"
@@ -23,5 +23,14 @@
       <p>Dashboard wechseln</p>
       <i class="fas fa-arrow-circle-right"></i>
     </a>
+  </div>
+  <div  class="accent-light-gray accent-blue accent-blue-background nav-bar__item changeButton"
+    (click)="this.changeNavBarDisplay()"  [ngClass]="this.showNavbar ? '' : 'changBtnFull'"
+    *ngIf="this.resize.isMobile"
+  >
+    <i  *ngIf="this.showNavbar"
+    class="fas accent-blue fa-arrow-up" ></i>
+    <i  *ngIf="!this.showNavbar"
+    class="fas accent-blue fa-arrow-down" ></i>
   </div>
 </div>

@@ -67,4 +67,21 @@
       font-size: 18rem;
     }
   }
+
+  .changeButton {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // .changBtnFull {
+  //   width: calc(100% - 70px);
+  // }
+
+}
+.smallMenu{
+  padding: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
