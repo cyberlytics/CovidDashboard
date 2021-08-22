@@ -24,14 +24,108 @@ export class MapComponent implements OnInit, AfterViewInit {
   private map = {} as L.Map;
   private layer = {} as L.Layer;
 
+  public incidenceslegende = [
+    {
+      min: 0,
+      max: 20,
+      color: '#529bf2',
+      fillOpacity: 0.75,
+    },
+    {
+      min: 20,
+      max: 40,
+      color: '#529bf2',
+      fillOpacity: 0.7,
+    },
+    {
+      min: 40,
+      max: 60,
+      color: '#529bf2',
+      fillOpacity: 0.65,
+    },
+    {
+      min: 60,
+      max: 80,
+      color: '#529bf2',
+      fillOpacity: 0.6,
+    },
+    {
+      min: 80,
+      max: 100,
+      color: '#529bf2',
+      fillOpacity: 0.55,
+    },
+    {
+      min: 100,
+      max: 120,
+      color: '#529bf2',
+      fillOpacity: 0.5,
+    },
+    {
+      min: 120,
+      max: 140,
+      color: '#529bf2',
+      fillOpacity: 0.45,
+    },
+    {
+      min: 140,
+      max: 160,
+      color: '#529bf2',
+      fillOpacity: 0.4,
+    },
+    {
+      min: 160,
+      max: 180,
+      color: '#529bf2',
+      fillOpacity: 0.35,
+    },
+    {
+      min: 180,
+      max: 200,
+      color: '#529bf2',
+      fillOpacity: 0.3,
+    },
+    {
+      min: 200,
+      max: 220,
+      color: '#529bf2',
+      fillOpacity: 0.25,
+    },
+    {
+      min: 220,
+      max: 240,
+      color: '#529bf2',
+      fillOpacity: 0.2,
+    },
+    {
+      min: 240,
+      max: 260,
+      color: '#529bf2',
+      fillOpacity: 0.15,
+    },
+    {
+      min: 260,
+      max: 280,
+      color: '#529bf2',
+      fillOpacity: 0.1,
+    },
+    {
+      min: 280,
+      max: undefined,
+      color: '#529bf2',
+      fillOpacity: 0.05,
+    },
+  ]
 
   constructor(
     private network: NetworkService,
     private router: Router,
     private infection: InfectionsService,
     private vaccines: VaccinesService,
-    private resize: ResizeService
+    public resize: ResizeService
   ) {
+    console.log(this.incidenceslegende.length);
+    console.log(this.incidenceslegende.length/2)
   }
 
   ngOnInit(): void {
@@ -710,6 +804,35 @@ export class MapComponent implements OnInit, AfterViewInit {
       }
     }
     return countyGeo;
+  }
+
+  public checkColumn(index: number): number {
+    // if (index > 0) {
+    //   if (index % 4 === 0) {
+    //     // console.log('4', index)
+    //     return 4;
+    //   } else if (index % 3 === 0) {
+    //     // console.log('3', index)
+    //     return 3;
+    //   } else if (index % 2 === 0) {
+    //     // console.log('2', index)
+    //     return 2;
+    //   }
+    // }
+    if (index >= 0 && index < 4) {
+      // console.log('1', index)
+      return 1;
+    } else if (index >= 4 && index < 8) {
+      // console.log('2', index)
+      return 2;
+    } else if (index >= 8 && index < 12) {
+      // console.log('3', index)
+      return 3;
+    } else if (index >= 12 && index < 16) {
+      // console.log('4', index)
+      return 4;
+    }
+    return 1;
   }
 }
 

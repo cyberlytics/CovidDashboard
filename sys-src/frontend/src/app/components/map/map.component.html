@@ -24,4 +24,32 @@
   </div>
 
   <div id="map"></div>
+
+
+  <div>
+    <p style="padding: 4px 0px;">Legende - Fälle letzte 7 Tage/100.000 EW	</p>
+    <div class="gridLegend" *ngIf="this.resize.isMobile">
+      <div *ngFor="let element of this.incidenceslegende, let lastelement = last, let i = index"
+        [ngStyle]="{'grid-column': (i < this.incidenceslegende.length/2) ? 1 : 2, 'grid-row': (i < this.incidenceslegende.length/2) ? i+1 : (i- this.incidenceslegende.length/2 + 0.5) }">
+        <i class="fas fa-stop"
+        [style.color]="element.color"
+        [style.opacity]="element.fillOpacity"
+        ></i>
+        <span *ngIf="!lastelement"> > {{element.min}} - {{element.max}} </span>
+        <span *ngIf="lastelement"> > {{element.min}}  </span>
+      </div>
+    </div>
+
+    <div class="gridLegend" *ngIf="!this.resize.isMobile">
+      <div *ngFor="let element of this.incidenceslegende, let lastelement = last, let i = index"
+        [ngStyle]="{'grid-column': checkColumn(i), 'grid-row': i % 4 + 1 }">
+        <i class="fas fa-stop"
+        [style.color]="element.color"
+        [style.opacity]="element.fillOpacity"
+        ></i>
+        <span *ngIf="!lastelement"> > {{element.min}} - {{element.max}} </span>
+        <span *ngIf="lastelement"> > {{element.min}}  </span>
+      </div>
+    </div>
+  </div>
 </div>
