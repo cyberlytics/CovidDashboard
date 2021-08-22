@@ -71,18 +71,22 @@ export function addDays(date: Date, days: number): Date {
 
 /**
  * Parses a date given in the RKI format:
- * `YYYY/MM/DD HH:mm:SS+00`
+ * `YYYY/MM/DD HH:mm:SS+00` or `YYYY/MM/DD HH:mm:SS`
  * @param date The date string.
  * @returns A Date object.
  */
 export function parseRKIDate(date: string): Date {
-    const s = date
+    // old format "YYYY/MM/DD HH:mm:SS+00"
+    // new format "YYYY/MM/DD HH:mm:SS"
+    let s = date
         .split("/")
         .join("-")
         .split(" ")
         .join("T")
         .split("+00")
         .join("Z");
+    if(!s.endsWith("Z"))
+        s += "Z";
     return new Date(Date.parse(s));
 }
 
