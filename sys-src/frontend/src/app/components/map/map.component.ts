@@ -874,53 +874,61 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     function createPopUpTextInfections(props: any) {
       const content =
-        '<h1>' +
+        '<h1 class="highlightblue">' +
         props.County +
         '</h1>' +
-        '<p>Bestätigt: ' +
-        props.TotalCases.toLocaleString('de-DE') +
-        '</p>' +
-        '<p>Aktiv: ' +
-        props.ActiveCases.toLocaleString('de-DE') +
-        '</p>' +
-        '<p>Genesen: ' +
-        props.Recovered.toLocaleString('de-DE') +
-        '</p>' +
-        '<p>7 Tage-Inzidenz: ' +
+        '<p >7 Tage-Inzidenz: <span class="highlightblue">' +
         props.Incidence7.toFixed(2).replace('.', ',') +
-        '</p>' +
-        '<p>Verstorben: ' +
+        '</span></p>' +
+        '<p>Bestätigt: <span class="highlightblue">' +
+        props.TotalCases.toLocaleString('de-DE') +
+        '</span></p>' +
+        '<p>Aktiv: <span class="highlightblue">' +
+        props.ActiveCases.toLocaleString('de-DE') +
+        '</span></p>' +
+        '<p>Genesen: <span class="highlightblue">' +
+        props.Recovered.toLocaleString('de-DE') +
+        '</span></p>' +
+        '<p>Verstorben: <span class="highlightblue">' +
         props.Deaths.toLocaleString('de-DE') +
-        '</p>';
+        '</span></p>';
         return content;
     }
 
     function createPopUpTextVaccines(props: any, name: any) {
-      const content =
-      '<h1>' +
+      let content = '';
+      let cssclass = '';
+      if (scope.showFirstVaccine) {
+        content = '<h1 class="highlightblue">';
+        cssclass = 'highlightblue'
+      } else {
+        content = '<h1 class="highlightyellow">';
+        cssclass = 'highlightyellow'
+      }
+      content +=
       name +
       '</h1>' +
-      '<p>Mindestens eine Impfdosis erhalten: ' +
+      '<p>Mindestens eine Impfdosis erhalten: <span class="' + cssclass + '">' +
       props.ProportionFirstVaccinations.toString().replace('.', ',') +
-      '%</p>' +
-      '<p>Zwei Impfdosen erhalten: ' +
+      '%</span></p>' +
+      '<p>Zwei Impfdosen erhalten: <span class="' + cssclass + '">' +
       props.ProportionSecondVaccinations.toString().replace('.', ',') +
       '%</p>' +
-      '<p>Verabreichte Impfdosen : ' +
+      '<p>Verabreichte Impfdosen : <span class="' + cssclass + '">' +
       props.SumVaccinations.toLocaleString('de-DE') +
-      '</p>' +
-      '<p>Impfdosen AstraZeneca: ' +
+      '</span></p>' +
+      '<p>Impfdosen AstraZeneca: <span class="' + cssclass + '">' +
       props.SumAstraZeneca.toLocaleString('de-DE') +
-      '</p>' +
-      '<p>Impfdosen BioNTech/Pfizer: ' +
+      '</span></p>' +
+      '<p>Impfdosen BioNTech/Pfizer: <span class="' + cssclass + '">' +
       props.SumBioNTech.toLocaleString('de-DE') +
-      '</p>' +
-      '<p>Impfdosen Johnson & Johnson: ' +
+      '</span></p>' +
+      '<p>Impfdosen Johnson & Johnson: <span class="' + cssclass + '">' +
       props.SumJohnsonAndJohnson.toLocaleString('de-DE') +
-      '</p>' +
-      '<p>Impfdosen Moderna: ' +
+      '</span></p>' +
+      '<p>Impfdosen Moderna: <span class="' + cssclass + '">' +
       props.SumModerna.toLocaleString('de-DE') +
-      '</p>';
+      '</span></p>';
       return content;
     }
     this.layer.addTo(this.map);

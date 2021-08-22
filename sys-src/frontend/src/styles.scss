@@ -103,9 +103,20 @@ body {
   }
   .leaflet-popup-close-button{
     color: $color-accent-light-gray !important;
+    // color: #529bf2 !important;
     top: 3px !important;
     right: 3px !important;
   }
+
+  .highlightblue{
+    color: $color-accent-blue;
+  }
+
+  .highlightyellow{
+    color: $color-accent-yellow;
+  }
+
+  // color: #529bf2
 }
 
 .active .legend-label-text {
