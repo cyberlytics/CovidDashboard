@@ -26,7 +26,7 @@ describe("Lock", () => {
             } else {
                 setTimeout(checkEnd, waitFactor);
             }
-        }
+        };
 
         // wait some more time
         setTimeout(checkEnd, iterations * waitFactor + 100);
