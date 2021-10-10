@@ -543,153 +543,155 @@ export class MapComponent implements OnInit, AfterViewInit {
           }
         } else if (type === 'incidences') {
           // data gets sorted by incidences
-          if (feature?.properties.propsNetwork.Incidence7 >= 280) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.05,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 280 &&
-            feature?.properties.propsNetwork.Incidence7 >= 260
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.1,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 260 &&
-            feature?.properties.propsNetwork.Incidence7 >= 240
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.15,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 240 &&
-            feature?.properties.propsNetwork.Incidence7 >= 220
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.2,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 220 &&
-            feature?.properties.propsNetwork.Incidence7 >= 200
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.25,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 200 &&
-            feature?.properties.propsNetwork.Incidence7 >= 180
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.3,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 180 &&
-            feature?.properties.propsNetwork.Incidence7 >= 160
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.35,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 160 &&
-            feature?.properties.propsNetwork.Incidence7 >= 140
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.4,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 140 &&
-            feature?.properties.propsNetwork.Incidence7 >= 120
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.45,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 120 &&
-            feature?.properties.propsNetwork.Incidence7 >= 100
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.5,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 100 &&
-            feature?.properties.propsNetwork.Incidence7 >= 80
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.55,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 80 &&
-            feature?.properties.propsNetwork.Incidence7 >= 60
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.6,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 60 &&
-            feature?.properties.propsNetwork.Incidence7 >= 40
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.65,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 40 &&
-            feature?.properties.propsNetwork.Incidence7 >= 20
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.7,
-              weight: 1,
-            };
-          } else if (
-            feature?.properties.propsNetwork.Incidence7 < 20 &&
-            feature?.properties.propsNetwork.Incidence7 >= 0
-          ) {
-            return {
-              color: '#529bf2',
-              fillColor: '#529bf2',
-              fillOpacity: 0.75,
-              weight: 1,
-            };
+          if (feature?.properties.propsNetwork) {
+            if (feature?.properties.propsNetwork.Incidence7 >= 280) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.05,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 280 &&
+              feature?.properties.propsNetwork.Incidence7 >= 260
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.1,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 260 &&
+              feature?.properties.propsNetwork.Incidence7 >= 240
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.15,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 240 &&
+              feature?.properties.propsNetwork.Incidence7 >= 220
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.2,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 220 &&
+              feature?.properties.propsNetwork.Incidence7 >= 200
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.25,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 200 &&
+              feature?.properties.propsNetwork.Incidence7 >= 180
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.3,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 180 &&
+              feature?.properties.propsNetwork.Incidence7 >= 160
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.35,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 160 &&
+              feature?.properties.propsNetwork.Incidence7 >= 140
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.4,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 140 &&
+              feature?.properties.propsNetwork.Incidence7 >= 120
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.45,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 120 &&
+              feature?.properties.propsNetwork.Incidence7 >= 100
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.5,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 100 &&
+              feature?.properties.propsNetwork.Incidence7 >= 80
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.55,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 80 &&
+              feature?.properties.propsNetwork.Incidence7 >= 60
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.6,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 60 &&
+              feature?.properties.propsNetwork.Incidence7 >= 40
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.65,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 40 &&
+              feature?.properties.propsNetwork.Incidence7 >= 20
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.7,
+                weight: 1,
+              };
+            } else if (
+              feature?.properties.propsNetwork.Incidence7 < 20 &&
+              feature?.properties.propsNetwork.Incidence7 >= 0
+            ) {
+              return {
+                color: '#529bf2',
+                fillColor: '#529bf2',
+                fillOpacity: 0.75,
+                weight: 1,
+              };
+            }
           }
         } else if (type === 'secondVaccination') {
           // data gets sorted second vaccination
