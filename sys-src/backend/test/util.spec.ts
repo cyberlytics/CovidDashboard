@@ -1,5 +1,5 @@
 import assert from "assert";
-import {addDays, dateToString, getMidnightUTC, last2ElementsPerMap, lastElementPerMap, mapToObject, MS_PER_DAY, parse, parseRKIDate, stringify} from "../typescript/util";
+import {addDays, dateToString, getMidnightUTC, last2ElementsPerMap, lastElementPerMap, mapToObject, MS_PER_DAY, parse, parseRKIDate, parseRKIVaccinationDate, roundTo, stringify} from "../typescript/util";
 
 
 describe("Util", () => {
@@ -74,6 +74,16 @@ describe("Util", () => {
 
         assert.deepStrictEqual(
             parseRKIDate("2020/04/13 00:00:00"),
+            new Date(Date.parse("2020-04-13T00:00:00Z")));
+    });
+
+    it("should parse a Date string formatted by RKI Vaccination", () => {
+        assert.deepStrictEqual(
+            parseRKIVaccinationDate("2021-06-28"),
+            new Date(Date.parse("2021-06-28T00:00:00Z")));
+
+        assert.deepStrictEqual(
+            parseRKIDate("2020-04-13"),
             new Date(Date.parse("2020-04-13T00:00:00Z")));
     });
 
@@ -165,5 +175,22 @@ describe("Util", () => {
         assert.strictEqual(
             dateToString(new Date(Date.parse("2020-03-29T07:19:49.87Z"))),
             "2020-03-29");
+    });
+
+    it("should return a correctly rounded number", () => {
+        assert.strictEqual(
+            roundTo(123.456, 2),
+            123.46
+        );
+
+        assert.strictEqual(
+            roundTo(123.456, 2),
+            123.46
+        );
+
+        assert.strictEqual(
+            roundTo(123.546, 0),
+            124
+        );
     });
 });

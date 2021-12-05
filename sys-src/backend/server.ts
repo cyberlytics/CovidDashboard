@@ -64,6 +64,15 @@ app.get("/api/counties", (req, res, next) => {
         .catch((err) => console.log("error:", err));
 });
 
+app.get("/api/states", (req, res, next) => {
+    getNames()
+        .then((n) => {
+            res.send(mapToObject(n.States));
+            next();
+        })
+        .catch((err) => console.log("error:", err));
+});
+
 app.get("/api/vaccines/:state(\\d+)", (req, res, next) => {
     vaccinationPerState()
         .then((v) => {

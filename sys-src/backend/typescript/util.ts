@@ -91,6 +91,17 @@ export function parseRKIDate(date: string): Date {
 }
 
 /**
+ * Parases a date given in the RKI-Vaccination format:
+ * `YYYY-MM-DD`.
+ * @param date The date string.
+ * @returns A Date object.
+ */
+export function parseRKIVaccinationDate(date: string): Date {
+    let s = date + "T00:00:00Z";
+    return new Date(Date.parse(s));
+}
+
+/**
  * Picks the last element per inner map
  * and returns a new map that contains this
  * value per outer map key.
@@ -153,3 +164,14 @@ export function dateToString(date: Date): string {
  * Milliseconds per day.
  */
 export const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+/**
+ * Rounds a given number to a specified accuracy.
+ * @param n Number to be rounded.
+ * @param digits The number of digits after period.
+ * @returns The number rounded to the specified accuracy.
+ */
+export function roundTo(n: number, digits: number) {
+    const factor = Math.pow(10, digits);
+    return Math.round(n * factor) / factor;
+}
